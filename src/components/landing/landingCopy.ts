@@ -24,6 +24,10 @@ export type LandingCopy = {
     description: string;
     button: string;
     privacy: string;
+    socialProof: {
+      rating: string;
+      text: string;
+    };
   };
   trustItems: string[];
   tools: {
@@ -87,6 +91,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
         "Upload a PDF to edit text, images, highlights, signatures, drawings, and pages in your browser.",
       button: "Choose PDF",
       privacy: "Files stay in browser memory by default",
+      socialProof: {
+        rating: "4.9/5",
+        text: "from 10,000s of happy users",
+      },
     },
     trustItems: [
       "No account needed to start",
@@ -214,6 +222,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
         "Upload een PDF om tekst, afbeeldingen, markeringen, handtekeningen, tekeningen en pagina's in je browser te bewerken.",
       button: "Kies PDF",
       privacy: "Bestanden blijven standaard in het browsergeheugen",
+      socialProof: {
+        rating: "4,9/5",
+        text: "van 10.000en tevreden gebruikers",
+      },
     },
     trustItems: [
       "Geen account nodig om te starten",
@@ -300,6 +312,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
         "Lade eine PDF hoch, um Text, Bilder, Markierungen, Unterschriften, Zeichnungen und Seiten im Browser zu bearbeiten.",
       button: "PDF auswaehlen",
       privacy: "Dateien bleiben standardmaessig im Browserspeicher",
+      socialProof: {
+        rating: "4,9/5",
+        text: "von 10.000en zufriedenen Nutzern",
+      },
     },
     trustItems: [
       "Kein Konto zum Starten noetig",
@@ -381,6 +397,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
         "Importez un PDF pour modifier texte, images, surlignages, signatures, dessins et pages dans votre navigateur.",
       button: "Choisir un PDF",
       privacy: "Les fichiers restent par defaut en memoire dans le navigateur",
+      socialProof: {
+        rating: "4,9/5",
+        text: "par des dizaines de milliers d'utilisateurs satisfaits",
+      },
     },
     trustItems: [
       "Aucun compte pour commencer",
@@ -462,6 +482,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
         "Sube un PDF para editar texto, imagenes, resaltados, firmas, dibujos y paginas en tu navegador.",
       button: "Elegir PDF",
       privacy: "Los archivos permanecen por defecto en la memoria del navegador",
+      socialProof: {
+        rating: "4,9/5",
+        text: "de decenas de miles de usuarios satisfechos",
+      },
     },
     trustItems: [
       "Sin cuenta para empezar",
@@ -543,6 +567,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
         "Carica un PDF per modificare testo, immagini, evidenziazioni, firme, disegni e pagine nel browser.",
       button: "Scegli PDF",
       privacy: "I file restano per default nella memoria del browser",
+      socialProof: {
+        rating: "4,9/5",
+        text: "da decine di migliaia di utenti soddisfatti",
+      },
     },
     trustItems: [
       "Nessun account per iniziare",

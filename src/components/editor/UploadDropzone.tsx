@@ -1,9 +1,28 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { FileUp, Loader2, ShieldCheck } from "lucide-react";
+import { BadgeCheck, FileUp, Loader2, ShieldCheck, Star } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+
+type UploadDropzoneCopy = {
+  title: string;
+  description: string;
+  button: string;
+  privacy: string;
+  socialProof?: {
+    rating: string;
+    text: string;
+  };
+};
+
+const avatarStyles = [
+  "bg-rose-100 text-rose-700",
+  "bg-amber-100 text-amber-700",
+  "bg-teal-100 text-teal-700",
+  "bg-violet-100 text-violet-700",
+  "bg-slate-900 text-white",
+];
 
 export function UploadDropzone({
   onFile,
@@ -22,12 +41,7 @@ export function UploadDropzone({
   isLoading?: boolean;
   compact?: boolean;
   wide?: boolean;
-  copy?: {
-    title: string;
-    description: string;
-    button: string;
-    privacy: string;
-  };
+  copy?: UploadDropzoneCopy;
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -92,6 +106,33 @@ export function UploadDropzone({
         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileUp className="h-4 w-4" />}
         {copy.button}
       </Button>
+      {copy.socialProof && (
+        <div className="mx-auto mt-5 flex w-fit flex-col items-center justify-center gap-3 rounded-full border border-line bg-white px-4 py-2 shadow-sm sm:flex-row">
+          <div className="flex -space-x-2">
+            {["A", "M", "J", "S", "+"].map((label, index) => (
+              <span
+                key={label}
+                className={cn(
+                  "flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-xs font-bold shadow-sm",
+                  avatarStyles[index],
+                )}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-1.5 text-sm font-semibold text-ink">
+            <span className="flex items-center gap-0.5 text-amber-500" aria-hidden="true">
+              {[0, 1, 2, 3, 4].map((star) => (
+                <Star key={star} className="h-3.5 w-3.5 fill-current" />
+              ))}
+            </span>
+            <span>{copy.socialProof.rating}</span>
+            <span className="font-medium text-slate-700">{copy.socialProof.text}</span>
+            <BadgeCheck className="h-4 w-4 fill-sky-500 text-white" aria-hidden="true" />
+          </div>
+        </div>
+      )}
       <div className="mt-4 flex items-center justify-center gap-2 text-xs text-slate-500">
         <ShieldCheck className="h-3.5 w-3.5 text-accent-600" />
         {copy.privacy}

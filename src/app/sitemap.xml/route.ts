@@ -1,6 +1,7 @@
 import { siteUrl } from "@/lib/site";
 
 const sitemapPaths = ["/sitemaps/pages.xml"];
+const sitemapLastModified = "2026-06-16";
 
 function xmlResponse(body: string) {
   return new Response(body, {
@@ -21,12 +22,11 @@ function escapeXml(value: string) {
 }
 
 export function GET() {
-  const lastModified = new Date().toISOString();
   const sitemaps = sitemapPaths
     .map(
       (path) => `  <sitemap>
     <loc>${escapeXml(`${siteUrl}${path}`)}</loc>
-    <lastmod>${lastModified}</lastmod>
+    <lastmod>${sitemapLastModified}</lastmod>
   </sitemap>`,
     )
     .join("\n");

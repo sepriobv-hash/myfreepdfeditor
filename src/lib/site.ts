@@ -1,4 +1,6 @@
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://myfreepdfeditor.com";
+const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://myfreepdfeditor.com";
+
+export const siteUrl = configuredSiteUrl.replace(/\/$/, "");
 
 export const siteName = "MyFreePDFEditor";
 

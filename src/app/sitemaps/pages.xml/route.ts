@@ -1,4 +1,5 @@
 import { getAbsoluteLocalizedUrl, getLanguageAlternates, localeOptions } from "@/lib/i18n";
+import { activePdfTools } from "@/lib/pdfTools";
 import { siteUrl } from "@/lib/site";
 
 type SitemapEntry = {
@@ -9,7 +10,7 @@ type SitemapEntry = {
   alternates?: Record<string, string>;
 };
 
-const lastContentUpdate = "2026-06-16";
+const lastContentUpdate = "2026-08-28";
 
 function xmlResponse(body: string) {
   return new Response(body, {
@@ -67,6 +68,30 @@ export function GET() {
       priority: "0.8",
       lastModified: lastContentUpdate,
     },
+    {
+      url: `${siteUrl}/all-tools`,
+      changeFrequency: "weekly",
+      priority: "0.9",
+      lastModified: lastContentUpdate,
+    },
+    {
+      url: `${siteUrl}/about`,
+      changeFrequency: "monthly",
+      priority: "0.6",
+      lastModified: lastContentUpdate,
+    },
+    {
+      url: `${siteUrl}/security`,
+      changeFrequency: "monthly",
+      priority: "0.7",
+      lastModified: lastContentUpdate,
+    },
+    ...activePdfTools.map((tool) => ({
+      url: `${siteUrl}/${tool.slug}`,
+      changeFrequency: "weekly" as const,
+      priority: tool.priority,
+      lastModified: lastContentUpdate,
+    })),
     {
       url: `${siteUrl}/privacy`,
       changeFrequency: "monthly",

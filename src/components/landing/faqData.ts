@@ -9,7 +9,7 @@ export const landingFaqs: LandingFaq[] = [
   {
     question: "Is MyFreePDFEditor a free PDF editor?",
     answer:
-      "Yes. MyFreePDFEditor is a free online PDF editor for the MVP. You can upload a PDF, edit it in your browser, and download the edited PDF without paying for the core editing workflow.",
+      "Yes. MyFreePDFEditor is a free online PDF editor. You can upload a PDF, edit it in your browser, and download the edited PDF without paying for the core editing workflow.",
   },
   {
     question: "How do I edit a PDF online for free?",
@@ -49,7 +49,7 @@ export const landingFaqs: LandingFaq[] = [
   {
     question: "Are my PDF files uploaded to a server?",
     answer:
-      "The MVP is browser-first. Files are handled in local browser memory where possible and are not permanently stored by default. The homepage-to-editor upload handoff uses temporary browser storage on your own device.",
+      "The editor is browser-first. Files are handled in local browser memory where possible and are not permanently stored by default. The homepage-to-editor upload handoff uses temporary browser storage on your own device.",
   },
   {
     question: "Do I need to create an account?",
@@ -69,7 +69,7 @@ export const landingFaqs: LandingFaq[] = [
   {
     question: "What makes this different from many PDF editors?",
     answer:
-      "The core MVP focuses on fast, free, browser-based editing without forcing an account before you can start. Many online PDF tools reserve common export or editing features for paid flows.",
+      "The core editor focuses on fast, free, browser-based editing without forcing an account before you can start. Many online PDF tools reserve common export or editing features for paid flows.",
   },
   {
     question: "Will OCR, compression, merge, split, and watermark tools be added?",
@@ -83,7 +83,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Is MyFreePDFEditor een gratis PDF-editor?",
       answer:
-        "Ja. MyFreePDFEditor is een gratis online PDF-editor voor de huidige MVP. Je kunt een PDF uploaden, in je browser bewerken en de bewerkte PDF downloaden zonder te betalen voor de basisworkflow.",
+        "Ja. MyFreePDFEditor is een gratis online PDF-editor. Je kunt een PDF uploaden, in je browser bewerken en de bewerkte PDF downloaden zonder te betalen voor de basisworkflow.",
     },
     {
       question: "Hoe kan ik gratis een PDF online bewerken?",
@@ -103,7 +103,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Worden mijn PDF-bestanden op een server opgeslagen?",
       answer:
-        "De MVP is browser-first. Bestanden worden waar mogelijk lokaal verwerkt en niet standaard permanent opgeslagen. De upload vanaf de homepage gebruikt tijdelijke browseropslag op je eigen apparaat.",
+        "De editor is browser-first. Bestanden worden waar mogelijk lokaal verwerkt en niet standaard permanent opgeslagen. De upload vanaf de homepage gebruikt tijdelijke browseropslag op je eigen apparaat.",
     },
     {
       question: "Moet ik een account maken?",
@@ -115,7 +115,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Ist MyFreePDFEditor ein kostenloser PDF-Editor?",
       answer:
-        "Ja. MyFreePDFEditor ist im aktuellen MVP ein kostenloser Online-PDF-Editor. Du kannst eine PDF hochladen, im Browser bearbeiten und die bearbeitete PDF herunterladen.",
+        "Ja. MyFreePDFEditor ist ein kostenloser Online-PDF-Editor. Du kannst eine PDF hochladen, im Browser bearbeiten und die bearbeitete PDF herunterladen.",
     },
     {
       question: "Wie kann ich eine PDF online kostenlos bearbeiten?",
@@ -135,7 +135,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Werden meine PDF-Dateien auf einem Server gespeichert?",
       answer:
-        "Der MVP ist browser-first. Dateien werden moeglichst lokal verarbeitet und standardmaessig nicht dauerhaft gespeichert. Der Homepage-Upload nutzt temporaeren Browserspeicher auf deinem Geraet.",
+        "Der Editor ist browser-first. Dateien werden moeglichst lokal verarbeitet und standardmaessig nicht dauerhaft gespeichert. Der Homepage-Upload nutzt temporaeren Browserspeicher auf deinem Geraet.",
     },
     {
       question: "Brauche ich ein Konto?",
@@ -147,7 +147,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "MyFreePDFEditor est-il un editeur PDF gratuit?",
       answer:
-        "Oui. MyFreePDFEditor est un editeur PDF en ligne gratuit pour le MVP actuel. Vous pouvez importer, modifier dans le navigateur et telecharger le PDF modifie.",
+        "Oui. MyFreePDFEditor est un editeur PDF en ligne gratuit. Vous pouvez importer, modifier dans le navigateur et telecharger le PDF modifie.",
     },
     {
       question: "Comment modifier un PDF en ligne gratuitement?",
@@ -167,7 +167,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Mes fichiers PDF sont-ils stockes sur un serveur?",
       answer:
-        "Le MVP est browser-first. Les fichiers sont traites localement lorsque possible et ne sont pas stockes de facon permanente par defaut. L'import depuis la page d'accueil utilise un stockage temporaire du navigateur.",
+        "L'editeur est browser-first. Les fichiers sont traites localement lorsque possible et ne sont pas stockes de facon permanente par defaut. L'import depuis la page d'accueil utilise un stockage temporaire du navigateur.",
     },
     {
       question: "Dois-je creer un compte?",
@@ -179,7 +179,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "MyFreePDFEditor es un editor PDF gratis?",
       answer:
-        "Si. MyFreePDFEditor es un editor PDF online gratis para el MVP actual. Puedes subir un PDF, editarlo en el navegador y descargar el PDF editado.",
+        "Si. MyFreePDFEditor es un editor PDF online gratis. Puedes subir un PDF, editarlo en el navegador y descargar el PDF editado.",
     },
     {
       question: "Como puedo editar un PDF online gratis?",
@@ -199,7 +199,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Mis archivos PDF se guardan en un servidor?",
       answer:
-        "El MVP es browser-first. Los archivos se procesan localmente cuando es posible y no se almacenan permanentemente por defecto. La subida desde la pagina inicial usa almacenamiento temporal del navegador.",
+        "El editor es browser-first. Los archivos se procesan localmente cuando es posible y no se almacenan permanentemente por defecto. La subida desde la pagina inicial usa almacenamiento temporal del navegador.",
     },
     {
       question: "Necesito crear una cuenta?",
@@ -211,7 +211,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "MyFreePDFEditor e un editor PDF gratuito?",
       answer:
-        "Si. MyFreePDFEditor e un editor PDF online gratuito per l'MVP attuale. Puoi caricare un PDF, modificarlo nel browser e scaricare il PDF modificato.",
+        "Si. MyFreePDFEditor e un editor PDF online gratuito. Puoi caricare un PDF, modificarlo nel browser e scaricare il PDF modificato.",
     },
     {
       question: "Come posso modificare un PDF online gratis?",
@@ -231,7 +231,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "I miei file PDF vengono salvati su un server?",
       answer:
-        "L'MVP e browser-first. I file vengono gestiti localmente quando possibile e non sono salvati permanentemente per impostazione predefinita. Il caricamento dalla homepage usa archiviazione temporanea del browser.",
+        "L'editor e browser-first. I file vengono gestiti localmente quando possibile e non sono salvati permanentemente per impostazione predefinita. Il caricamento dalla homepage usa archiviazione temporanea del browser.",
     },
     {
       question: "Devo creare un account?",

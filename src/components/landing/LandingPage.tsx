@@ -140,6 +140,12 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
             <a className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href="#tools">
               {copy.nav.tools}
             </a>
+            <Link className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href="/all-tools">
+              {copy.nav.allTools}
+            </Link>
+            <Link className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href="/about">
+              {copy.nav.about}
+            </Link>
             <a className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href="#security">
               {copy.nav.security}
             </a>
@@ -451,7 +457,9 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
             </div>
             <div className="flex flex-wrap gap-4 text-sm text-slate-600">
               <Link href="/editor" className="hover:text-ink">{copy.footer.editor}</Link>
-              <Link href="/pricing" className="hover:text-ink">{copy.footer.pricing}</Link>
+              <Link href="/all-tools" className="hover:text-ink">{copy.footer.allTools}</Link>
+              <Link href="/about" className="hover:text-ink">{copy.footer.about}</Link>
+              <Link href="/security" className="hover:text-ink">{copy.footer.security}</Link>
               <Link href="/privacy" className="hover:text-ink">{copy.footer.privacy}</Link>
               <a href="#faq" className="hover:text-ink">{copy.footer.faq}</a>
             </div>

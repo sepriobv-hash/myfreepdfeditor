@@ -7,14 +7,14 @@ export default function PricingPage() {
         <p className="text-sm font-semibold uppercase tracking-normal text-brand-600">Pricing</p>
         <h1 className="mt-3 text-4xl font-semibold text-ink">The PDF editor is free.</h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-          MyFreePDFEditor is free during the MVP. Core editing, signing, annotations, page tools, and
-          PDF export are not locked behind a paywall in this version.
+          MyFreePDFEditor keeps core PDF editing free. Editing, signing, annotations, page tools, and
+          PDF export are not locked behind a paywall.
         </p>
         <div className="mt-7 grid gap-4 md:grid-cols-3">
           {[
             ["Free editor", "$0", "Upload, edit, sign, annotate, and export PDFs in the browser."],
             ["No account required", "$0", "Start editing without creating a workspace or entering payment details."],
-            ["Future Pro", "Later", "Optional cloud storage, OCR, compression, teams, and version history."],
+            ["Optional Pro later", "Later", "Cloud storage, OCR, batch workflows, teams, and version history can become optional upgrades."],
           ].map(([title, price, text]) => (
             <div key={title} className="rounded-lg border border-line bg-slate-50 p-5">
               <div className="text-sm font-semibold text-brand-600">{title}</div>

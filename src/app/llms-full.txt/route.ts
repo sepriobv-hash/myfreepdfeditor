@@ -1,4 +1,5 @@
 import { getAbsoluteLocalizedUrl, localeOptions } from "@/lib/i18n";
+import { activePdfTools } from "@/lib/pdfTools";
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
 function textResponse(body: string) {
@@ -17,6 +18,9 @@ export function GET() {
         `- ${locale.label} (${locale.hreflang}): ${getAbsoluteLocalizedUrl(locale.code)}`,
     )
     .join("\n");
+  const activeTools = activePdfTools
+    .map((tool) => `- ${tool.title}: ${siteUrl}/${tool.slug}`)
+    .join("\n");
 
   return textResponse(`# ${siteName} Full LLM Reference
 
@@ -27,9 +31,15 @@ ${siteName} helps users edit PDFs online for free. The product focuses on common
 ## Public Routes
 - Homepage: ${siteUrl}
 ${localizedPages}
+- All tools: ${siteUrl}/all-tools
+- About: ${siteUrl}/about
+- Security: ${siteUrl}/security
 - Editor: ${siteUrl}/editor
 - Pricing: ${siteUrl}/pricing
 - Privacy: ${siteUrl}/privacy
+
+## Active Tool Routes
+${activeTools}
 
 ## SEO Files
 - Sitemap index: ${siteUrl}/sitemap.xml

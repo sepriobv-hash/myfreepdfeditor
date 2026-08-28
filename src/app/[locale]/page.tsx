@@ -20,32 +20,32 @@ const localizedMetadata: Record<SupportedLocale, { title: string; description: s
   en: {
     title: "Free PDF Editor Online - Edit PDFs in Your Browser",
     description:
-      "Free PDF editor for editing PDFs online. Upload a PDF, edit text, add signatures, images, highlights, annotations, and export securely from your browser.",
+      "Free PDF editor for editing PDFs online. Upload a PDF, edit text, add signatures, images, highlights, and export with no signup and no watermark.",
   },
   nl: {
     title: "Gratis PDF Editor Online - PDF Bewerken in je Browser",
     description:
-      "Gratis online PDF-editor. Upload een PDF, bewerk tekst, voeg handtekeningen, afbeeldingen, markeringen en annotaties toe en exporteer veilig vanuit je browser.",
+      "Gratis online PDF-editor. Upload een PDF, bewerk tekst, voeg handtekeningen, afbeeldingen en markeringen toe, zonder account en zonder watermerk.",
   },
   de: {
     title: "Kostenloser PDF Editor Online - PDFs im Browser bearbeiten",
     description:
-      "Kostenloser Online-PDF-Editor. PDF hochladen, Text bearbeiten, Unterschriften, Bilder, Markierungen und Anmerkungen hinzufuegen und sicher im Browser exportieren.",
+      "Kostenloser Online-PDF-Editor. PDF hochladen, Text bearbeiten, Unterschriften, Bilder und Markierungen hinzufuegen, ohne Konto und ohne Wasserzeichen.",
   },
   fr: {
     title: "Editeur PDF Gratuit en Ligne - Modifier un PDF dans le Navigateur",
     description:
-      "Editeur PDF en ligne gratuit. Importez un PDF, modifiez le texte, ajoutez signatures, images, surlignages et annotations, puis exportez depuis le navigateur.",
+      "Editeur PDF en ligne gratuit. Importez un PDF, modifiez le texte, ajoutez signatures, images et surlignages, sans compte et sans filigrane.",
   },
   es: {
     title: "Editor PDF Gratis Online - Editar PDF en el Navegador",
     description:
-      "Editor PDF online gratis. Sube un PDF, edita texto, agrega firmas, imagenes, resaltados y anotaciones, y exporta de forma segura desde el navegador.",
+      "Editor PDF online gratis. Sube un PDF, edita texto, agrega firmas, imagenes y resaltados, sin registro y sin marca de agua.",
   },
   it: {
     title: "Editor PDF Gratis Online - Modifica PDF nel Browser",
     description:
-      "Editor PDF online gratuito. Carica un PDF, modifica testo, aggiungi firme, immagini, evidenziazioni e annotazioni, poi esporta dal browser.",
+      "Editor PDF online gratuito. Carica un PDF, modifica testo, aggiungi firme, immagini ed evidenziazioni, senza account e senza filigrana.",
   },
 };
 

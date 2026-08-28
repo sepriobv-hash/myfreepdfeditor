@@ -8,7 +8,7 @@ export default function PrivacyPage() {
         <h1 className="mt-3 text-4xl font-semibold text-ink">Browser-first PDF editing.</h1>
         <p className="mt-4 text-base leading-7 text-slate-600">
           MyFreePDFEditor processes uploaded files in local browser memory by default. Files are not
-          permanently stored, and the MVP does not require user accounts or server uploads for core
+          permanently stored, and the core editor does not require user accounts or server uploads for core
           editing.
         </p>
         <p className="mt-4 text-base leading-7 text-slate-600">

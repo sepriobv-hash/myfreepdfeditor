@@ -1,6 +1,6 @@
 # PDF Studio Web
 
-A browser-first PDF editor MVP built with Next.js, TypeScript, Tailwind CSS, PDF.js, pdf-lib, Konva, and Zustand.
+A browser-first PDF editor built with Next.js, TypeScript, Tailwind CSS, PDF.js, pdf-lib, Konva, and Zustand.
 
 ## Features
 
@@ -32,6 +32,6 @@ npm run build
 
 ## Notes
 
-The MVP uses visual overlay editing. Existing PDF text is preserved in the original page content; new edits are added as exported PDF objects. Direct editing of existing PDF text, OCR, compression, cloud storage, authentication, Stripe subscriptions, and team workspaces are prepared as future product areas.
+The editor uses visual overlay editing. Existing PDF text is preserved in the original page content; new edits are added as exported PDF objects. Existing text editing, OCR, compression, cloud storage, authentication, Stripe subscriptions, and team workspaces are product areas that can keep expanding over time.
 
-Files are processed in browser memory by default. No upload API route is required for the MVP.
+Files are processed in browser memory by default. No upload API route is required for the core editor workflow.

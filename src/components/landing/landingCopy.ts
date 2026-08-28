@@ -8,6 +8,8 @@ type TextBlock = {
 export type LandingCopy = {
   nav: {
     tools: string;
+    allTools: string;
+    about: string;
     security: string;
     faq: string;
     cta: string;
@@ -63,7 +65,9 @@ export type LandingCopy = {
     language: string;
     tagline: string;
     editor: string;
-    pricing: string;
+    allTools: string;
+    about: string;
+    security: string;
     privacy: string;
     faq: string;
   };
@@ -73,6 +77,8 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
   en: {
     nav: {
       tools: "Tools",
+      allTools: "All Tools",
+      about: "About",
       security: "Security",
       faq: "FAQ",
       cta: "Edit PDF Free",
@@ -81,9 +87,9 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       badge: "Free online PDF editor with browser-first file handling",
       title: "Free PDF Editor Online",
       description:
-        "Upload a PDF for free, edit existing text visually, add images, signatures, highlights, drawings, and page changes, then download the edited PDF from your browser.",
-      badges: ["Free to use", "No signup needed", "Private browser editing", "Real PDF download"],
-      trust: ["Private by default", "Real PDF export", "Fast visual editing"],
+        "Upload a PDF for free, edit existing text visually, add images, signatures, highlights, drawings, and page changes, then download the edited PDF with no signup and no watermark.",
+      badges: ["Free to use", "No signup needed", "No watermark", "Files stay on your device"],
+      trust: ["Private by default", "No watermark export", "Fast visual editing"],
     },
     upload: {
       title: "Drop your PDF here",
@@ -92,8 +98,8 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       button: "Choose PDF",
       privacy: "Files stay in browser memory by default",
       socialProof: {
-        rating: "4.9/5",
-        text: "from 10,000s of happy users",
+        rating: "Free",
+        text: "No signup, no watermark, browser-first editing",
       },
     },
     trustItems: [
@@ -196,7 +202,9 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       language: "Language",
       tagline: "Modern browser-based PDF editing",
       editor: "Editor",
-      pricing: "Pricing",
+      allTools: "All Tools",
+      about: "About",
+      security: "Security",
       privacy: "Privacy",
       faq: "FAQ",
     },
@@ -204,6 +212,8 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
   nl: {
     nav: {
       tools: "Tools",
+      allTools: "Alle tools",
+      about: "Over ons",
       security: "Privacy",
       faq: "FAQ",
       cta: "PDF gratis bewerken",
@@ -212,9 +222,9 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       badge: "Gratis online PDF-editor met browsergerichte bestandsverwerking",
       title: "Gratis PDF Editor Online",
       description:
-        "Upload gratis een PDF, bewerk bestaande tekst visueel, voeg afbeeldingen, handtekeningen, markeringen, tekeningen en paginawijzigingen toe en download daarna je bewerkte PDF.",
-      badges: ["Gratis te gebruiken", "Geen account nodig", "Prive bewerken in de browser", "Echte PDF-download"],
-      trust: ["Prive standaard", "Echte PDF-export", "Snel visueel bewerken"],
+        "Upload gratis een PDF, bewerk bestaande tekst visueel, voeg afbeeldingen, handtekeningen, markeringen, tekeningen en paginawijzigingen toe en download daarna je bewerkte PDF zonder account en zonder watermerk.",
+      badges: ["Gratis te gebruiken", "Geen account nodig", "Geen watermerk", "Bestanden blijven op je apparaat"],
+      trust: ["Prive standaard", "Export zonder watermerk", "Snel visueel bewerken"],
     },
     upload: {
       title: "Sleep je PDF hierheen",
@@ -223,8 +233,8 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       button: "Kies PDF",
       privacy: "Bestanden blijven standaard in het browsergeheugen",
       socialProof: {
-        rating: "4,9/5",
-        text: "van 10.000en tevreden gebruikers",
+        rating: "Gratis",
+        text: "Geen account, geen watermerk, browsergericht bewerken",
       },
     },
     trustItems: [
@@ -289,11 +299,13 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
     },
     faq: { eyebrow: "FAQ", title: "Vragen over PDF's online bewerken" },
     cta: { title: "Klaar om je PDF te bewerken?", description: "Upload lokaal, bewerk visueel en download een nette PDF.", button: "Open gratis editor" },
-    footer: { language: "Taal", tagline: "Moderne PDF-bewerking in je browser", editor: "Editor", pricing: "Prijzen", privacy: "Privacy", faq: "FAQ" },
+    footer: { language: "Taal", tagline: "Moderne PDF-bewerking in je browser", editor: "Editor", allTools: "Alle tools", about: "Over ons", security: "Beveiliging", privacy: "Privacy", faq: "FAQ" },
   },
   de: {
     nav: {
       tools: "Werkzeuge",
+      allTools: "Alle Werkzeuge",
+      about: "Ueber uns",
       security: "Datenschutz",
       faq: "FAQ",
       cta: "PDF kostenlos bearbeiten",
@@ -302,9 +314,9 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       badge: "Kostenloser Online-PDF-Editor mit browserbasierter Dateiverarbeitung",
       title: "Kostenloser PDF Editor Online",
       description:
-        "Lade eine PDF kostenlos hoch, bearbeite vorhandenen Text visuell, fuege Bilder, Unterschriften, Markierungen, Zeichnungen und Seitenanpassungen hinzu und lade die bearbeitete PDF herunter.",
-      badges: ["Kostenlos nutzbar", "Kein Konto erforderlich", "Privat im Browser bearbeiten", "Echter PDF-Download"],
-      trust: ["Standardmaessig privat", "Echter PDF-Export", "Schnelle visuelle Bearbeitung"],
+        "Lade eine PDF kostenlos hoch, bearbeite vorhandenen Text visuell, fuege Bilder, Unterschriften, Markierungen, Zeichnungen und Seitenanpassungen hinzu und lade die bearbeitete PDF ohne Konto und ohne Wasserzeichen herunter.",
+      badges: ["Kostenlos nutzbar", "Kein Konto erforderlich", "Kein Wasserzeichen", "Dateien bleiben auf deinem Geraet"],
+      trust: ["Standardmaessig privat", "Export ohne Wasserzeichen", "Schnelle visuelle Bearbeitung"],
     },
     upload: {
       title: "PDF hier ablegen",
@@ -313,8 +325,8 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       button: "PDF auswaehlen",
       privacy: "Dateien bleiben standardmaessig im Browserspeicher",
       socialProof: {
-        rating: "4,9/5",
-        text: "von 10.000en zufriedenen Nutzern",
+        rating: "Kostenlos",
+        text: "Kein Konto, kein Wasserzeichen, Bearbeitung im Browser",
       },
     },
     trustItems: [
@@ -379,17 +391,17 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
     },
     faq: { eyebrow: "FAQ", title: "Fragen zum Online-Bearbeiten von PDFs" },
     cta: { title: "Bereit, deine PDF zu bearbeiten?", description: "Lade lokal hoch, bearbeite visuell und lade eine saubere PDF herunter.", button: "Kostenlosen Editor oeffnen" },
-    footer: { language: "Sprache", tagline: "Moderne PDF-Bearbeitung im Browser", editor: "Editor", pricing: "Preise", privacy: "Datenschutz", faq: "FAQ" },
+    footer: { language: "Sprache", tagline: "Moderne PDF-Bearbeitung im Browser", editor: "Editor", allTools: "Alle Werkzeuge", about: "Ueber uns", security: "Sicherheit", privacy: "Datenschutz", faq: "FAQ" },
   },
   fr: {
-    nav: { tools: "Outils", security: "Confidentialite", faq: "FAQ", cta: "Modifier PDF gratuit" },
+    nav: { tools: "Outils", allTools: "Tous les outils", about: "A propos", security: "Confidentialite", faq: "FAQ", cta: "Modifier PDF gratuit" },
     hero: {
       badge: "Editeur PDF en ligne gratuit avec traitement des fichiers dans le navigateur",
       title: "Editeur PDF Gratuit en Ligne",
       description:
-        "Importez un PDF gratuitement, modifiez le texte existant visuellement, ajoutez images, signatures, surlignages, dessins et changements de pages, puis telechargez le PDF modifie.",
-      badges: ["Gratuit", "Sans compte", "Edition privee dans le navigateur", "Telechargement PDF reel"],
-      trust: ["Prive par defaut", "Export PDF reel", "Edition visuelle rapide"],
+        "Importez un PDF gratuitement, modifiez le texte existant visuellement, ajoutez images, signatures, surlignages, dessins et changements de pages, puis telechargez le PDF modifie sans compte et sans filigrane.",
+      badges: ["Gratuit", "Sans compte", "Sans filigrane", "Fichiers sur votre appareil"],
+      trust: ["Prive par defaut", "Export sans filigrane", "Edition visuelle rapide"],
     },
     upload: {
       title: "Deposez votre PDF ici",
@@ -398,8 +410,8 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       button: "Choisir un PDF",
       privacy: "Les fichiers restent par defaut en memoire dans le navigateur",
       socialProof: {
-        rating: "4,9/5",
-        text: "par des dizaines de milliers d'utilisateurs satisfaits",
+        rating: "Gratuit",
+        text: "Sans compte, sans filigrane, edition dans le navigateur",
       },
     },
     trustItems: [
@@ -464,17 +476,17 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
     },
     faq: { eyebrow: "FAQ", title: "Questions sur la modification de PDF en ligne" },
     cta: { title: "Pret a modifier votre PDF?", description: "Importez localement, modifiez visuellement et telechargez un PDF propre.", button: "Ouvrir l'editeur gratuit" },
-    footer: { language: "Langue", tagline: "Edition PDF moderne dans le navigateur", editor: "Editeur", pricing: "Tarifs", privacy: "Confidentialite", faq: "FAQ" },
+    footer: { language: "Langue", tagline: "Edition PDF moderne dans le navigateur", editor: "Editeur", allTools: "Tous les outils", about: "A propos", security: "Securite", privacy: "Confidentialite", faq: "FAQ" },
   },
   es: {
-    nav: { tools: "Herramientas", security: "Privacidad", faq: "FAQ", cta: "Editar PDF gratis" },
+    nav: { tools: "Herramientas", allTools: "Todas las herramientas", about: "Acerca de", security: "Privacidad", faq: "FAQ", cta: "Editar PDF gratis" },
     hero: {
       badge: "Editor PDF online gratis con manejo de archivos desde el navegador",
       title: "Editor PDF Gratis Online",
       description:
-        "Sube un PDF gratis, edita texto existente de forma visual, agrega imagenes, firmas, resaltados, dibujos y cambios de paginas, y descarga el PDF editado.",
-      badges: ["Gratis", "Sin registro", "Edicion privada en el navegador", "Descarga PDF real"],
-      trust: ["Privado por defecto", "Exportacion PDF real", "Edicion visual rapida"],
+        "Sube un PDF gratis, edita texto existente de forma visual, agrega imagenes, firmas, resaltados, dibujos y cambios de paginas, y descarga el PDF editado sin registro y sin marca de agua.",
+      badges: ["Gratis", "Sin registro", "Sin marca de agua", "Archivos en tu dispositivo"],
+      trust: ["Privado por defecto", "Exportacion sin marca de agua", "Edicion visual rapida"],
     },
     upload: {
       title: "Suelta tu PDF aqui",
@@ -483,8 +495,8 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       button: "Elegir PDF",
       privacy: "Los archivos permanecen por defecto en la memoria del navegador",
       socialProof: {
-        rating: "4,9/5",
-        text: "de decenas de miles de usuarios satisfechos",
+        rating: "Gratis",
+        text: "Sin registro, sin marca de agua, edicion en el navegador",
       },
     },
     trustItems: [
@@ -549,17 +561,17 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
     },
     faq: { eyebrow: "FAQ", title: "Preguntas sobre editar PDF online" },
     cta: { title: "Listo para editar tu PDF?", description: "Sube el archivo localmente, edita visualmente y descarga un PDF limpio.", button: "Abrir editor gratis" },
-    footer: { language: "Idioma", tagline: "Edicion PDF moderna en el navegador", editor: "Editor", pricing: "Precios", privacy: "Privacidad", faq: "FAQ" },
+    footer: { language: "Idioma", tagline: "Edicion PDF moderna en el navegador", editor: "Editor", allTools: "Todas las herramientas", about: "Acerca de", security: "Seguridad", privacy: "Privacidad", faq: "FAQ" },
   },
   it: {
-    nav: { tools: "Strumenti", security: "Privacy", faq: "FAQ", cta: "Modifica PDF gratis" },
+    nav: { tools: "Strumenti", allTools: "Tutti gli strumenti", about: "Chi siamo", security: "Privacy", faq: "FAQ", cta: "Modifica PDF gratis" },
     hero: {
       badge: "Editor PDF online gratuito con gestione dei file nel browser",
       title: "Editor PDF Gratis Online",
       description:
-        "Carica un PDF gratis, modifica visivamente il testo esistente, aggiungi immagini, firme, evidenziazioni, disegni e modifiche alle pagine, poi scarica il PDF modificato.",
-      badges: ["Gratis", "Nessun account", "Modifica privata nel browser", "Download PDF reale"],
-      trust: ["Privato di default", "Export PDF reale", "Modifica visuale rapida"],
+        "Carica un PDF gratis, modifica visivamente il testo esistente, aggiungi immagini, firme, evidenziazioni, disegni e modifiche alle pagine, poi scarica il PDF modificato senza account e senza filigrana.",
+      badges: ["Gratis", "Nessun account", "Nessuna filigrana", "File sul tuo dispositivo"],
+      trust: ["Privato di default", "Export senza filigrana", "Modifica visuale rapida"],
     },
     upload: {
       title: "Trascina qui il PDF",
@@ -568,8 +580,8 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       button: "Scegli PDF",
       privacy: "I file restano per default nella memoria del browser",
       socialProof: {
-        rating: "4,9/5",
-        text: "da decine di migliaia di utenti soddisfatti",
+        rating: "Gratis",
+        text: "Nessun account, nessuna filigrana, modifica nel browser",
       },
     },
     trustItems: [
@@ -634,6 +646,6 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
     },
     faq: { eyebrow: "FAQ", title: "Domande sulla modifica dei PDF online" },
     cta: { title: "Pronto a modificare il tuo PDF?", description: "Carica localmente, modifica visivamente e scarica un PDF pulito.", button: "Apri editor gratis" },
-    footer: { language: "Lingua", tagline: "Modifica PDF moderna nel browser", editor: "Editor", pricing: "Prezzi", privacy: "Privacy", faq: "FAQ" },
+    footer: { language: "Lingua", tagline: "Modifica PDF moderna nel browser", editor: "Editor", allTools: "Tutti gli strumenti", about: "Chi siamo", security: "Sicurezza", privacy: "Privacy", faq: "FAQ" },
   },
 };

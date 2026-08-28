@@ -1,4 +1,5 @@
 import { getAbsoluteLocalizedUrl, localeOptions } from "@/lib/i18n";
+import { activePdfTools } from "@/lib/pdfTools";
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
 function textResponse(body: string) {
@@ -14,6 +15,9 @@ export function GET() {
   const localizedPages = localeOptions
     .map((locale) => `- [${locale.label} homepage](${getAbsoluteLocalizedUrl(locale.code)})`)
     .join("\n");
+  const toolPages = activePdfTools
+    .map((tool) => `- [${tool.title}](${siteUrl}/${tool.slug}): ${tool.intro}`)
+    .join("\n");
 
   return textResponse(`# ${siteName}
 
@@ -24,9 +28,15 @@ ${siteName} is a free browser-based PDF editor for people who need quick PDF edi
 ## Primary Pages
 - [Homepage](${siteUrl}): Free online PDF editor upload page.
 ${localizedPages}
+- [All Tools](${siteUrl}/all-tools): Browse available free PDF tools.
+- [About](${siteUrl}/about): Product positioning and public promise.
+- [Security](${siteUrl}/security): Browser-first file handling and privacy explanation.
 - [Editor](${siteUrl}/editor): Browser-based PDF editing workspace.
-- [Pricing](${siteUrl}/pricing): Free MVP pricing information.
+- [Pricing](${siteUrl}/pricing): Free core editing and optional future upgrade information.
 - [Privacy](${siteUrl}/privacy): Privacy and file-handling information.
+
+## Active Tool Pages
+${toolPages}
 
 ## Capabilities
 - Edit existing PDF text visually.

@@ -1,7 +1,7 @@
 import { siteUrl } from "@/lib/site";
 
 const sitemapPaths = ["/sitemaps/pages.xml"];
-const sitemapLastModified = "2026-06-16";
+const sitemapLastModified = "2026-08-28";
 
 function xmlResponse(body: string) {
   return new Response(body, {

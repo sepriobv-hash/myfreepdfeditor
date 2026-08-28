@@ -43,6 +43,8 @@ export default function HomePage() {
       "Edit PDF text",
       "Add signatures to PDF",
       "Annotate and highlight PDFs",
+      "No signup required",
+      "No watermark on exported PDFs",
       "Export edited PDF files",
     ],
   };

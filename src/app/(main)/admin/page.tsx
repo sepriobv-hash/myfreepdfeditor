@@ -6,6 +6,16 @@ import { Activity, BarChart3, Clock, KeyRound, RefreshCw, Users } from "lucide-r
 import { Button } from "@/components/ui/Button";
 import type { UsageSummary } from "@/types/usage";
 
+const funnelSteps = [
+  "landing_view",
+  "upload_clicked",
+  "upload_success",
+  "editor_ready",
+  "first_edit",
+  "export_started",
+  "export_success",
+] as const;
+
 export default function AdminPage() {
   const [token, setToken] = useState("");
   const [summary, setSummary] = useState<UsageSummary | null>(null);
@@ -54,8 +64,8 @@ export default function AdminPage() {
             </p>
             <h1 className="mt-2 text-4xl font-semibold text-ink">Usage dashboard</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-              Privacy-light product events for the current deployment runtime. For production
-              retention across serverless restarts, connect this to a database.
+              Privacy-minimized product events with a fixed upload-to-export funnel and a 90-day
+              maximum retention period.
             </p>
             {summary && (
               <p className="mt-2 text-sm font-medium text-slate-500">
@@ -112,6 +122,30 @@ export default function AdminPage() {
             value={summary?.lastEventAt ? new Date(summary.lastEventAt).toLocaleString() : "-"}
           />
         </div>
+
+        <section className="mt-8 rounded-lg border border-line bg-white p-5 shadow-soft">
+          <div className="mb-5 flex items-center gap-2">
+            <BarChart3 className="h-5 w-5 text-brand-600" />
+            <div>
+              <h2 className="text-lg font-semibold text-ink">Core funnel</h2>
+              <p className="text-sm text-slate-500">Event completion relative to landing views.</p>
+            </div>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-7">
+            {funnelSteps.map((step, index) => {
+              const count = summary?.countsByEvent[step] ?? 0;
+              const landingViews = summary?.countsByEvent.landing_view ?? 0;
+              const percentage = landingViews ? Math.min(100, Math.round((count / landingViews) * 100)) : 0;
+              return (
+                <div key={step} className="rounded-md border border-line bg-mist p-3">
+                  <div className="text-xs font-semibold text-slate-500">{index + 1}. {step}</div>
+                  <div className="mt-2 text-2xl font-semibold text-ink">{count}</div>
+                  <div className="mt-1 text-xs text-slate-500">{percentage}% of landings</div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
           <section className="rounded-lg border border-line bg-white p-5 shadow-soft">

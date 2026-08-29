@@ -52,6 +52,10 @@ export function CompressPdfPanel() {
       source: "compress-pdf",
       fileSizeBucket: fileSizeBucket(nextFile.size),
     });
+    trackUsageEvent("upload_success", {
+      source: "compress-pdf",
+      fileSizeBucket: fileSizeBucket(nextFile.size),
+    });
   }
 
   async function compressFile() {
@@ -138,7 +142,10 @@ export function CompressPdfPanel() {
           <p className="mt-2 max-w-md text-sm leading-6 text-slate-600">
             Reduce file size locally in your browser. Files up to 100 MB and 100 pages are supported.
           </p>
-          <button type="button" className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700" onClick={() => inputRef.current?.click()}>
+          <button type="button" className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700" onClick={() => {
+            trackUsageEvent("upload_clicked", { source: "compress-pdf" });
+            inputRef.current?.click();
+          }}>
             <FileText className="h-4 w-4" />
             Choose PDF
           </button>

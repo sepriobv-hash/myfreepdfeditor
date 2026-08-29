@@ -1,29 +1,24 @@
 "use client";
 
-import type { ComponentType } from "react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   BadgeCheck,
   Check,
-  Clock,
-  CloudOff,
   FileImage,
   FileText,
   Highlighter,
   Layers3,
   LockKeyhole,
+  MonitorCheck,
   MousePointer2,
   RotateCw,
-  ShieldCheck,
+  ScanText,
   Signature,
-  Sparkles,
   Stamp,
   TextCursorInput,
   UploadCloud,
-  Wand2,
 } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { UploadDropzone } from "@/components/editor/UploadDropzone";
@@ -138,18 +133,35 @@ const howItWorksLabel: Record<SupportedLocale, string> = {
 const stepIcons = [UploadCloud, MousePointer2, FileText];
 
 const trustItems = [
-  { label: "No account needed to start", icon: CloudOff },
-  { label: "No permanent storage by default", icon: ShieldCheck },
-  { label: "Temporary local upload handoff", icon: Clock },
-  { label: "Clear before future cloud saving", icon: Sparkles },
+  { icon: MonitorCheck, tone: "bg-rose-50 text-rose-600" },
+  { icon: TextCursorInput, tone: "bg-teal-50 text-teal-600" },
+  { icon: ScanText, tone: "bg-amber-50 text-amber-600" },
+  { icon: LockKeyhole, tone: "bg-emerald-50 text-emerald-600" },
 ];
+
+const uploadNotesByLocale: Record<SupportedLocale, [string, string]> = {
+  en: ["Best for PDFs under 100 MB", "Password-protected files may not open"],
+  nl: ["Werkt het best met PDF's onder 100 MB", "Beveiligde PDF's openen mogelijk niet"],
+  de: ["Am besten fuer PDFs unter 100 MB", "Passwortgeschuetzte PDFs lassen sich eventuell nicht oeffnen"],
+  fr: ["Ideal pour les PDF de moins de 100 Mo", "Les PDF proteges par mot de passe peuvent ne pas s'ouvrir"],
+  es: ["Ideal para PDF de menos de 100 MB", "Los PDF protegidos con contrasena pueden no abrirse"],
+  it: ["Ideale per PDF sotto i 100 MB", "I PDF protetti da password potrebbero non aprirsi"],
+};
+
+const termsLabel: Record<SupportedLocale, string> = {
+  en: "Terms",
+  nl: "Voorwaarden",
+  de: "Nutzungsbedingungen",
+  fr: "Conditions",
+  es: "Terminos",
+  it: "Termini",
+};
 
 type LandingPageProps = {
   locale?: SupportedLocale;
 };
 
 export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
-  const router = useRouter();
   const [isUploading, setIsUploading] = useState(false);
   const { notify } = useToast();
   const copy = landingCopyByLocale[locale];
@@ -161,7 +173,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
   const primaryToolLinks = primaryToolLinksByLocale[locale];
 
   useEffect(() => {
-    trackUsageEvent("page_view", { page: "home", locale });
+    trackUsageEvent("landing_view", { page: "home", locale });
   }, [locale]);
 
   async function handleUpload(file: File) {
@@ -177,7 +189,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
         fileSizeBucket: fileSizeBucket(file.size),
       });
       const uploadId = await storePendingUpload(file);
-      trackUsageEvent("upload_handoff_created", {
+      trackUsageEvent("upload_success", {
         source: "homepage",
         fileSizeBucket: fileSizeBucket(file.size),
       });
@@ -185,7 +197,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
       window.location.assign(`/editor?uploadId=${encodeURIComponent(uploadId)}`);
     } catch (error) {
       setIsUploading(false);
-      trackUsageEvent("upload_handoff_failed", { source: "homepage" });
+      trackUsageEvent("upload_failed", { source: "homepage" });
       notify(error instanceof Error ? error.message : "Could not prepare this PDF.", "error");
     }
   }
@@ -194,9 +206,9 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
     <main className="min-h-screen bg-mist text-ink">
       <nav className="sticky top-0 z-30 border-b border-line bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
-          <button className="flex items-center gap-3" onClick={() => router.push("/")}>
+          <Link className="flex items-center gap-3" href="/" aria-label="MyFreePDFEditor home">
             <BrandLogo />
-          </button>
+          </Link>
           <div className="hidden items-center gap-1 lg:flex">
             {primaryToolLinks.map((link) => (
               <Link key={link.href} className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href={link.href}>
@@ -244,11 +256,19 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
         </div>
 
         <div className="mx-auto mt-10 max-w-5xl rounded-xl border border-rose-100 bg-white p-2 shadow-panel">
-          <UploadDropzone onFile={handleUpload} isLoading={isUploading} wide copy={copy.upload} />
-          <div className="mt-5 grid gap-3 text-sm text-slate-600 sm:grid-cols-3">
-            <TrustPill icon={ShieldCheck} label={copy.hero.trust[0]} />
-            <TrustPill icon={Wand2} label={copy.hero.trust[1]} />
-            <TrustPill icon={Clock} label={copy.hero.trust[2]} />
+          <UploadDropzone
+            onFile={handleUpload}
+            isLoading={isUploading}
+            onChoose={() => trackUsageEvent("upload_clicked", { source: "homepage", locale })}
+            wide
+            copy={copy.upload}
+          />
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-slate-500">
+            <span>{uploadNotesByLocale[locale][0]}</span>
+            <span>{uploadNotesByLocale[locale][1]}</span>
+            <Link className="font-semibold text-brand-600 hover:text-brand-700" href="/how-it-works">
+              {howItWorksLabel[locale]}
+            </Link>
           </div>
         </div>
       </section>
@@ -259,17 +279,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
             const Icon = item.icon;
             return (
               <div key={copy.trustItems[index]} className="flex items-center gap-3 text-sm font-medium text-slate-700">
-                <div
-                  className={
-                    item.label.includes("Browser")
-                      ? "flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-rose-50 text-rose-600"
-                      : item.label.includes("No permanent")
-                        ? "flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-teal-50 text-teal-600"
-                        : item.label.includes("Vercel")
-                          ? "flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-amber-50 text-amber-600"
-                          : "flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-emerald-50 text-emerald-600"
-                  }
-                >
+                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${item.tone}`}>
                   <Icon className="h-4 w-4" />
                 </div>
                 {copy.trustItems[index]}
@@ -522,26 +532,12 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
               <Link href="/security" className="hover:text-ink">{copy.footer.security}</Link>
               <Link href="/how-it-works" className="hover:text-ink">{howItWorksLabel[locale]}</Link>
               <Link href="/privacy" className="hover:text-ink">{copy.footer.privacy}</Link>
+              <Link href="/terms" className="hover:text-ink">{termsLabel[locale]}</Link>
               <a href="#faq" className="hover:text-ink">{copy.footer.faq}</a>
             </div>
           </div>
         </div>
       </footer>
     </main>
-  );
-}
-
-function TrustPill({
-  icon: Icon,
-  label,
-}: {
-  icon: ComponentType<{ className?: string }>;
-  label: string;
-}) {
-  return (
-    <div className="flex items-center justify-center gap-2 rounded-md border border-line bg-white px-3 py-3 shadow-sm">
-      <Icon className="h-4 w-4 text-accent-600" />
-      <span className="font-medium">{label}</span>
-    </div>
   );
 }

@@ -1,4 +1,4 @@
-import { getAbsoluteLocalizedUrl, localeOptions } from "@/lib/i18n";
+import { getAbsoluteLocalizedUrl, indexableLocaleOptions } from "@/lib/i18n";
 import { activePdfTools } from "@/lib/pdfTools";
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
@@ -12,7 +12,7 @@ function textResponse(body: string) {
 }
 
 export function GET() {
-  const localizedPages = localeOptions
+  const localizedPages = indexableLocaleOptions
     .map(
       (locale) =>
         `- ${locale.label} (${locale.hreflang}): ${getAbsoluteLocalizedUrl(locale.code)}`,
@@ -36,6 +36,7 @@ ${localizedPages}
 - Security: ${siteUrl}/security
 - How it works: ${siteUrl}/how-it-works
 - Privacy: ${siteUrl}/privacy
+- Terms: ${siteUrl}/terms
 
 ## Active Tool Routes
 ${activeTools}
@@ -49,7 +50,7 @@ ${activeTools}
 ## Positioning
 - Category: free online PDF editor.
 - Main audience: people who need fast PDF edits in a browser.
-- Key language markets: English, Dutch, German, French, Spanish, and Italian.
+- Published search language: English. Additional European language versions remain available for review but are not currently advertised for indexing.
 - Important claim: the editor is free for the core editing workflow.
 
 ## Excluded From Public Product Discovery

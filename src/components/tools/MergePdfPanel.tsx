@@ -13,7 +13,7 @@ import {
 import { PDFDocument } from "pdf-lib";
 import { useToast } from "@/components/ui/Toaster";
 import { downloadBlob } from "@/lib/utils";
-import { fileSizeBucket, trackUsageEvent } from "@/lib/usage/client";
+import { fileCountBucket, fileSizeBucket, trackUsageEvent } from "@/lib/usage/client";
 
 const MAX_FILES = 30;
 const MAX_TOTAL_BYTES = 250 * 1024 * 1024;
@@ -53,7 +53,12 @@ export function MergePdfPanel() {
     setResult(null);
     trackUsageEvent("upload_started", {
       source: "merge-pdf",
-      fileCount: nextFiles.length,
+      fileCountBucket: fileCountBucket(nextFiles.length),
+      fileSizeBucket: fileSizeBucket(totalBytes),
+    });
+    trackUsageEvent("upload_success", {
+      source: "merge-pdf",
+      fileCountBucket: fileCountBucket(nextFiles.length),
       fileSizeBucket: fileSizeBucket(totalBytes),
     });
   }
@@ -83,7 +88,10 @@ export function MergePdfPanel() {
     try {
       setIsMerging(true);
       setResult(null);
-      trackUsageEvent("export_started", { source: "merge-pdf", fileCount: files.length });
+      trackUsageEvent("export_started", {
+        source: "merge-pdf",
+        fileCountBucket: fileCountBucket(files.length),
+      });
       const output = await PDFDocument.create();
 
       for (const file of files) {
@@ -100,7 +108,7 @@ export function MergePdfPanel() {
       downloadBlob(blob, name);
       trackUsageEvent("export_success", {
         source: "merge-pdf",
-        fileCount: files.length,
+        fileCountBucket: fileCountBucket(files.length),
         outputSizeBucket: fileSizeBucket(blob.size),
       });
       notify("Your merged PDF is ready.", "success");
@@ -145,7 +153,10 @@ export function MergePdfPanel() {
         <button
           type="button"
           className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700"
-          onClick={() => inputRef.current?.click()}
+          onClick={() => {
+            trackUsageEvent("upload_clicked", { source: "merge-pdf" });
+            inputRef.current?.click();
+          }}
         >
           <FilePlus2 className="h-4 w-4" />
           Choose PDFs

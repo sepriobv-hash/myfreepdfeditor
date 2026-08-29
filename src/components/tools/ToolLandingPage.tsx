@@ -37,7 +37,7 @@ export function ToolLandingPage({ tool }: ToolLandingPageProps) {
   const relatedTools = getRelatedTools(tool);
 
   useEffect(() => {
-    trackUsageEvent("page_view", { page: tool.slug });
+    trackUsageEvent("landing_view", { page: tool.slug });
   }, [tool.slug]);
 
   async function handleUpload(file: File) {
@@ -53,7 +53,7 @@ export function ToolLandingPage({ tool }: ToolLandingPageProps) {
         fileSizeBucket: fileSizeBucket(file.size),
       });
       const uploadId = await storePendingUpload(file);
-      trackUsageEvent("upload_handoff_created", {
+      trackUsageEvent("upload_success", {
         source: tool.slug,
         fileSizeBucket: fileSizeBucket(file.size),
       });
@@ -61,7 +61,7 @@ export function ToolLandingPage({ tool }: ToolLandingPageProps) {
       window.location.assign(`/editor?uploadId=${encodeURIComponent(uploadId)}&tool=${tool.slug}`);
     } catch (error) {
       setIsUploading(false);
-      trackUsageEvent("upload_handoff_failed", { source: tool.slug });
+      trackUsageEvent("upload_failed", { source: tool.slug });
       notify(error instanceof Error ? error.message : "Could not prepare this PDF.", "error");
     }
   }
@@ -127,6 +127,7 @@ export function ToolLandingPage({ tool }: ToolLandingPageProps) {
               <UploadDropzone
                 onFile={handleUpload}
                 isLoading={isUploading}
+                onChoose={() => trackUsageEvent("upload_clicked", { source: tool.slug })}
                 wide
                 copy={{
                   title: tool.uploadTitle,

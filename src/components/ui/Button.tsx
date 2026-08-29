@@ -17,9 +17,10 @@ const variantClasses: Record<ButtonVariant, string> = {
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "secondary", active, ...props }, ref) => (
+  ({ className, variant = "secondary", active, type = "button", ...props }, ref) => (
     <button
       ref={ref}
+      type={type}
       className={cn(
         "inline-flex h-10 items-center justify-center gap-2 rounded-md border px-3 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
         variantClasses[variant],

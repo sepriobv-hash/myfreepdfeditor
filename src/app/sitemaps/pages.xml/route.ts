@@ -1,4 +1,4 @@
-import { getAbsoluteLocalizedUrl, getLanguageAlternates, localeOptions } from "@/lib/i18n";
+import { getAbsoluteLocalizedUrl, getLanguageAlternates, indexableLocaleOptions } from "@/lib/i18n";
 import { activePdfTools } from "@/lib/pdfTools";
 import { siteUrl } from "@/lib/site";
 
@@ -10,7 +10,7 @@ type SitemapEntry = {
   alternates?: Record<string, string>;
 };
 
-const lastContentUpdate = "2026-08-28";
+const lastContentUpdate = "2026-08-29";
 
 function xmlResponse(body: string) {
   return new Response(body, {
@@ -55,7 +55,7 @@ function renderUrl(entry: SitemapEntry) {
 export function GET() {
   const homeAlternates = getLanguageAlternates();
   const entries: SitemapEntry[] = [
-    ...localeOptions.map((locale) => ({
+    ...indexableLocaleOptions.map((locale) => ({
       url: getAbsoluteLocalizedUrl(locale.code),
       changeFrequency: "weekly" as const,
       priority: locale.code === "en" ? "1.0" : "0.9",
@@ -96,6 +96,12 @@ export function GET() {
       url: `${siteUrl}/privacy`,
       changeFrequency: "monthly",
       priority: "0.5",
+      lastModified: lastContentUpdate,
+    },
+    {
+      url: `${siteUrl}/terms`,
+      changeFrequency: "monthly",
+      priority: "0.3",
       lastModified: lastContentUpdate,
     },
   ];

@@ -1,4 +1,4 @@
-import { getAbsoluteLocalizedUrl, localeOptions } from "@/lib/i18n";
+import { getAbsoluteLocalizedUrl, indexableLocaleOptions } from "@/lib/i18n";
 import { activePdfTools } from "@/lib/pdfTools";
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
@@ -12,7 +12,7 @@ function textResponse(body: string) {
 }
 
 export function GET() {
-  const localizedPages = localeOptions
+  const localizedPages = indexableLocaleOptions
     .map((locale) => `- [${locale.label} homepage](${getAbsoluteLocalizedUrl(locale.code)})`)
     .join("\n");
   const toolPages = activePdfTools
@@ -33,6 +33,7 @@ ${localizedPages}
 - [Security](${siteUrl}/security): Browser-first file handling and privacy explanation.
 - [How It Works](${siteUrl}/how-it-works): How local PDF processing works without document uploads.
 - [Privacy](${siteUrl}/privacy): Privacy and file-handling information.
+- [Terms](${siteUrl}/terms): Terms for using the free browser-based tools.
 
 ## Active Tool Pages
 ${toolPages}

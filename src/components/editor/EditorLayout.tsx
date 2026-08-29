@@ -17,14 +17,26 @@ import { imageFileToEditorData } from "@/lib/editor/fileUtils";
 import { createImageObject } from "@/lib/editor/objectUtils";
 import { consumePendingUpload } from "@/lib/editor/uploadHandoff";
 import { exportEditedPdf } from "@/lib/pdf/exportPdf";
-import { fileSizeBucket, trackUsageEvent } from "@/lib/usage/client";
+import {
+  consumeUploadDurationBucket,
+  durationBucket,
+  fileSizeBucket,
+  getExportErrorCode,
+  objectCountBucket,
+  pageCountBucket,
+  trackUsageEvent,
+} from "@/lib/usage/client";
 import { downloadBlob } from "@/lib/utils";
 import { useEditorStore } from "@/store/editorStore";
+import type { PageState } from "@/types/editor";
 
 export function EditorLayout() {
   const searchParams = useSearchParams();
   const [signatureOpen, setSignatureOpen] = useState(false);
   const trackedDocumentIdRef = useRef<string | null>(null);
+  const initialEditSignatureRef = useRef<string | null>(null);
+  const firstEditTrackedRef = useRef(false);
+  const editorReadyAtRef = useRef<number | null>(null);
   const document = useEditorStore((state) => state.document);
   const pdfDoc = useEditorStore((state) => state.pdfDoc);
   const pages = useEditorStore((state) => state.pages);
@@ -49,12 +61,8 @@ export function EditorLayout() {
           return;
         }
         await loadPdf(file);
-        trackUsageEvent("upload_consumed", {
-          source: "homepage",
-          fileSizeBucket: fileSizeBucket(file.size),
-        });
-        trackUsageEvent("pdf_uploaded", {
-          source: "homepage",
+        trackUsageEvent("upload_success", {
+          source: searchParams.get("tool") ?? "homepage",
           fileSizeBucket: fileSizeBucket(file.size),
         });
         if (!cancelled) notify("PDF uploaded.", "success");
@@ -75,11 +83,28 @@ export function EditorLayout() {
     const documentKey = `${document.fileName}:${document.pageCount}:${document.originalBytes.byteLength}`;
     if (trackedDocumentIdRef.current === documentKey) return;
     trackedDocumentIdRef.current = documentKey;
-    trackUsageEvent("editor_opened", {
-      pageCount: pages.length,
+    const editSignature = getEditSignature(pages);
+    initialEditSignatureRef.current = editSignature;
+    firstEditTrackedRef.current = false;
+    editorReadyAtRef.current = Date.now();
+    trackUsageEvent("editor_ready", {
+      pageCountBucket: pageCountBucket(pages.length),
       fileSizeBucket: fileSizeBucket(document.originalBytes.byteLength),
+      durationBucket: consumeUploadDurationBucket(),
     });
-  }, [document, pages.length]);
+  }, [document, pages]);
+
+  useEffect(() => {
+    if (!document || firstEditTrackedRef.current || !initialEditSignatureRef.current) return;
+    if (getEditSignature(pages) === initialEditSignatureRef.current) return;
+    firstEditTrackedRef.current = true;
+    trackUsageEvent("first_edit", {
+      pageCountBucket: pageCountBucket(pages.length),
+      durationBucket: editorReadyAtRef.current
+        ? durationBucket(Date.now() - editorReadyAtRef.current)
+        : "unknown",
+    });
+  }, [document, pages]);
 
   const activePage = useMemo(
     () => pages.find((page) => page.id === activePageId) ?? pages[0],
@@ -95,8 +120,8 @@ export function EditorLayout() {
       setIsExporting(true);
       const objectCount = pages.reduce((total, page) => total + page.objects.length, 0);
       trackUsageEvent("export_started", {
-        pageCount: pages.length,
-        objectCount,
+        pageCountBucket: pageCountBucket(pages.length),
+        objectCountBucket: objectCountBucket(objectCount),
       });
       const result = await exportEditedPdf({
         originalBytes: document.originalBytes,
@@ -105,14 +130,14 @@ export function EditorLayout() {
       });
       downloadBlob(result.blob, result.fileName);
       trackUsageEvent("export_success", {
-        pageCount: pages.length,
-        objectCount,
+        pageCountBucket: pageCountBucket(pages.length),
+        objectCountBucket: objectCountBucket(objectCount),
       });
       notify("Export successful. Your edited PDF is downloading.", "success");
     } catch (error) {
       trackUsageEvent("export_failed", {
-        pageCount: pages.length,
-        reason: error instanceof Error ? error.message.slice(0, 120) : "unknown",
+        pageCountBucket: pageCountBucket(pages.length),
+        errorCode: getExportErrorCode(error),
       });
       notify(error instanceof Error ? error.message : "Could not export this PDF.", "error");
     } finally {
@@ -129,7 +154,7 @@ export function EditorLayout() {
         fileSizeBucket: fileSizeBucket(file.size),
       });
       await loadPdf(file);
-      trackUsageEvent("pdf_uploaded", {
+      trackUsageEvent("upload_success", {
         source: "editor",
         fileSizeBucket: fileSizeBucket(file.size),
       });
@@ -152,7 +177,7 @@ export function EditorLayout() {
           mimeType: image.mimeType,
         }),
       );
-      trackUsageEvent("image_added", { pageCount: pages.length });
+      trackUsageEvent("image_added", { pageCountBucket: pageCountBucket(pages.length) });
       notify("Image added.", "success");
     } catch (error) {
       notify(error instanceof Error ? error.message : "Could not add this image.", "error");
@@ -171,7 +196,7 @@ export function EditorLayout() {
         type: "signature",
       }),
     );
-    trackUsageEvent("signature_added", { pageCount: pages.length });
+    trackUsageEvent("signature_added", { pageCountBucket: pageCountBucket(pages.length) });
     notify("Signature added.", "success");
   }
 
@@ -195,7 +220,11 @@ export function EditorLayout() {
               {isLoading ? <Loader2 className="h-7 w-7 animate-spin" /> : <FileText className="h-7 w-7" />}
             </div>
           </div>
-          <UploadDropzone onFile={handleUpload} isLoading={isLoading} />
+          <UploadDropzone
+            onFile={handleUpload}
+            isLoading={isLoading}
+            onChoose={() => trackUsageEvent("upload_clicked", { source: "editor" })}
+          />
         </section>
       </main>
     );
@@ -232,4 +261,10 @@ export function EditorLayout() {
       />
     </main>
   );
+}
+
+function getEditSignature(pages: PageState[]) {
+  return pages
+    .map((page) => `${page.id}:${page.sourcePageIndex}:${page.objects.map((object) => object.id).join(",")}`)
+    .join("|");
 }

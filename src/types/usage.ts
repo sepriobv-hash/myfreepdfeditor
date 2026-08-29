@@ -1,11 +1,11 @@
 export type UsageEventName =
-  | "page_view"
+  | "landing_view"
+  | "upload_clicked"
+  | "upload_success"
+  | "upload_failed"
+  | "editor_ready"
+  | "first_edit"
   | "upload_started"
-  | "upload_handoff_created"
-  | "upload_handoff_failed"
-  | "upload_consumed"
-  | "pdf_uploaded"
-  | "editor_opened"
   | "image_added"
   | "signature_added"
   | "export_started"
@@ -33,3 +33,11 @@ export type UsageSummary = {
   storage: "memory" | "supabase";
   storageNotice?: string;
 };
+
+export type ExportErrorCode =
+  | "password_protected"
+  | "invalid_pdf"
+  | "font_or_encoding"
+  | "resource_limit"
+  | "download_failed"
+  | "unexpected";

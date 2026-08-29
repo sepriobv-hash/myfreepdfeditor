@@ -4,6 +4,8 @@ export const defaultLocale = "en";
 
 export const supportedLocales = ["en", "nl", "de", "fr", "es", "it"] as const;
 
+export const indexableLocales = ["en"] as const;
+
 export type SupportedLocale = (typeof supportedLocales)[number];
 
 export type LocaleOption = {
@@ -22,6 +24,10 @@ export const localeOptions: LocaleOption[] = [
   { code: "it", hreflang: "it", label: "Italian", nativeLabel: "Italiano" },
 ];
 
+export const indexableLocaleOptions = localeOptions.filter((locale) =>
+  indexableLocales.includes(locale.code as (typeof indexableLocales)[number]),
+);
+
 export function isSupportedLocale(locale: string): locale is SupportedLocale {
   return supportedLocales.includes(locale as SupportedLocale);
 }
@@ -39,7 +45,7 @@ export function getAbsoluteLocalizedUrl(locale: SupportedLocale, path = "/") {
 export function getLanguageAlternates(path = "/") {
   return {
     ...Object.fromEntries(
-      localeOptions.map((locale) => [
+      indexableLocaleOptions.map((locale) => [
         locale.hreflang,
         getAbsoluteLocalizedUrl(locale.code, path),
       ]),

@@ -59,6 +59,15 @@ export async function consumePendingUpload(id: string) {
   });
 }
 
+export function clearPendingUploads() {
+  return new Promise<void>((resolve, reject) => {
+    const request = indexedDB.deleteDatabase(DB_NAME);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+    request.onblocked = () => reject(new Error("Close other editor tabs and try again."));
+  });
+}
+
 function openUploadDb() {
   return new Promise<IDBDatabase>((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);

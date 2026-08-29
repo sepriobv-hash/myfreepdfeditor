@@ -10,7 +10,7 @@ export function BrandLogo({ compact = false }: BrandLogoProps) {
     return (
       <span className="flex items-center gap-3">
         <Image
-          src="/brand/favicon.png"
+          src="/brand/icon-192.png"
           alt=""
           width={40}
           height={40}
@@ -27,7 +27,7 @@ export function BrandLogo({ compact = false }: BrandLogoProps) {
       src="/brand/myfreepdfeditor-logo.png"
       alt={siteName}
       width={360}
-      height={74}
+      height={90}
       className="h-12 w-auto object-contain"
       priority
     />

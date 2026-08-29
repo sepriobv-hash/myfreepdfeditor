@@ -82,6 +82,10 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
       title: copy.title,
       description: copy.description,
     },
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

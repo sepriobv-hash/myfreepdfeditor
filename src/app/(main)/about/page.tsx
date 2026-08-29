@@ -54,6 +54,12 @@ export default function AboutPage() {
             accounts, cloud workflows, batch processing, and advanced tools can be added later for
             people who want them, while the core editor remains easy to use.
           </p>
+          <p className="mt-4 text-base leading-7 text-slate-600">
+            Product, accessibility, and support questions are welcome at{" "}
+            <a className="font-semibold text-brand-700 hover:underline" href="mailto:support@myfreepdfeditor.com">
+              support@myfreepdfeditor.com
+            </a>.
+          </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/editor"

@@ -19,7 +19,6 @@ export type LandingCopy = {
     title: string;
     description: string;
     badges: string[];
-    trust: string[];
   };
   upload: {
     title: string;
@@ -88,8 +87,7 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       title: "Free PDF Editor Online",
       description:
         "Upload a PDF for free, edit existing text visually, add images, signatures, highlights, drawings, and page changes, then download the edited PDF with no signup and no watermark.",
-      badges: ["Free to use", "No signup needed", "No watermark", "Files stay on your device"],
-      trust: ["Private by default", "No watermark export", "Fast visual editing"],
+      badges: ["No signup needed", "No watermark", "Files stay on your device"],
     },
     upload: {
       title: "Drop your PDF here",
@@ -103,10 +101,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       },
     },
     trustItems: [
-      "No account needed to start",
-      "No permanent storage by default",
-      "Temporary local upload handoff",
-      "Clear before future cloud saving",
+      "Works in modern browsers",
+      "Best with text-based PDFs",
+      "Scanned PDFs need OCR",
+      "Password-protected PDFs may not open",
     ],
     tools: {
       eyebrow: "Free PDF tools",
@@ -223,8 +221,7 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       title: "Gratis PDF Editor Online",
       description:
         "Upload gratis een PDF, bewerk bestaande tekst visueel, voeg afbeeldingen, handtekeningen, markeringen, tekeningen en paginawijzigingen toe en download daarna je bewerkte PDF zonder account en zonder watermerk.",
-      badges: ["Gratis te gebruiken", "Geen account nodig", "Geen watermerk", "Bestanden blijven op je apparaat"],
-      trust: ["Prive standaard", "Export zonder watermerk", "Snel visueel bewerken"],
+      badges: ["Geen account nodig", "Geen watermerk", "Bestanden blijven op je apparaat"],
     },
     upload: {
       title: "Sleep je PDF hierheen",
@@ -238,10 +235,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       },
     },
     trustItems: [
-      "Geen account nodig om te starten",
-      "Geen permanente opslag standaard",
-      "Tijdelijke lokale upload-overdracht",
-      "Duidelijke keuze voor toekomstige cloudopslag",
+      "Werkt in moderne browsers",
+      "Werkt het best met tekst-PDF's",
+      "Gescande PDF's hebben OCR nodig",
+      "Beveiligde PDF's openen mogelijk niet",
     ],
     tools: {
       eyebrow: "Gratis PDF-tools",
@@ -315,8 +312,7 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       title: "Kostenloser PDF Editor Online",
       description:
         "Lade eine PDF kostenlos hoch, bearbeite vorhandenen Text visuell, fuege Bilder, Unterschriften, Markierungen, Zeichnungen und Seitenanpassungen hinzu und lade die bearbeitete PDF ohne Konto und ohne Wasserzeichen herunter.",
-      badges: ["Kostenlos nutzbar", "Kein Konto erforderlich", "Kein Wasserzeichen", "Dateien bleiben auf deinem Geraet"],
-      trust: ["Standardmaessig privat", "Export ohne Wasserzeichen", "Schnelle visuelle Bearbeitung"],
+      badges: ["Kein Konto erforderlich", "Kein Wasserzeichen", "Dateien bleiben auf deinem Geraet"],
     },
     upload: {
       title: "PDF hier ablegen",
@@ -330,10 +326,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       },
     },
     trustItems: [
-      "Kein Konto zum Starten noetig",
-      "Keine dauerhafte Speicherung standardmaessig",
-      "Temporaere lokale Upload-Uebergabe",
-      "Klare Wahl vor zukuenftiger Cloud-Speicherung",
+      "Funktioniert in modernen Browsern",
+      "Am besten mit textbasierten PDFs",
+      "Gescannte PDFs benoetigen OCR",
+      "Passwortgeschuetzte PDFs lassen sich eventuell nicht oeffnen",
     ],
     tools: {
       eyebrow: "Kostenlose PDF-Werkzeuge",
@@ -400,8 +396,7 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       title: "Editeur PDF Gratuit en Ligne",
       description:
         "Importez un PDF gratuitement, modifiez le texte existant visuellement, ajoutez images, signatures, surlignages, dessins et changements de pages, puis telechargez le PDF modifie sans compte et sans filigrane.",
-      badges: ["Gratuit", "Sans compte", "Sans filigrane", "Fichiers sur votre appareil"],
-      trust: ["Prive par defaut", "Export sans filigrane", "Edition visuelle rapide"],
+      badges: ["Sans compte", "Sans filigrane", "Fichiers sur votre appareil"],
     },
     upload: {
       title: "Deposez votre PDF ici",
@@ -415,10 +410,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       },
     },
     trustItems: [
-      "Aucun compte pour commencer",
-      "Pas de stockage permanent par defaut",
-      "Transfert local temporaire",
-      "Choix clair avant toute sauvegarde cloud",
+      "Fonctionne dans les navigateurs modernes",
+      "Ideal avec les PDF contenant du texte",
+      "Les PDF numerises necessitent l'OCR",
+      "Les PDF proteges peuvent ne pas s'ouvrir",
     ],
     tools: {
       eyebrow: "Outils PDF gratuits",
@@ -485,8 +480,7 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       title: "Editor PDF Gratis Online",
       description:
         "Sube un PDF gratis, edita texto existente de forma visual, agrega imagenes, firmas, resaltados, dibujos y cambios de paginas, y descarga el PDF editado sin registro y sin marca de agua.",
-      badges: ["Gratis", "Sin registro", "Sin marca de agua", "Archivos en tu dispositivo"],
-      trust: ["Privado por defecto", "Exportacion sin marca de agua", "Edicion visual rapida"],
+      badges: ["Sin registro", "Sin marca de agua", "Archivos en tu dispositivo"],
     },
     upload: {
       title: "Suelta tu PDF aqui",
@@ -500,10 +494,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       },
     },
     trustItems: [
-      "Sin cuenta para empezar",
-      "Sin almacenamiento permanente por defecto",
-      "Transferencia local temporal",
-      "Eleccion clara antes de guardar en la nube",
+      "Funciona en navegadores modernos",
+      "Ideal con PDF basados en texto",
+      "Los PDF escaneados necesitan OCR",
+      "Los PDF protegidos pueden no abrirse",
     ],
     tools: {
       eyebrow: "Herramientas PDF gratis",
@@ -570,8 +564,7 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       title: "Editor PDF Gratis Online",
       description:
         "Carica un PDF gratis, modifica visivamente il testo esistente, aggiungi immagini, firme, evidenziazioni, disegni e modifiche alle pagine, poi scarica il PDF modificato senza account e senza filigrana.",
-      badges: ["Gratis", "Nessun account", "Nessuna filigrana", "File sul tuo dispositivo"],
-      trust: ["Privato di default", "Export senza filigrana", "Modifica visuale rapida"],
+      badges: ["Nessun account", "Nessuna filigrana", "File sul tuo dispositivo"],
     },
     upload: {
       title: "Trascina qui il PDF",
@@ -585,10 +578,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       },
     },
     trustItems: [
-      "Nessun account per iniziare",
-      "Nessun salvataggio permanente di default",
-      "Passaggio locale temporaneo",
-      "Scelta chiara prima del cloud",
+      "Funziona nei browser moderni",
+      "Ideale con PDF basati su testo",
+      "I PDF scansionati richiedono OCR",
+      "I PDF protetti potrebbero non aprirsi",
     ],
     tools: {
       eyebrow: "Strumenti PDF gratuiti",

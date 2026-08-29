@@ -2,9 +2,12 @@ import type { UsageEvent, UsageSummary } from "@/types/usage";
 
 const MAX_EVENTS = 2000;
 const DEFAULT_SUPABASE_TABLE = "usage_events";
+const RETENTION_DAYS = 90;
+const RETENTION_MS = RETENTION_DAYS * 24 * 60 * 60 * 1000;
 
 type UsageGlobal = {
   events: UsageEvent[];
+  lastCleanupAt?: number;
 };
 
 type SupabaseUsageRow = {
@@ -31,12 +34,14 @@ function getUsageGlobal() {
 
 export async function appendUsageEvent(event: UsageEvent) {
   const store = getUsageGlobal();
+  pruneExpiredMemoryEvents(store);
   store.events.unshift(event);
   if (store.events.length > MAX_EVENTS) {
     store.events.length = MAX_EVENTS;
   }
 
   if (hasSupabaseConfig()) {
+    await purgeExpiredSupabaseEvents(store).catch(() => undefined);
     await appendSupabaseUsageEvent(event).catch((error) => {
       console.error("Could not persist usage event.", error);
     });
@@ -44,19 +49,21 @@ export async function appendUsageEvent(event: UsageEvent) {
 }
 
 export async function getUsageSummary(): Promise<UsageSummary> {
+  const memoryStore = getUsageGlobal();
+  pruneExpiredMemoryEvents(memoryStore);
   if (hasSupabaseConfig()) {
     try {
       return summarizeUsageEvents(await readSupabaseUsageEvents(), "supabase");
     } catch (error) {
       console.error("Could not read persisted usage events.", error);
       return {
-        ...summarizeUsageEvents(getUsageGlobal().events, "memory"),
+        ...summarizeUsageEvents(memoryStore.events, "memory"),
         storageNotice: "Supabase is configured, but the dashboard could not read it. Showing runtime fallback data.",
       };
     }
   }
 
-  return summarizeUsageEvents(getUsageGlobal().events, "memory");
+  return summarizeUsageEvents(memoryStore.events, "memory");
 }
 
 function summarizeUsageEvents(events: UsageEvent[], storage: UsageSummary["storage"]): UsageSummary {
@@ -129,6 +136,7 @@ async function readSupabaseUsageEvents() {
   );
   url.searchParams.set("order", "occurred_at.desc");
   url.searchParams.set("limit", String(MAX_EVENTS));
+  url.searchParams.set("occurred_at", `gte.${new Date(Date.now() - RETENTION_MS).toISOString()}`);
 
   const response = await fetch(url, {
     headers: {
@@ -144,6 +152,27 @@ async function readSupabaseUsageEvents() {
 
   const rows = (await response.json()) as SupabaseUsageRow[];
   return rows.map(mapSupabaseRowToEvent);
+}
+
+function pruneExpiredMemoryEvents(store: UsageGlobal) {
+  const cutoff = Date.now() - RETENTION_MS;
+  store.events = store.events.filter((event) => Date.parse(event.timestamp) >= cutoff);
+}
+
+async function purgeExpiredSupabaseEvents(store: UsageGlobal) {
+  const now = Date.now();
+  if (store.lastCleanupAt && now - store.lastCleanupAt < 24 * 60 * 60 * 1000) return;
+  store.lastCleanupAt = now;
+  const url = new URL(getSupabaseEndpoint());
+  url.searchParams.set("occurred_at", `lt.${new Date(now - RETENTION_MS).toISOString()}`);
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      ...getSupabaseHeaders(),
+      Prefer: "return=minimal",
+    },
+  });
+  if (!response.ok) throw new Error(`Supabase retention cleanup failed with ${response.status}.`);
 }
 
 function mapSupabaseRowToEvent(row: SupabaseUsageRow): UsageEvent {

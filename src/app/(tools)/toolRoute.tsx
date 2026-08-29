@@ -60,6 +60,30 @@ export function ToolRoutePage({ slug }: { slug: string }) {
       priceCurrency: "USD",
     },
   };
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "All PDF Tools",
+        item: `${siteUrl}/all-tools`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: tool.shortTitle,
+        item: `${siteUrl}/${tool.slug}`,
+      },
+    ],
+  };
 
   return (
     <>
@@ -70,6 +94,10 @@ export function ToolRoutePage({ slug }: { slug: string }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <ToolLandingPage tool={tool} />
     </>

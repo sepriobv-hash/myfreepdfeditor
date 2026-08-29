@@ -100,6 +100,12 @@ export default function SecurityPage() {
             >
               Read privacy details
             </Link>
+            <Link
+              href="/how-it-works"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-line bg-white px-3 text-sm font-medium text-ink transition hover:bg-slate-50"
+            >
+              See how local processing works
+            </Link>
           </div>
         </div>
       </section>

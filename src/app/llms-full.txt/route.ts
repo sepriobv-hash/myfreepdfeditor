@@ -34,8 +34,7 @@ ${localizedPages}
 - All tools: ${siteUrl}/all-tools
 - About: ${siteUrl}/about
 - Security: ${siteUrl}/security
-- Editor: ${siteUrl}/editor
-- Pricing: ${siteUrl}/pricing
+- How it works: ${siteUrl}/how-it-works
 - Privacy: ${siteUrl}/privacy
 
 ## Active Tool Routes

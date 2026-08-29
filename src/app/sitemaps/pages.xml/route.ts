@@ -63,12 +63,6 @@ export function GET() {
       alternates: homeAlternates,
     })),
     {
-      url: `${siteUrl}/editor`,
-      changeFrequency: "weekly",
-      priority: "0.8",
-      lastModified: lastContentUpdate,
-    },
-    {
       url: `${siteUrl}/all-tools`,
       changeFrequency: "weekly",
       priority: "0.9",
@@ -86,6 +80,12 @@ export function GET() {
       priority: "0.7",
       lastModified: lastContentUpdate,
     },
+    {
+      url: `${siteUrl}/how-it-works`,
+      changeFrequency: "monthly",
+      priority: "0.75",
+      lastModified: lastContentUpdate,
+    },
     ...activePdfTools.map((tool) => ({
       url: `${siteUrl}/${tool.slug}`,
       changeFrequency: "weekly" as const,
@@ -96,12 +96,6 @@ export function GET() {
       url: `${siteUrl}/privacy`,
       changeFrequency: "monthly",
       priority: "0.5",
-      lastModified: lastContentUpdate,
-    },
-    {
-      url: `${siteUrl}/pricing`,
-      changeFrequency: "monthly",
-      priority: "0.4",
       lastModified: lastContentUpdate,
     },
   ];

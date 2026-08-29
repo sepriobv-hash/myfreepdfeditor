@@ -1,4 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Free PDF Editor Pricing",
+  description:
+    "MyFreePDFEditor keeps its core PDF editing workflow free, with no signup and no watermark on exported PDFs.",
+  alternates: {
+    canonical: "/pricing",
+  },
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
 
 export default function PricingPage() {
   return (

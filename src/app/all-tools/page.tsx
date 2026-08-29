@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check, Clock } from "lucide-react";
-import { activePdfTools, plannedPdfTools } from "@/lib/pdfTools";
+import { ArrowRight, Check } from "lucide-react";
+import { activePdfTools } from "@/lib/pdfTools";
 import { siteName, siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "All Free PDF Tools",
   description:
-    "Browse free PDF tools from MyFreePDFEditor: edit PDF, edit PDF text, add text, sign, annotate, highlight, draw, add images, reorder pages, and delete pages.",
+    "Browse free PDF tools from MyFreePDFEditor: edit, sign, merge, compress, annotate, highlight, add images, reorder pages, and delete pages.",
   alternates: {
     canonical: "/all-tools",
   },
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
 };
 
-const categoryOrder = ["Edit", "Sign", "Annotate", "Organize"] as const;
+const categoryOrder = ["Edit", "Sign", "Annotate", "Organize", "Optimize"] as const;
 
 export default function AllToolsPage() {
   return (
@@ -71,28 +71,6 @@ export default function AllToolsPage() {
             );
           })}
         </div>
-
-        <section className="mt-12 rounded-lg border border-line bg-white p-6 shadow-soft">
-          <div className="flex items-start gap-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-amber-50 text-amber-600">
-              <Clock className="h-4 w-4" />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold text-ink">Planned tools</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                These tools are useful for the roadmap, but they should only get public landing
-                pages once the actual tool workflow is ready.
-              </p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {plannedPdfTools.map((tool) => (
-                  <span key={tool} className="rounded-md bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700">
-                    {tool}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
       </section>
     </main>
   );

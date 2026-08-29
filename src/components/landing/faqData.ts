@@ -72,9 +72,9 @@ export const landingFaqs: LandingFaq[] = [
       "The core editor focuses on fast, free, browser-based editing without forcing an account before you can start. Many online PDF tools reserve common export or editing features for paid flows.",
   },
   {
-    question: "Will OCR, compression, merge, split, and watermark tools be added?",
+    question: "Can I merge or compress PDF files for free?",
     answer:
-      "The app structure is prepared for OCR, compress PDF, merge PDF, split PDF, watermark, redact, password protection, cloud saving, subscriptions, and team workspaces.",
+      "Yes. The Merge PDF tool combines multiple files in your chosen order, and the Compress PDF tool reduces file size with adjustable quality. Both run in your browser without signup or a watermark.",
   },
 ];
 

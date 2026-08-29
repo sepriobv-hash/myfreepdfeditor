@@ -1,4 +1,22 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { siteName, siteUrl } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: "Privacy and PDF File Handling",
+  description:
+    "Learn how MyFreePDFEditor processes PDFs in your browser, uses temporary local storage, and avoids permanent file uploads for core editing.",
+  alternates: {
+    canonical: "/privacy",
+  },
+  openGraph: {
+    title: `Privacy and PDF File Handling - ${siteName}`,
+    description: "Understand how MyFreePDFEditor handles PDF files in your browser.",
+    url: `${siteUrl}/privacy`,
+    siteName,
+    type: "website",
+  },
+};
 
 export default function PrivacyPage() {
   return (

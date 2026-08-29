@@ -1,4 +1,4 @@
-export type ToolCategory = "Edit" | "Sign" | "Annotate" | "Organize";
+export type ToolCategory = "Edit" | "Sign" | "Annotate" | "Organize" | "Optimize";
 
 export type PdfTool = {
   slug: string;
@@ -10,6 +10,7 @@ export type PdfTool = {
   uploadTitle: string;
   uploadDescription: string;
   category: ToolCategory;
+  workflow?: "editor" | "merge" | "compress";
   priority: string;
   related: string[];
   steps: string[];
@@ -34,7 +35,7 @@ export const activePdfTools: PdfTool[] = [
       "Upload a PDF and open the editor with text, signature, image, annotation, and page tools ready.",
     category: "Edit",
     priority: "1.0",
-    related: ["edit-pdf-text", "add-text-to-pdf", "sign-pdf", "annotate-pdf"],
+    related: ["edit-pdf-text", "sign-pdf", "merge-pdf", "compress-pdf"],
     steps: [
       "Upload your PDF from the browser.",
       "Use the toolbar to edit text, add objects, sign, annotate, or organize pages.",
@@ -169,6 +170,93 @@ export const activePdfTools: PdfTool[] = [
         question: "Do I need to print the PDF?",
         answer:
           "No. You can sign the document visually in the browser and download the signed PDF.",
+      },
+    ],
+  },
+  {
+    slug: "merge-pdf",
+    title: "Merge PDF Online Free",
+    shortTitle: "Merge PDF",
+    description:
+      "Merge PDF files online for free. Arrange multiple PDFs, combine every page in your chosen order, and download one PDF without uploading files to a server.",
+    h1: "Merge PDF Files Online Free",
+    intro:
+      "Combine multiple PDF files into one document directly in your browser. Reorder files first, then download a single merged PDF.",
+    uploadTitle: "Choose PDF files to merge",
+    uploadDescription:
+      "Add two or more PDFs, arrange them in the right order, and combine them locally in your browser.",
+    category: "Organize",
+    workflow: "merge",
+    priority: "0.95",
+    related: ["compress-pdf", "edit-pdf", "reorder-pdf-pages", "delete-pdf-pages"],
+    steps: [
+      "Choose two or more PDF files from your device.",
+      "Arrange the files in the order you want them to appear.",
+      "Merge and download one combined PDF without a watermark.",
+    ],
+    faqs: [
+      {
+        question: "How do I merge PDF files for free?",
+        answer:
+          "Choose at least two PDFs, arrange them in the required order, and select Merge PDFs. The combined file is created and downloaded in your browser.",
+      },
+      {
+        question: "Are my PDFs uploaded while merging?",
+        answer:
+          "No. The merge workflow reads and combines the selected files locally in your browser. Your PDF contents are not sent to a document-processing server.",
+      },
+      {
+        question: "Can I change the PDF order before merging?",
+        answer:
+          "Yes. Use the up and down controls beside each file to set the exact order before creating the merged PDF.",
+      },
+      {
+        question: "Will the merged PDF have a watermark?",
+        answer: "No. MyFreePDFEditor does not add a watermark to the merged file.",
+      },
+    ],
+  },
+  {
+    slug: "compress-pdf",
+    title: "Compress PDF Online Free",
+    shortTitle: "Compress PDF",
+    description:
+      "Compress a PDF online for free. Reduce PDF file size in your browser with adjustable quality, no signup, and no server upload.",
+    h1: "Compress PDF Online Free",
+    intro:
+      "Reduce a PDF's file size for email, forms, and sharing. Choose the quality level and process the document on your device.",
+    uploadTitle: "Choose a PDF to compress",
+    uploadDescription:
+      "Select a PDF, choose a quality level, and create a smaller browser-processed copy.",
+    category: "Optimize",
+    workflow: "compress",
+    priority: "0.95",
+    related: ["merge-pdf", "edit-pdf", "reorder-pdf-pages", "delete-pdf-pages"],
+    steps: [
+      "Choose the PDF you want to make smaller.",
+      "Select a compression level that balances size and image quality.",
+      "Compress and download the optimized PDF from your browser.",
+    ],
+    faqs: [
+      {
+        question: "How does PDF compression work?",
+        answer:
+          "The tool first optimizes the PDF structure. It can also rebuild pages with compressed images when that produces a smaller result.",
+      },
+      {
+        question: "Does PDF compression reduce quality?",
+        answer:
+          "Lossless optimization keeps the original appearance. Stronger compression can flatten pages into images, so lower quality settings trade some sharpness for a smaller file.",
+      },
+      {
+        question: "Is the PDF uploaded to a server?",
+        answer:
+          "No. Compression runs in your browser, and the selected PDF is not sent to a document-processing server.",
+      },
+      {
+        question: "Can every PDF be made smaller?",
+        answer:
+          "No. Some PDFs are already efficiently compressed. The tool compares its output and tells you when the original file is already smaller.",
       },
     ],
   },
@@ -403,9 +491,7 @@ export const activePdfTools: PdfTool[] = [
 ];
 
 export const plannedPdfTools = [
-  "Merge PDF",
   "Split PDF",
-  "Compress PDF",
   "OCR PDF",
   "Redact PDF",
   "Watermark PDF",

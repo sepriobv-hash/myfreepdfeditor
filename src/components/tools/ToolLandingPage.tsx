@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   Check,
@@ -17,6 +18,15 @@ import { storePendingUpload } from "@/lib/editor/uploadHandoff";
 import { type PdfTool, getRelatedTools } from "@/lib/pdfTools";
 import { fileSizeBucket, trackUsageEvent } from "@/lib/usage/client";
 
+const MergePdfPanel = dynamic(
+  () => import("@/components/tools/MergePdfPanel").then((module) => module.MergePdfPanel),
+  { ssr: false },
+);
+const CompressPdfPanel = dynamic(
+  () => import("@/components/tools/CompressPdfPanel").then((module) => module.CompressPdfPanel),
+  { ssr: false },
+);
+
 type ToolLandingPageProps = {
   tool: PdfTool;
 };
@@ -25,6 +35,10 @@ export function ToolLandingPage({ tool }: ToolLandingPageProps) {
   const [isUploading, setIsUploading] = useState(false);
   const { notify } = useToast();
   const relatedTools = getRelatedTools(tool);
+
+  useEffect(() => {
+    trackUsageEvent("page_view", { page: tool.slug });
+  }, [tool.slug]);
 
   async function handleUpload(file: File) {
     if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
@@ -105,17 +119,23 @@ export function ToolLandingPage({ tool }: ToolLandingPageProps) {
           </div>
 
           <div className="rounded-xl border border-rose-100 bg-white p-2 shadow-panel">
-            <UploadDropzone
-              onFile={handleUpload}
-              isLoading={isUploading}
-              wide
-              copy={{
-                title: tool.uploadTitle,
-                description: tool.uploadDescription,
-                button: "Choose PDF",
-                privacy: "Browser-first editing. No account required.",
-              }}
-            />
+            {tool.workflow === "merge" ? (
+              <MergePdfPanel />
+            ) : tool.workflow === "compress" ? (
+              <CompressPdfPanel />
+            ) : (
+              <UploadDropzone
+                onFile={handleUpload}
+                isLoading={isUploading}
+                wide
+                copy={{
+                  title: tool.uploadTitle,
+                  description: tool.uploadDescription,
+                  button: "Choose PDF",
+                  privacy: "Browser-first editing. No account required.",
+                }}
+              />
+            )}
           </div>
         </div>
       </section>
@@ -146,8 +166,11 @@ export function ToolLandingPage({ tool }: ToolLandingPageProps) {
           <p className="text-sm font-semibold uppercase tracking-normal text-brand-600">How it works</p>
           <h2 className="mt-3 text-3xl font-semibold text-ink">Use the tool in three steps</h2>
           <p className="mt-4 text-base leading-7 text-slate-600">
-            This page opens the same editor workspace, focused on the task you searched for. You get
-            the full editor instead of a limited upload form.
+            {tool.workflow === "merge"
+              ? "Choose multiple PDFs, set their order, and combine every page into one downloadable document without leaving this page."
+              : tool.workflow === "compress"
+                ? "Choose a quality level and let the browser compare lossless optimization with a smaller image-based copy before downloading the best result."
+                : "This page opens the full editor workspace, focused on the task you searched for. You get the complete editor instead of a limited upload form."}
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-3">

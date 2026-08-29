@@ -31,8 +31,7 @@ ${localizedPages}
 - [All Tools](${siteUrl}/all-tools): Browse available free PDF tools.
 - [About](${siteUrl}/about): Product positioning and public promise.
 - [Security](${siteUrl}/security): Browser-first file handling and privacy explanation.
-- [Editor](${siteUrl}/editor): Browser-based PDF editing workspace.
-- [Pricing](${siteUrl}/pricing): Free core editing and optional future upgrade information.
+- [How It Works](${siteUrl}/how-it-works): How local PDF processing works without document uploads.
 - [Privacy](${siteUrl}/privacy): Privacy and file-handling information.
 
 ## Active Tool Pages

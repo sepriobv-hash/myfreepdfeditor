@@ -42,38 +42,98 @@ const toolCards = [
     text: "Click detected text, replace it visually, tune font size, color, spacing, and export cleanly for free.",
     icon: TextCursorInput,
     tone: "bg-rose-50 text-rose-700 border-rose-100",
+    href: "/edit-pdf-text",
   },
   {
     title: "Add images",
     text: "Insert PNG, JPG, and WebP images, then move, resize, rotate, and layer them on any page.",
     icon: FileImage,
     tone: "bg-amber-50 text-amber-700 border-amber-100",
+    href: "/add-image-to-pdf",
   },
   {
     title: "Sign documents",
     text: "Draw a signature or upload one, place it precisely, and keep it editable until export.",
     icon: Signature,
     tone: "bg-emerald-50 text-emerald-700 border-emerald-100",
+    href: "/sign-pdf",
   },
   {
     title: "Highlight and annotate",
     text: "Add highlights, shapes, lines, and freehand notes for review workflows.",
     icon: Highlighter,
     tone: "bg-teal-50 text-teal-700 border-teal-100",
+    href: "/annotate-pdf",
   },
   {
     title: "Manage pages",
     text: "Preview pages, reorder, duplicate, and delete pages before downloading the final file.",
     icon: Layers3,
     tone: "bg-violet-50 text-violet-700 border-violet-100",
+    href: "/reorder-pdf-pages",
   },
   {
     title: "Export securely",
     text: "Download a real edited PDF while preserving the original page content.",
     icon: LockKeyhole,
     tone: "bg-slate-100 text-slate-800 border-slate-200",
+    href: "/edit-pdf",
   },
 ];
+
+const primaryToolLinksByLocale: Record<SupportedLocale, Array<{ href: string; label: string }>> = {
+  en: [
+    { href: "/edit-pdf", label: "Edit PDF" },
+    { href: "/sign-pdf", label: "Sign PDF" },
+    { href: "/merge-pdf", label: "Merge PDF" },
+    { href: "/compress-pdf", label: "Compress PDF" },
+    { href: "/all-tools", label: "All Tools" },
+  ],
+  nl: [
+    { href: "/edit-pdf", label: "PDF bewerken" },
+    { href: "/sign-pdf", label: "PDF ondertekenen" },
+    { href: "/merge-pdf", label: "PDF samenvoegen" },
+    { href: "/compress-pdf", label: "PDF comprimeren" },
+    { href: "/all-tools", label: "Alle tools" },
+  ],
+  de: [
+    { href: "/edit-pdf", label: "PDF bearbeiten" },
+    { href: "/sign-pdf", label: "PDF unterschreiben" },
+    { href: "/merge-pdf", label: "PDF zusammenfuegen" },
+    { href: "/compress-pdf", label: "PDF komprimieren" },
+    { href: "/all-tools", label: "Alle Werkzeuge" },
+  ],
+  fr: [
+    { href: "/edit-pdf", label: "Modifier PDF" },
+    { href: "/sign-pdf", label: "Signer PDF" },
+    { href: "/merge-pdf", label: "Fusionner PDF" },
+    { href: "/compress-pdf", label: "Compresser PDF" },
+    { href: "/all-tools", label: "Tous les outils" },
+  ],
+  es: [
+    { href: "/edit-pdf", label: "Editar PDF" },
+    { href: "/sign-pdf", label: "Firmar PDF" },
+    { href: "/merge-pdf", label: "Unir PDF" },
+    { href: "/compress-pdf", label: "Comprimir PDF" },
+    { href: "/all-tools", label: "Todas las herramientas" },
+  ],
+  it: [
+    { href: "/edit-pdf", label: "Modifica PDF" },
+    { href: "/sign-pdf", label: "Firma PDF" },
+    { href: "/merge-pdf", label: "Unisci PDF" },
+    { href: "/compress-pdf", label: "Comprimi PDF" },
+    { href: "/all-tools", label: "Tutti gli strumenti" },
+  ],
+};
+
+const howItWorksLabel: Record<SupportedLocale, string> = {
+  en: "How it works",
+  nl: "Hoe het werkt",
+  de: "So funktioniert es",
+  fr: "Comment ca marche",
+  es: "Como funciona",
+  it: "Come funziona",
+};
 
 const stepIcons = [UploadCloud, MousePointer2, FileText];
 
@@ -98,6 +158,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
     ...tool,
     ...copy.tools.cards[index],
   }));
+  const primaryToolLinks = primaryToolLinksByLocale[locale];
 
   useEffect(() => {
     trackUsageEvent("page_view", { page: "home", locale });
@@ -137,21 +198,11 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
             <BrandLogo />
           </button>
           <div className="hidden items-center gap-1 lg:flex">
-            <a className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href="#tools">
-              {copy.nav.tools}
-            </a>
-            <Link className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href="/all-tools">
-              {copy.nav.allTools}
-            </Link>
-            <Link className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href="/about">
-              {copy.nav.about}
-            </Link>
-            <a className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href="#security">
-              {copy.nav.security}
-            </a>
-            <a className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href="#faq">
-              {copy.nav.faq}
-            </a>
+            {primaryToolLinks.map((link) => (
+              <Link key={link.href} className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href={link.href}>
+                {link.label}
+              </Link>
+            ))}
           </div>
           <Button variant="primary" onClick={() => window.location.assign("/editor")}>
             {copy.nav.cta}
@@ -244,8 +295,9 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
           {localizedToolCards.map((tool) => {
             const Icon = tool.icon;
             return (
-              <article
+              <Link
                 key={tool.title}
+                href={tool.href}
                 className="rounded-lg border border-line bg-white p-6 shadow-soft transition hover:-translate-y-0.5 hover:shadow-panel"
               >
                 <div className={`mb-5 flex h-11 w-11 items-center justify-center rounded-md border ${tool.tone}`}>
@@ -253,9 +305,17 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
                 </div>
                 <h3 className="text-lg font-semibold text-ink">{tool.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600">{tool.text}</p>
-              </article>
+              </Link>
             );
           })}
+        </div>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          {primaryToolLinks.slice(2).map((link) => (
+            <Link key={link.href} href={link.href} className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-line bg-white px-3 text-sm font-semibold text-ink shadow-sm hover:bg-slate-50">
+              {link.label}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -460,6 +520,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
               <Link href="/all-tools" className="hover:text-ink">{copy.footer.allTools}</Link>
               <Link href="/about" className="hover:text-ink">{copy.footer.about}</Link>
               <Link href="/security" className="hover:text-ink">{copy.footer.security}</Link>
+              <Link href="/how-it-works" className="hover:text-ink">{howItWorksLabel[locale]}</Link>
               <Link href="/privacy" className="hover:text-ink">{copy.footer.privacy}</Link>
               <a href="#faq" className="hover:text-ink">{copy.footer.faq}</a>
             </div>

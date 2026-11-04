@@ -10,6 +10,7 @@ type UploadDropzoneCopy = {
   description: string;
   button: string;
   privacy: string;
+  loading?: string;
   socialProof?: {
     rating: string;
     text: string;
@@ -42,14 +43,16 @@ export function UploadDropzone({
 
   const handleFiles = useCallback(
     async (files: FileList | null) => {
+      if (isLoading) return;
       const file = files?.[0];
       if (file) await onFile(file);
     },
-    [onFile],
+    [onFile, isLoading],
   );
 
   return (
     <div
+      aria-busy={Boolean(isLoading)}
       className={cn(
         "group rounded-lg border border-dashed border-slate-300 bg-white text-center shadow-soft transition",
         isDragging && "border-brand-500 bg-brand-50",
@@ -57,7 +60,7 @@ export function UploadDropzone({
       )}
       onDragOver={(event) => {
         event.preventDefault();
-        setIsDragging(true);
+        if (!isLoading) setIsDragging(true);
       }}
       onDragLeave={() => setIsDragging(false)}
       onDrop={(event) => {
@@ -71,7 +74,12 @@ export function UploadDropzone({
         className="hidden"
         type="file"
         accept="application/pdf,.pdf"
-        onChange={(event) => void handleFiles(event.target.files)}
+        aria-label={copy.button}
+        disabled={isLoading}
+        onChange={(event) => {
+          void handleFiles(event.target.files);
+          event.currentTarget.value = "";
+        }}
       />
       <div
         className={cn(
@@ -101,7 +109,9 @@ export function UploadDropzone({
         }}
       >
         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileUp className="h-4 w-4" />}
-        {copy.button}
+        <span role={isLoading ? "status" : undefined}>
+          {isLoading ? copy.loading ?? "Opening PDF…" : copy.button}
+        </span>
       </Button>
       <div className="mt-4 flex items-center justify-center gap-2 text-xs text-slate-500">
         <ShieldCheck className="h-3.5 w-3.5 text-accent-600" />

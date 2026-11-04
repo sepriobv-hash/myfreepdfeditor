@@ -4,7 +4,8 @@ export const defaultLocale = "en";
 
 export const supportedLocales = ["en", "nl", "de", "fr", "es", "it"] as const;
 
-export const indexableLocales = ["en"] as const;
+// Only publish language variants whose landing copy has been reviewed.
+export const indexableLocales: readonly SupportedLocale[] = ["en", "nl"];
 
 export type SupportedLocale = (typeof supportedLocales)[number];
 
@@ -25,8 +26,12 @@ export const localeOptions: LocaleOption[] = [
 ];
 
 export const indexableLocaleOptions = localeOptions.filter((locale) =>
-  indexableLocales.includes(locale.code as (typeof indexableLocales)[number]),
+  indexableLocales.includes(locale.code),
 );
+
+export function isIndexableLocale(locale: SupportedLocale) {
+  return indexableLocales.includes(locale);
+}
 
 export function isSupportedLocale(locale: string): locale is SupportedLocale {
   return supportedLocales.includes(locale as SupportedLocale);

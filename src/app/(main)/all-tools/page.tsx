@@ -35,8 +35,8 @@ export default function AllToolsPage() {
             Free PDF tools that work in your browser
           </h1>
           <p className="mt-5 text-lg leading-8 text-slate-600">
-            Start with the tools that are available today. Each tool opens a real PDF editing
-            workflow, not a dead SEO page. More tools will be added as they become production-ready.
+            Edit text, sign a document, combine files or reduce the size of a PDF. Choose a tool below;
+            your PDF is processed on your device, with no account and no watermark.
           </p>
         </div>
 

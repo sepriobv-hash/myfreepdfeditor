@@ -93,7 +93,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Kan ik bestaande tekst in een PDF aanpassen?",
       answer:
-        "Ja. De editor detecteert tekst op de PDF-pagina en maakt een bewerkbare vervanglaag. Je kunt tekst, lettergrootte, boldness, spacing, kleur en uitlijning aanpassen.",
+        "Ja. De editor herkent tekst en voegt een visuele vervanging toe. Je kunt de tekst, lettergrootte, dikte, tekenafstand, kleur en uitlijning aanpassen. De oorspronkelijke tekst blijft in de onderliggende PDF aanwezig; gebruik dit niet om vertrouwelijke gegevens definitief te verwijderen.",
     },
     {
       question: "Kan ik online een PDF ondertekenen?",
@@ -103,12 +103,22 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Worden mijn PDF-bestanden op een server opgeslagen?",
       answer:
-        "De editor is browser-first. Bestanden worden waar mogelijk lokaal verwerkt en niet standaard permanent opgeslagen. De upload vanaf de homepage gebruikt tijdelijke browseropslag op je eigen apparaat.",
+        "De inhoud van je PDF wordt lokaal op je apparaat verwerkt. Tijdelijke browseropslag brengt het bestand naar de editor. Via de privacypagina kun je die tijdelijke gegevens zelf wissen.",
     },
     {
       question: "Moet ik een account maken?",
       answer:
         "Nee. Voor de huidige gratis editorworkflow is geen account nodig. Toekomstige cloudfuncties kunnen optionele accounts toevoegen voor opslag en samenwerking.",
+    },
+    {
+      question: "Kan ik PDF-bestanden gratis samenvoegen of verkleinen?",
+      answer:
+        "Ja. Met PDF samenvoegen combineer je maximaal 30 bestanden met een totale grootte onder 250 MB. Met PDF comprimeren verklein je een bestand van maximaal 100 MB en 100 pagina's. Beide tools werken lokaal in je browser, zonder account of watermerk.",
+    },
+    {
+      question: "Kan ik een gescande PDF bewerken?",
+      answer:
+        "Je kunt tekstvakken, afbeeldingen, handtekeningen en markeringen toevoegen aan een scan. Om de oorspronkelijke tekst in een scan te herkennen, is OCR nodig. Die functie is momenteel niet beschikbaar.",
     },
   ],
   de: [

@@ -24,5 +24,30 @@
     "critical": 0,
     "moderate_development_only": 6
   },
-  "production_audit": "Recorded separately after deployment"
+  "production_audit": {
+    "pages": 180,
+    "failed": 0,
+    "duplicate_metadata": 0,
+    "sitemap_status": 200,
+    "robots_status": 200,
+    "invalid_routes_return_404": true
+  },
+  "pull_request": "https://github.com/sepriobv-hash/myfreepdfeditor/pull/11",
+  "production_commit": "17dd55c38d059d316a5973e78993e8c724ce93d9",
+  "github_ci": {
+    "run_id": 41928825001,
+    "conclusion": "success"
+  },
+  "vercel_production": "success",
+  "production_browser_tests": {
+    "passed": 5,
+    "duration": "1.9 minutes",
+    "coverage": [
+      "page extraction and splitting",
+      "redaction content removal and mask pixels",
+      "Word-to-PDF output",
+      "Dutch mobile locale handoff",
+      "six OCR language packs and font assets"
+    ]
+  }
 }

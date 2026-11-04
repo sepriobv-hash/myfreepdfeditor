@@ -54,4 +54,6 @@ Browser coverage is in `tests/e2e/toolkit.spec.ts`; translation coverage in `tes
 - `npm audit`: **0 high / 0 critical** findings after patching existing dependencies. Six moderate findings remain in development-only TypeScript ESLint/minimatch dependencies; see `validation/toolkit-dependencies.json`.
 - Generated OCR/font assets are verified as local responses. The synthetic OCR test observes no external requests and no document contents in POST bodies.
 
-The separate production HTTP audit is run after deployment and recorded in `validation/production-seo.json`.
+Production verification completed on the deployed merge commit `17dd55c38d059d316a5973e78993e8c724ce93d9` (PR #11): GitHub CI and Vercel succeeded. All **180** public URLs returned 200 with correct language, canonical, reciprocal alternates and one H1; no duplicate titles/descriptions were found. Sitemap and robots returned 200; invalid routes returned 404. Evidence: `validation/production-seo.json`.
+
+Five additional browser tests passed against `https://www.myfreepdfeditor.com` (1.9 minutes): extraction/splitting downloads, redaction output, Word-to-PDF output, Dutch mobile continuation, and local OCR/font assets. The managed verification proxy's certificate was explicitly trusted in the temporary test configuration; application TLS settings were unchanged.

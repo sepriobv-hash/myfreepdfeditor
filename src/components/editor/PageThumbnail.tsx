@@ -1,10 +1,12 @@
 "use client";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useEffect, useRef, useState } from "react";
 import type { PageState } from "@/types/editor";
 import type { PdfJsDocument } from "@/types/pdf";
 
 export function PageThumbnail({ pdfDoc, page }: { pdfDoc: PdfJsDocument; page: PageState }) {
+  const t = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -40,7 +42,7 @@ export function PageThumbnail({ pdfDoc, page }: { pdfDoc: PdfJsDocument; page: P
   }, [page.height, page.sourcePageIndex, page.width, pdfDoc]);
 
   if (failed) {
-    return <div className="flex h-32 w-24 items-center justify-center bg-slate-100 text-xs text-slate-500">Preview</div>;
+    return <div className="flex h-32 w-24 items-center justify-center bg-slate-100 text-xs text-slate-500">{t("Preview")}</div>;
   }
 
   return <canvas ref={canvasRef} className="rounded-sm bg-white shadow-sm" />;

@@ -1,7 +1,5 @@
-const configuredSiteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.myfreepdfeditor.com";
-
-export const siteUrl = configuredSiteUrl.replace(/\/$/, "");
+// Canonical origin is independent of preview/deployment host configuration.
+export const siteUrl = "https://www.myfreepdfeditor.com";
 
 export const siteName = "MyFreePDFEditor";
 

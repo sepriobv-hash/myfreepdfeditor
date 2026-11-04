@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useEffect, useState } from "react";
 import type { RefObject } from "react";
@@ -20,6 +21,7 @@ export function TextSelectionLayer({
   zoom: number;
   canvasRef: RefObject<HTMLCanvasElement | null>;
 }) {
+  const t = useTranslation();
   const tool = useEditorStore((state) => state.tool);
   const addObjects = useEditorStore((state) => state.addObjects);
   const [items, setItems] = useState<ExtractedPdfText[]>([]);
@@ -55,7 +57,7 @@ export function TextSelectionLayer({
       style={{ width: page.width * zoom, height: page.height * zoom }}
     >
       <div className="pointer-events-none absolute left-3 top-3 rounded-md border border-brand-200 bg-white/95 px-3 py-2 text-xs font-medium text-brand-700 shadow-soft">
-        {isLoading ? "Finding editable text..." : "Click existing text, then edit it in Properties"}
+        {isLoading ? t("Finding editable text...") : t("Click existing text, then edit it in Properties")}
       </div>
       {items.map((item) => (
         <button
@@ -70,7 +72,7 @@ export function TextSelectionLayer({
             width: Math.max(8, item.width * zoom),
             height: Math.max(8, item.height * zoom),
           }}
-          title={`Edit: ${item.text}`}
+          title={t(t("Edit text")) + ": " + item.text}
           onClick={() => {
             const { cover, replacement } = createTextReplacementObjects({
               page,

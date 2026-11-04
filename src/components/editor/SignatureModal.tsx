@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useEffect, useRef, useState } from "react";
 import type { PointerEvent } from "react";
@@ -15,6 +16,7 @@ export function SignatureModal({
   onClose: () => void;
   onCreate: (data: { dataUrl: string; mimeType: "image/png" | "image/jpeg" }) => void;
 }) {
+  const t = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [drawing, setDrawing] = useState(false);
 
@@ -34,7 +36,7 @@ export function SignatureModal({
 
   function pointer(event: PointerEvent<HTMLCanvasElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
-    return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    return { x: (event.clientX - rect.left) * event.currentTarget.width / rect.width, y: (event.clientY - rect.top) * event.currentTarget.height / rect.height };
   }
 
   function clear() {
@@ -44,14 +46,14 @@ export function SignatureModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4">
+    <div role="dialog" aria-modal="true" aria-label={t("Create signature")} className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4">
       <div className="w-full max-w-xl rounded-lg border border-line bg-white p-5 shadow-panel">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-ink">Create signature</h2>
-            <p className="text-sm text-slate-600">Draw or upload a signature image.</p>
+            <h2 className="text-lg font-semibold text-ink">{t("Create signature")}</h2>
+            <p className="text-sm text-slate-600">{t("Draw or upload a signature image.")}</p>
           </div>
-          <Button title="Close" variant="ghost" onClick={onClose}>
+          <Button title={t("Close")} variant="ghost" onClick={onClose}>
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -84,13 +86,9 @@ export function SignatureModal({
         <div className="mt-4 flex flex-wrap justify-between gap-3">
           <div className="flex gap-2">
             <Button variant="secondary" onClick={clear}>
-              <RotateCcw className="h-4 w-4" />
-              Clear
-            </Button>
+              <RotateCcw className="h-4 w-4" /> {t("Clear")} </Button>
             <label className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-line bg-white px-3 text-sm font-medium text-ink transition hover:bg-slate-50">
-              <ImageUp className="h-4 w-4" />
-              Upload
-              <input
+              <ImageUp className="h-4 w-4" /> {t("Upload")} <input
                 className="hidden"
                 type="file"
                 accept="image/png,image/jpeg,image/webp"
@@ -111,9 +109,7 @@ export function SignatureModal({
               if (dataUrl) onCreate({ dataUrl, mimeType: "image/png" });
               onClose();
             }}
-          >
-            Add Signature
-          </Button>
+          > {t("Add Signature")} </Button>
         </div>
       </div>
     </div>

@@ -1,15 +1,9 @@
-import type { Metadata } from "next";
 import { LandingPage } from "@/components/landing/LandingPage";
 import { getLandingFaqs } from "@/components/landing/faqData";
-import { getLanguageAlternates } from "@/lib/i18n";
+import { pageMetadata } from "@/lib/pageMetadata";
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
-export const metadata: Metadata = {
-  alternates: {
-    canonical: "/",
-    languages: getLanguageAlternates(),
-  },
-};
+export const metadata = pageMetadata("/");
 
 export default function HomePage() {
   const faqs = getLandingFaqs("en");
@@ -59,6 +53,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: siteName, url: siteUrl }) }} />
       <LandingPage locale="en" />
     </>
   );

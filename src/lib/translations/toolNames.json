@@ -1,0 +1,72 @@
+{
+  "nl": {
+    "edit-pdf": "PDF bewerken",
+    "edit-pdf-text": "PDF-tekst bewerken",
+    "sign-pdf": "PDF ondertekenen",
+    "merge-pdf": "PDF samenvoegen",
+    "compress-pdf": "PDF verkleinen",
+    "add-text-to-pdf": "Tekst toevoegen aan PDF",
+    "add-image-to-pdf": "Afbeelding toevoegen aan PDF",
+    "annotate-pdf": "PDF annoteren",
+    "highlight-pdf": "PDF markeren",
+    "reorder-pdf-pages": "PDF-pagina’s ordenen",
+    "delete-pdf-pages": "PDF-pagina’s verwijderen",
+    "draw-on-pdf": "Tekenen op PDF"
+  },
+  "de": {
+    "edit-pdf": "PDF bearbeiten",
+    "edit-pdf-text": "PDF-Text bearbeiten",
+    "sign-pdf": "PDF unterschreiben",
+    "merge-pdf": "PDFs zusammenführen",
+    "compress-pdf": "PDF komprimieren",
+    "add-text-to-pdf": "Text zu PDF hinzufügen",
+    "add-image-to-pdf": "Bild zu PDF hinzufügen",
+    "annotate-pdf": "PDF kommentieren",
+    "highlight-pdf": "PDF markieren",
+    "reorder-pdf-pages": "PDF-Seiten sortieren",
+    "delete-pdf-pages": "PDF-Seiten löschen",
+    "draw-on-pdf": "Auf PDF zeichnen"
+  },
+  "fr": {
+    "edit-pdf": "Modifier un PDF",
+    "edit-pdf-text": "Modifier le texte d’un PDF",
+    "sign-pdf": "Signer un PDF",
+    "merge-pdf": "Fusionner des PDF",
+    "compress-pdf": "Compresser un PDF",
+    "add-text-to-pdf": "Ajouter du texte à un PDF",
+    "add-image-to-pdf": "Ajouter une image à un PDF",
+    "annotate-pdf": "Annoter un PDF",
+    "highlight-pdf": "Surligner un PDF",
+    "reorder-pdf-pages": "Réorganiser les pages PDF",
+    "delete-pdf-pages": "Supprimer des pages PDF",
+    "draw-on-pdf": "Dessiner sur un PDF"
+  },
+  "es": {
+    "edit-pdf": "Editar PDF",
+    "edit-pdf-text": "Editar texto PDF",
+    "sign-pdf": "Firmar PDF",
+    "merge-pdf": "Unir PDF",
+    "compress-pdf": "Comprimir PDF",
+    "add-text-to-pdf": "Añadir texto a PDF",
+    "add-image-to-pdf": "Añadir imagen a PDF",
+    "annotate-pdf": "Anotar PDF",
+    "highlight-pdf": "Resaltar PDF",
+    "reorder-pdf-pages": "Ordenar páginas PDF",
+    "delete-pdf-pages": "Eliminar páginas PDF",
+    "draw-on-pdf": "Dibujar en PDF"
+  },
+  "it": {
+    "edit-pdf": "Modifica PDF",
+    "edit-pdf-text": "Modifica testo PDF",
+    "sign-pdf": "Firma PDF",
+    "merge-pdf": "Unisci PDF",
+    "compress-pdf": "Comprimi PDF",
+    "add-text-to-pdf": "Aggiungi testo al PDF",
+    "add-image-to-pdf": "Aggiungi immagine al PDF",
+    "annotate-pdf": "Annota PDF",
+    "highlight-pdf": "Evidenzia PDF",
+    "reorder-pdf-pages": "Riordina pagine PDF",
+    "delete-pdf-pages": "Elimina pagine PDF",
+    "draw-on-pdf": "Disegna sul PDF"
+  }
+}

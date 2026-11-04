@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Ellipse, Image as KonvaImage, Layer, Line, Rect, Stage, Text, Transformer } from "react-konva";
@@ -18,6 +19,7 @@ import { normalizeDragRect } from "@/lib/pdf/coordinateUtils";
 type DraftRect = { x: number; y: number; width: number; height: number; kind: "highlight" | "rectangle" | "circle" | "line" };
 
 export function ObjectOverlay({ page, zoom }: { page: PageState; zoom: number }) {
+  const t = useTranslation();
   const stageRef = useRef<Konva.Stage | null>(null);
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
@@ -60,7 +62,7 @@ export function ObjectOverlay({ page, zoom }: { page: PageState; zoom: number })
     }
 
     if (tool === "text" && clickedStage) {
-      addObject(createTextObject({ page, x: point.x, y: point.y }));
+      addObject({ ...createTextObject({ page, x: point.x, y: point.y }), text: t("Edit text") });
       return;
     }
 
@@ -192,6 +194,7 @@ function EditorObjectNode({
   onSelect: () => void;
   onChange: (patch: Partial<EditorObject>, trackHistory?: boolean) => void;
 }) {
+  const t = useTranslation();
   const common = {
     id: object.id,
     x: object.x,
@@ -241,7 +244,7 @@ function EditorObjectNode({
         align={object.alignment}
         padding={2}
         onDblClick={() => {
-          const text = window.prompt("Edit text", object.text);
+          const text = window.prompt(t("Edit text"), object.text);
           if (text !== null) onChange({ text } as Partial<EditorObject>);
         }}
       />

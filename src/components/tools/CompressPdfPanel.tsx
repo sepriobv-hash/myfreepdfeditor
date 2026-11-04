@@ -1,8 +1,8 @@
 "use client";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useRef, useState } from "react";
 import { AlertCircle, Download, FileDown, FileText, Loader2, Trash2 } from "lucide-react";
-import { PDFDocument } from "pdf-lib";
 import { useToast } from "@/components/ui/Toaster";
 import { getPdfJs } from "@/lib/pdf/renderPdf";
 import { downloadBlob, sanitizeFileName } from "@/lib/utils";
@@ -28,6 +28,7 @@ type CompressionResult = {
 };
 
 export function CompressPdfPanel() {
+  const t = useTranslation();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [level, setLevel] = useState<CompressionLevel>(2);
@@ -39,11 +40,11 @@ export function CompressPdfPanel() {
   function chooseFile(nextFile?: File) {
     if (!nextFile) return;
     if (nextFile.type !== "application/pdf" && !nextFile.name.toLowerCase().endsWith(".pdf")) {
-      notify("Please choose a valid PDF file.", "error");
+      notify(t("Please choose a valid PDF file."), "error");
       return;
     }
     if (nextFile.size > MAX_FILE_BYTES) {
-      notify("Choose a PDF smaller than 100 MB for browser compression.", "error");
+      notify(t("Choose a PDF smaller than 100 MB for browser compression."), "error");
       return;
     }
     setFile(nextFile);
@@ -108,18 +109,18 @@ export function CompressPdfPanel() {
       });
       notify(
         blob.size < file.size
-          ? "Your compressed PDF is ready."
-          : "This PDF was already efficiently compressed. Your copy is ready.",
+          ? t("Your compressed PDF is ready.")
+          : t("This PDF was already efficiently compressed. Your copy is ready."),
         "success",
       );
     } catch (error) {
       trackUsageEvent("export_failed", { source: "compress-pdf" });
       notify(
         error instanceof Error && /page limit/i.test(error.message)
-          ? error.message
+          ? t("This browser compressor has a 100-page limit.")
           : error instanceof Error && /encrypt|password/i.test(error.message)
-            ? "Password-protected PDFs cannot be compressed yet."
-            : "This PDF could not be compressed in the browser.",
+            ? t("Password-protected PDFs cannot be compressed yet.")
+            : t("This PDF could not be compressed in the browser."),
         "error",
       );
     } finally {
@@ -138,17 +139,13 @@ export function CompressPdfPanel() {
           <div className="flex h-12 w-12 items-center justify-center rounded-md bg-white text-rose-600 shadow-sm">
             <FileDown className="h-6 w-6" />
           </div>
-          <h2 className="mt-4 text-xl font-semibold text-ink">Choose a PDF to compress</h2>
-          <p className="mt-2 max-w-md text-sm leading-6 text-slate-600">
-            Reduce file size locally in your browser. Files up to 100 MB and 100 pages are supported.
-          </p>
+          <h2 className="mt-4 text-xl font-semibold text-ink">{t("Choose a PDF to compress")}</h2>
+          <p className="mt-2 max-w-md text-sm leading-6 text-slate-600"> {t("Reduce file size locally in your browser. Files up to 100 MB and 100 pages are supported.")} </p>
           <button type="button" className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700" onClick={() => {
             trackUsageEvent("upload_clicked", { source: "compress-pdf" });
             inputRef.current?.click();
           }}>
-            <FileText className="h-4 w-4" />
-            Choose PDF
-          </button>
+            <FileText className="h-4 w-4" /> {t("Choose PDF")} </button>
           <input ref={inputRef} className="hidden" type="file" accept="application/pdf,.pdf" onChange={(event) => {
             chooseFile(event.target.files?.[0]);
             event.currentTarget.value = "";
@@ -157,14 +154,14 @@ export function CompressPdfPanel() {
       ) : (
         <div>
           <div className="flex min-w-0 items-center gap-3 rounded-md border border-line bg-slate-50 p-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-white text-brand-600 shadow-sm">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-white text-brand-700 shadow-sm">
               <FileText className="h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
               <div className="truncate text-sm font-semibold text-ink">{file.name}</div>
               <div className="mt-1 text-xs text-slate-500">{formatBytes(file.size)}</div>
             </div>
-            <button type="button" title="Remove PDF" aria-label="Remove PDF" className="p-2 text-slate-500 hover:text-rose-600" disabled={isCompressing} onClick={() => {
+            <button type="button" title={t("Remove PDF")} aria-label={t("Remove PDF")} className="p-2 text-slate-500 hover:text-rose-600" disabled={isCompressing} onClick={() => {
               setFile(null);
               setResult(null);
             }}>
@@ -174,8 +171,8 @@ export function CompressPdfPanel() {
 
           <div className="mt-5">
             <div className="flex items-center justify-between text-sm">
-              <label className="font-semibold text-ink" htmlFor="compression-level">Compression level</label>
-              <span className="font-medium text-brand-600">{compressionLevels[level].label}</span>
+              <label className="font-semibold text-ink" htmlFor="compression-level">{t("Compression level")}</label>
+              <span className="font-medium text-brand-700">{t(compressionLevels[level].label)}</span>
             </div>
             <input
               id="compression-level"
@@ -192,21 +189,21 @@ export function CompressPdfPanel() {
               }}
             />
             <div className="mt-1 flex justify-between text-xs text-slate-500">
-              <span>Smaller file</span>
-              <span>Balanced</span>
-              <span>Sharper pages</span>
+              <span>{t("Smaller file")}</span>
+              <span>{t("Balanced")}</span>
+              <span>{t("Sharper pages")}</span>
             </div>
           </div>
 
           <div className="mt-5 flex gap-3 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-            <p>Strong compression may flatten pages into images. That can remove selectable text, links, and form fields from the compressed copy.</p>
+            <p>{t("Strong compression may flatten pages into images. That can remove selectable text, links, and form fields from the compressed copy.")}</p>
           </div>
 
           {isCompressing && (
             <div className="mt-5" aria-live="polite">
               <div className="flex justify-between text-xs font-medium text-slate-600">
-                <span>Compressing on this device</span>
+                <span>{t("Compressing on this device")}</span>
                 <span>{progress}%</span>
               </div>
               <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
@@ -217,7 +214,7 @@ export function CompressPdfPanel() {
 
           <button type="button" disabled={isCompressing} className="mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-60" onClick={compressFile}>
             {isCompressing ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileDown className="h-4 w-4" />}
-            {isCompressing ? "Compressing PDF..." : "Compress PDF"}
+            {isCompressing ? t("Compressing PDF...") : t("Compress PDF")}
           </button>
         </div>
       )}
@@ -225,21 +222,19 @@ export function CompressPdfPanel() {
       {result && (
         <div className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 p-4">
           <div className="grid grid-cols-3 gap-3 text-center text-sm">
-            <ResultStat label="Before" value={formatBytes(result.originalSize)} />
-            <ResultStat label="After" value={formatBytes(result.outputSize)} />
-            <ResultStat label="Reduction" value={`${reduction}%`} />
+            <ResultStat label={t("Before")} value={formatBytes(result.originalSize)} />
+            <ResultStat label={t("After")} value={formatBytes(result.outputSize)} />
+            <ResultStat label={t("Reduction")} value={`${reduction}%`} />
           </div>
           <p className="mt-3 text-xs leading-5 text-emerald-900">
             {result.outputSize < result.originalSize
               ? result.flattened
-                ? "The image-compressed version produced the smallest file."
-                : "Lossless structure optimization produced the smallest file."
-              : "The original was already the smallest available version, so the downloaded copy keeps its original quality."}
+                ? t("The image-compressed version produced the smallest file.")
+                : t("Lossless structure optimization produced the smallest file.")
+              : t("The original was already the smallest available version, so the downloaded copy keeps its original quality.")}
           </p>
           <button type="button" className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-emerald-300 bg-white px-4 py-3 text-sm font-semibold text-emerald-900 hover:bg-emerald-100" onClick={() => downloadBlob(result.blob, result.name)}>
-            <Download className="h-4 w-4" />
-            Download compressed PDF again
-          </button>
+            <Download className="h-4 w-4" /> {t("Download compressed PDF again")} </button>
         </div>
       )}
     </div>
@@ -256,6 +251,7 @@ function ResultStat({ label, value }: { label: string; value: string }) {
 }
 
 async function optimizeStructure(bytes: ArrayBuffer) {
+  const { PDFDocument } = await import("pdf-lib");
   const document = await PDFDocument.load(bytes.slice(0));
   return document.save({ useObjectStreams: true });
 }
@@ -273,6 +269,7 @@ async function rasterizePdf(
     throw new Error(`This browser compressor has a ${MAX_PAGES}-page limit.`);
   }
 
+  const { PDFDocument } = await import("pdf-lib");
   const output = await PDFDocument.create();
   try {
     for (let pageNumber = 1; pageNumber <= source.numPages; pageNumber += 1) {

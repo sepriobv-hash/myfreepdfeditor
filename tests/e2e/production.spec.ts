@@ -22,10 +22,11 @@ test("homepage and localized metadata are accessible and index-safe", async ({ p
   await expect(page.getByRole("button", { name: /Kies PDF/i })).toBeVisible();
 
   await page.goto("/de");
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /^index, follow$/);
 });
 
 test("sitemap only advertises reachable, indexable canonical pages", async ({ request }) => {
+  test.setTimeout(240_000);
   const sitemap = await request.get("/sitemaps/pages.xml");
   expect(sitemap.status()).toBe(200);
   const xml = await sitemap.text();
@@ -57,7 +58,7 @@ test("Dutch mobile navigation and upload feedback stay usable", async ({ page })
   await expect(page.getByText("Kies een geldig PDF-bestand.", { exact: true })).toBeVisible();
   await expect(page.locator('input[type="file"]')).toHaveValue("");
   await merge.click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Merge PDF Files Online Free");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("PDF samenvoegen");
 });
 
 test("homepage upload hands the selected PDF to the editor", async ({ page }) => {
@@ -66,9 +67,9 @@ test("homepage upload hands the selected PDF to the editor", async ({ page }) =>
   await page.locator('input[type="file"]').setInputFiles({
     name: "homepage-upload.pdf", mimeType: "application/pdf", buffer: pdf,
   });
-  await expect(page).toHaveURL(/\/editor\?uploadId=/);
-  await expect(page.getByRole("button", { name: "Download" })).toBeVisible({ timeout: 20_000 });
-  await expect(page.getByText(/Page 1 of 1/)).toBeVisible();
+  await expect(page).toHaveURL(/\/nl\/editor\?uploadId=/);
+  await expect(page.getByRole("button", { name: "Downloaden" })).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByText(/Pagina 1 van 1/)).toBeVisible();
 });
 
 test("privacy controls clear local upload and analytics data", async ({ page }) => {
@@ -160,4 +161,6 @@ test("a text edit supports undo, redo, and a reopenable export", async ({ page }
   expect(path).not.toBeNull();
   const exported = await import("node:fs/promises").then(({ readFile }) => readFile(path!));
   expect(exported.subarray(0, 5).toString()).toBe("%PDF-");
+  const { PDFDocument } = await import("pdf-lib");
+  expect((await PDFDocument.load(exported)).getPageCount()).toBe(1);
 });

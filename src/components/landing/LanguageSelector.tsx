@@ -1,7 +1,6 @@
 "use client";
 
 import { Languages } from "lucide-react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   defaultLocale,
@@ -29,7 +28,7 @@ export function LanguageSelector({ currentLocale = defaultLocale, label = "Langu
         {localeOptions.map((locale) => {
           const isActive = locale.code === currentLocale;
           return (
-            <Link
+            <a
               key={locale.code}
               href={getLocalizedPath(locale.code, pathname)}
               hrefLang={locale.hreflang}
@@ -41,7 +40,7 @@ export function LanguageSelector({ currentLocale = defaultLocale, label = "Langu
               }
             >
               {locale.nativeLabel}
-            </Link>
+            </a>
           );
         })}
       </div>

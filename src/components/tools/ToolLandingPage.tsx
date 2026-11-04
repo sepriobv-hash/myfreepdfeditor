@@ -199,6 +199,11 @@ export function ToolLandingPage({ tool, relatedTools }: ToolLandingPageProps) {
         <article className="rounded-lg border border-amber-200 bg-amber-50 p-6"><h2 className="text-xl font-semibold">{t("Important limits")}</h2><p className="mt-3 leading-7 text-slate-700">{tool.limitation}</p></article>
       </section>
 
+      {tool.workflow === "compress" && <section className="mx-auto max-w-7xl px-5 pb-14"><h2 className="text-2xl font-semibold">{t("Measured compression examples")}</h2><p className="mt-3 max-w-3xl leading-7 text-slate-600">{t("One-page samples measured in Chromium: a short text invoice and a generated 1200 × 1600 RGB gradient embedded as a PNG. Results depend on the document and browser; these are examples, not expected savings.")}</p><div className="mt-5 overflow-x-auto"><table className="w-full border-collapse text-left text-sm"><caption className="sr-only">{t("Measured compression examples")}</caption><thead><tr>{[t("Sample"), t("Compression level"), t("Input → output (bytes)")].map(label=><th key={label} className="border-b border-line p-3">{label}</th>)}</tr></thead><tbody>{[
+        ["Text sample", "Strong", 1304, 888], ["Text sample", "Balanced", 1304, 888], ["Text sample", "High quality", 1304, 888],
+        ["Generated image sample", "Strong", 1205231, 44502], ["Generated image sample", "Balanced", 1205231, 70809], ["Generated image sample", "High quality", 1205231, 121061],
+      ].map(([sample,mode,input,output])=><tr key={`${sample}-${mode}`}><td className="border-b border-line p-3">{t(String(sample))}</td><td className="border-b border-line p-3">{t(String(mode))}</td><td className="border-b border-line p-3 tabular-nums">{Number(input).toLocaleString(locale)} → {Number(output).toLocaleString(locale)}</td></tr>)}</tbody></table></div></section>}
+
       {relatedTools.length > 0 && (
         <section className="bg-white">
           <div className="mx-auto max-w-7xl px-5 py-16">

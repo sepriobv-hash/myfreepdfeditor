@@ -43,9 +43,11 @@ test('Dutch mobile signature and page changes export a valid document',async({pa
  await page.mouse.move(box.x+30,box.y+30);await page.mouse.down();await page.mouse.move(box.x+100,box.y+60,{steps:8});await page.mouse.up();
  await page.screenshot({path:'test-results/mobile-signature.png'});
  await page.getByRole('dialog').getByRole('button',{name:'Handtekening toevoegen',exact:true}).click();
- await page.locator('.konvajs-content').click({position:{x:80,y:120}});
+ await page.getByTitle('Pagina omlaag',{exact:true}).first().click();
+ page.once('dialog',dialog=>dialog.accept());
+ await page.getByTitle('Pagina verwijderen',{exact:true}).last().click();
  const pending=page.waitForEvent('download');await page.getByRole('button',{name:'Downloaden',exact:true}).click();
  const output=await readFile((await (await pending).path())!);
- expect((await PDFDocument.load(output)).getPageCount()).toBe(3);
+ expect((await PDFDocument.load(output)).getPageCount()).toBe(2);
  await page.screenshot({path:'test-results/mobile-editor.png'});
 });

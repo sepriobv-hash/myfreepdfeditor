@@ -283,5 +283,11 @@
   "Mode": "Modus",
   "Result": "Resultaat",
   "Image-based": "Op basis van afbeeldingen",
-  "Lossless or original": "Verliesvrij of origineel"
+  "Lossless or original": "Verliesvrij of origineel",
+  "Measured compression examples": "Gemeten compressievoorbeelden",
+  "Sample": "Voorbeeld",
+  "Text sample": "Tekstvoorbeeld",
+  "Generated image sample": "Gegenereerd afbeeldingsvoorbeeld",
+  "Input → output (bytes)": "Invoer → uitvoer (bytes)",
+  "One-page samples measured in Chromium: a short text invoice and a generated 1200 × 1600 RGB gradient embedded as a PNG. Results depend on the document and browser; these are examples, not expected savings.": "Voorbeelden van één pagina, gemeten in Chromium: een korte tekstfactuur en een gegenereerd RGB-kleurverloop van 1200 × 1600 als PNG. Resultaten hangen af van het document en de browser; dit zijn voorbeelden, geen verwachte besparing."
 }

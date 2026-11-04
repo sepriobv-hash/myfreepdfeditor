@@ -249,10 +249,10 @@ export function EditorLayout() {
         </div>
         <PropertiesPanel />
       </div>
-      <footer className="flex min-h-10 items-center justify-between border-t border-line bg-white px-4 text-xs text-slate-600">
+      <footer className="flex min-h-10 shrink-0 items-center justify-between gap-3 border-t border-line bg-white px-4 text-xs text-slate-600">
         <span> {t("Page")} {pages.findIndex((page) => page.id === activePage.id) + 1} {t("of")} {pages.length}
         </span>
-        <span>{document.fileName}</span>
+        <span className="min-w-0 truncate">{document.fileName}</span>
         <span>{t("Zoom")} {Math.round(zoom * 100)}%</span>
       </footer>
       <SignatureModal

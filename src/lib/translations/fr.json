@@ -283,5 +283,11 @@
   "Mode": "Mode",
   "Result": "Résultat",
   "Image-based": "En images",
-  "Lossless or original": "Sans perte ou original"
+  "Lossless or original": "Sans perte ou original",
+  "Measured compression examples": "Exemples de compression mesurés",
+  "Sample": "Exemple",
+  "Text sample": "Exemple de texte",
+  "Generated image sample": "Exemple d’image générée",
+  "Input → output (bytes)": "Entrée → sortie (octets)",
+  "One-page samples measured in Chromium: a short text invoice and a generated 1200 × 1600 RGB gradient embedded as a PNG. Results depend on the document and browser; these are examples, not expected savings.": "Exemples d’une page mesurés dans Chromium : une courte facture textuelle et un dégradé RVB généré de 1200 × 1600 pixels intégré en PNG. Les résultats dépendent du document et du navigateur ; ces exemples ne prédisent pas le gain."
 }

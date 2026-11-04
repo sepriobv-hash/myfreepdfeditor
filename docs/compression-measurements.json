@@ -1,0 +1,38 @@
+[
+  {
+    "sample": "text",
+    "mode": "Strong",
+    "inputBytes": 1304,
+    "outputBytes": 888
+  },
+  {
+    "sample": "text",
+    "mode": "Balanced",
+    "inputBytes": 1304,
+    "outputBytes": 888
+  },
+  {
+    "sample": "text",
+    "mode": "High quality",
+    "inputBytes": 1304,
+    "outputBytes": 888
+  },
+  {
+    "sample": "image",
+    "mode": "Strong",
+    "inputBytes": 1205231,
+    "outputBytes": 44502
+  },
+  {
+    "sample": "image",
+    "mode": "Balanced",
+    "inputBytes": 1205231,
+    "outputBytes": 70809
+  },
+  {
+    "sample": "image",
+    "mode": "High quality",
+    "inputBytes": 1205231,
+    "outputBytes": 121061
+  }
+]

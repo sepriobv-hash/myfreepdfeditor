@@ -54,7 +54,7 @@ export const landingFaqs: LandingFaq[] = [
   {
     question: "Do I need to create an account?",
     answer:
-      "No account is required for the current free editor workflow. Future cloud features may add optional accounts for saving documents, teams, and version history.",
+      "No account is required for the current free editor workflow.",
   },
   {
     question: "Can I delete or reorder PDF pages?",
@@ -108,7 +108,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Moet ik een account maken?",
       answer:
-        "Nee. Voor de huidige gratis editorworkflow is geen account nodig. Toekomstige cloudfuncties kunnen optionele accounts toevoegen voor opslag en samenwerking.",
+        "Nee. Voor de huidige gratis editorworkflow is geen account nodig.",
     },
     {
       question: "Kan ik PDF-bestanden gratis samenvoegen of verkleinen?",
@@ -150,7 +150,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Brauche ich ein Konto?",
       answer:
-        "Nein. Für den aktuellen kostenlosen Editor-Workflow ist kein Konto erforderlich. Spätere Cloud-Funktionen können optionale Konten für Speicherung und Zusammenarbeit ergänzen.",
+        "Nein. Für den aktuellen kostenlosen Editor-Workflow ist kein Konto erforderlich.",
     },
   ],
   fr: [
@@ -182,7 +182,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Dois-je créer un compte?",
       answer:
-        "Non. Aucun compte n'est nécessaire pour le flux gratuit actuel. De futures fonctions cloud pourront ajouter des comptes optionnels.",
+        "Non. Aucun compte n'est nécessaire pour le flux gratuit actuel.",
     },
   ],
   es: [
@@ -214,7 +214,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Necesito crear una cuenta?",
       answer:
-        "No. El flujo gratuito actual no requiere cuenta. Las futuras funciones cloud podrán agregar cuentas opcionales para guardar y colaborar.",
+        "No. El flujo gratuito actual no requiere cuenta.",
     },
   ],
   it: [
@@ -246,7 +246,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Devo creare un account?",
       answer:
-        "No. Il flusso gratuito attuale non richiede un account. Future funzioni cloud potranno aggiungere account opzionali per salvataggio e collaborazione.",
+        "No. Il flusso gratuito attuale non richiede un account.",
     },
   ],
 };

@@ -56,11 +56,16 @@ for (const locale of locales) {
   expect(links.filter(href => !languageLinks.includes(href)).every(href => href.startsWith(`/${locale}/`))).toBe(true);
   await page.locator(`a[href="/${locale}/sign-pdf"]`).first().click();
   await expect(page).toHaveURL(new RegExp(`/${locale}/sign-pdf$`));
-  await page.reload();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(localizeTool(activePdfTools.find(tool => tool.slug === "sign-pdf")!, locale).h1);
   await page.goBack();
+  await expect(page).toHaveURL(new RegExp(`/${locale}$`));
+  await expect(page.locator("h1")).not.toHaveText(localizeTool(activePdfTools.find(tool => tool.slug === "sign-pdf")!, locale).h1);
   await page.goForward();
+  await expect(page).toHaveURL(new RegExp(`/${locale}/sign-pdf$`));
   await expect(page.locator("html")).toHaveAttribute("lang",locale);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(localizeTool(activePdfTools.find(tool => tool.slug === "sign-pdf")!, locale).h1);
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("lang",locale);
   const related = await page.locator('a[href*="edit-pdf"]').first().getAttribute("href");
   expect(related).toMatch(new RegExp(`^/${locale}/`));
   await page.getByRole("link", { name: "English", exact: true }).click();
@@ -69,7 +74,7 @@ for (const locale of locales) {
   await page.getByRole("link", { name: ({ nl: "Nederlands", de: "Deutsch", fr: "Français", es: "Español", it: "Italiano" })[locale], exact: true }).click();
   await expect(page).toHaveURL(new RegExp(`/${locale}/sign-pdf$`));
   await page.locator('input[type="file"]').setInputFiles({ name: "invalid.txt", mimeType: "text/plain", buffer: Buffer.from("invalid") });
-  await expect(page.getByRole("alert")).toHaveText(t("Please choose a valid PDF file."));
+  await expect(page.getByRole("alert").filter({ hasText: t("Please choose a valid PDF file.") })).toHaveText(t("Please choose a valid PDF file."));
   await page.locator('input[type="file"]').setInputFiles({ name: "source.pdf", mimeType: "application/pdf", buffer: await createDigitalPdf() });
   await expect(page).toHaveURL(new RegExp(`/${locale}/editor\\?uploadId=.+&tool=sign-pdf`));
   await expect(page.getByRole("button", { name: t("Download"), exact: true })).toBeVisible();
@@ -99,7 +104,7 @@ test("Dutch merge and compression complete with translated results", async ({ pa
  await expect(page.getByRole("button", { name: "Samengevoegde PDF opnieuw downloaden" })).toBeVisible();
  await page.goto("/nl/compress-pdf");
  await page.locator('input[type="file"]').setInputFiles({ name: "a.pdf", mimeType: "application/pdf", buffer: pdf });
- await expect(page.getByText("Compressieniveau", { exact: true })).toBeVisible();
+ await expect(page.getByRole("slider", { name: "Compressieniveau" })).toBeVisible();
  download = page.waitForEvent("download");
  await page.getByRole("button", { name: "PDF verkleinen", exact: true }).click();
  await download;

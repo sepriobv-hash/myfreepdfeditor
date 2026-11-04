@@ -63,7 +63,7 @@ export function TopToolbar({
   const isExporting = useEditorStore((state) => state.isExporting);
 
   return (
-    <header className="flex min-h-16 items-center gap-2 overflow-x-auto border-b border-line bg-white px-3 py-2 editor-scrollbar">
+    <header className="flex min-h-16 shrink-0 flex-wrap items-center gap-2 border-b border-line bg-white px-3 py-2 editor-scrollbar">
       <input
         ref={pdfInputRef}
         type="file"

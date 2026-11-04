@@ -1,0 +1,1159 @@
+{
+  "sitemap_status": 200,
+  "sitemap_count": 114,
+  "lastmod_present": false,
+  "sitemap_index_status": 200,
+  "robots_status": 200,
+  "robots_body": "User-Agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api\n\nSitemap: https://www.myfreepdfeditor.com/sitemap.xml\n",
+  "invalid_routes": {
+    "/nl/not-a-tool": 404,
+    "/zz": 404,
+    "/zz/merge-pdf": 404
+  },
+  "pages": [
+    {
+      "url": "https://www.myfreepdfeditor.com",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/all-tools",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/all-tools",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/all-tools",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/all-tools",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/all-tools",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/all-tools",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/all-tools",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/all-tools",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/all-tools",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/all-tools",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/all-tools",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/all-tools",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/edit-pdf",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/edit-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/edit-pdf",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/edit-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/edit-pdf",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/edit-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/edit-pdf",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/edit-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/edit-pdf",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/edit-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/edit-pdf",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/edit-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/edit-pdf-text",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/edit-pdf-text",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/edit-pdf-text",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/edit-pdf-text",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/edit-pdf-text",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/edit-pdf-text",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/edit-pdf-text",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/edit-pdf-text",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/edit-pdf-text",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/edit-pdf-text",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/edit-pdf-text",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/edit-pdf-text",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/add-text-to-pdf",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/add-text-to-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/add-text-to-pdf",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/add-text-to-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/add-text-to-pdf",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/add-text-to-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/add-text-to-pdf",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/add-text-to-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/add-text-to-pdf",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/add-text-to-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/add-text-to-pdf",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/add-text-to-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/sign-pdf",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/sign-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/sign-pdf",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/sign-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/sign-pdf",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/sign-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/sign-pdf",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/sign-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/sign-pdf",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/sign-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/sign-pdf",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/sign-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/merge-pdf",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/merge-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/merge-pdf",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/merge-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/merge-pdf",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/merge-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/merge-pdf",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/merge-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/merge-pdf",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/merge-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/merge-pdf",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/merge-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/compress-pdf",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/compress-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/compress-pdf",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/compress-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/compress-pdf",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/compress-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/compress-pdf",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/compress-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/compress-pdf",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/compress-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/compress-pdf",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/compress-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/annotate-pdf",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/annotate-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/annotate-pdf",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/annotate-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/annotate-pdf",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/annotate-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/annotate-pdf",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/annotate-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/annotate-pdf",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/annotate-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/annotate-pdf",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/annotate-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/highlight-pdf",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/highlight-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/highlight-pdf",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/highlight-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/highlight-pdf",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/highlight-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/highlight-pdf",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/highlight-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/highlight-pdf",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/highlight-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/highlight-pdf",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/highlight-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/draw-on-pdf",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/draw-on-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/draw-on-pdf",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/draw-on-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/draw-on-pdf",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/draw-on-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/draw-on-pdf",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/draw-on-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/draw-on-pdf",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/draw-on-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/draw-on-pdf",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/draw-on-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/add-image-to-pdf",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/add-image-to-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/add-image-to-pdf",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/add-image-to-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/add-image-to-pdf",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/add-image-to-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/add-image-to-pdf",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/add-image-to-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/add-image-to-pdf",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/add-image-to-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/add-image-to-pdf",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/add-image-to-pdf",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/reorder-pdf-pages",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/reorder-pdf-pages",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/reorder-pdf-pages",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/reorder-pdf-pages",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/reorder-pdf-pages",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/reorder-pdf-pages",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/reorder-pdf-pages",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/reorder-pdf-pages",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/reorder-pdf-pages",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/reorder-pdf-pages",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/reorder-pdf-pages",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/reorder-pdf-pages",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/delete-pdf-pages",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/delete-pdf-pages",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/delete-pdf-pages",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/delete-pdf-pages",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/delete-pdf-pages",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/delete-pdf-pages",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/delete-pdf-pages",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/delete-pdf-pages",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/delete-pdf-pages",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/delete-pdf-pages",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/delete-pdf-pages",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/delete-pdf-pages",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/about",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/about",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/about",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/about",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/about",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/about",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/about",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/about",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/about",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/about",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/about",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/about",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/security",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/security",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/security",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/security",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/security",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/security",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/security",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/security",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/security",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/security",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/security",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/security",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/how-it-works",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/how-it-works",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/how-it-works",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/how-it-works",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/how-it-works",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/how-it-works",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/how-it-works",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/how-it-works",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/how-it-works",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/how-it-works",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/how-it-works",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/how-it-works",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/privacy",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/privacy",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/privacy",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/privacy",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/privacy",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/privacy",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/privacy",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/privacy",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/privacy",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/privacy",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/privacy",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/privacy",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/terms",
+      "status": 200,
+      "lang": "en",
+      "canonical": "https://www.myfreepdfeditor.com/terms",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/nl/terms",
+      "status": 200,
+      "lang": "nl",
+      "canonical": "https://www.myfreepdfeditor.com/nl/terms",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/de/terms",
+      "status": 200,
+      "lang": "de",
+      "canonical": "https://www.myfreepdfeditor.com/de/terms",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/fr/terms",
+      "status": 200,
+      "lang": "fr",
+      "canonical": "https://www.myfreepdfeditor.com/fr/terms",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/es/terms",
+      "status": 200,
+      "lang": "es",
+      "canonical": "https://www.myfreepdfeditor.com/es/terms",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    },
+    {
+      "url": "https://www.myfreepdfeditor.com/it/terms",
+      "status": 200,
+      "lang": "it",
+      "canonical": "https://www.myfreepdfeditor.com/it/terms",
+      "h1": 1,
+      "robots": "index, follow",
+      "errors": [],
+      "alternate_count": 7
+    }
+  ],
+  "duplicate_metadata": {
+    "title": [],
+    "description": []
+  }
+}

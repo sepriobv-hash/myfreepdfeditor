@@ -39,7 +39,9 @@ Results vary by document and browser. The implementation selects the smallest of
 
 ## Validation status
 
-Final production-build test and performance results are recorded below after completion. Earlier development-server navigation assertions timed out during compilation; final checks use `PLAYWRIGHT_PRODUCTION=1`. An initial regression test raced browser history transitions and matched Next's route announcer as an upload alert; these test issues were corrected with explicit history-state waits and a specific alert selector.
+`npm run build`, `npm run typecheck` and `npm run lint` all passed. All **29 Chromium production-build tests passed in 1.4 minutes**, without retries in the final run. The suite covers all localized public routes; direct access, refresh and back/forward; language switching; localized upload/error/editor/export; canonical/hreflang/sitemap consistency; noindex and 404 behavior; privacy controls; digital, scanned, rotated and form PDFs; undo/redo; mobile signing, page movement/deletion; merge and compression downloads. Representative exports reopen with pdf-lib and have the expected page counts. Chromium desktop and mobile viewport rendering was checked; Firefox and WebKit were not run.
+
+Earlier development-server runs hit compilation delays. The history tests also exposed inconsistent client navigation across root layouts, resolved with native localized links. Test selectors were tightened to distinguish upload alerts from Next’s route announcer and compression labels from table headings. Final checks use `PLAYWRIGHT_PRODUCTION=1` against the built app.
 
 ## Search Console follow-up
 
@@ -59,3 +61,30 @@ Once the production changes are verified, use property `sc-domain:myfreepdfedito
 3. Review indexing after 7–14 days and search performance over a complete 28-day period. No recurring task has been created.
 
 Manual actions, security reports, backlink quality and CrUX field data have not been established by the local tests.
+
+## Lighthouse lab measurements
+
+Lighthouse 13.6, Chromium 140 headless shell, default mobile simulated throttling, locally served production builds. Baseline: main commit `429b782`; updated application: PR #10. One successful run per URL; baseline compression was retried after a NO_FCP browser failure. Some baseline measurements overlapped other checks, so timing comparisons are directional, not controlled benchmarks. No CrUX field data or INP claim is made. TBT is a lab metric and is not INP.
+
+| URL | Performance before → after | LCP after (s) | TBT after (ms) | CLS after | Transfer before → after (KB) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `/` | 94 → 100 | 0.89 | 74 | 0.000 | 236 → 199 |
+| `/nl` | 89 → 98 | 0.93 | 157 | 0.000 | 223 → 209 |
+| `/all-tools` | 89 → 92 | 0.81 | 340 | 0.000 | 207 → 152 |
+| `/edit-pdf-text` | 89 → 99 | 0.76 | 148 | 0.000 | 220 → 166 |
+| `/merge-pdf` | 70 → 96 | 0.79 | 229 | 0.000 | 400 → 170 |
+| `/compress-pdf` | 93 → 99 | 0.76 | 131 | 0.000 | 401 → 171 |
+
+All six updated pages scored 100 for Lighthouse accessibility and SEO. This does not certify full accessibility or guarantee search indexing. The directory’s 340 ms TBT remains above the usual 200 ms good threshold in this run. Reduced landing-page payloads come from on-demand PDF-library imports, isolating the editor bundle, shipping only the active translation dictionary and avoiding unnecessary link prefetching. Contrast issues and tool-loading layout shifts were also addressed. Raw summarized results are in `docs/validation/lighthouse-before.json` and `lighthouse-after.json`.
+
+## Deployment and external checks
+
+PR [#10](https://github.com/sepriobv-hash/myfreepdfeditor/pull/10) merged into `main` as `3c3ea87a5e3fad192dda019c7896fcf304e90d20`. Vercel reported success for the merged commit.
+
+Host checks: HTTP www and HTTPS apex each redirect once with 308 to HTTPS www. HTTP apex uses two permanent 308 hops (HTTPS upgrade, then www). There are no loops; the existing edge-level two-hop chain is preserved. Reducing that chain requires reviewing Vercel domain/edge settings, which were not changed.
+
+The direct Search Console service listed the existing sitemap submissions with zero warnings/errors, but its stored sitemap data still showed 19 submitted URLs and downloads dated 26 October (child sitemap) and 2 November (index). That is old Google state, not the updated live sitemap. All seven requested URL inspections returned `google_unavailable`; retrying Dutch merge separately returned the same error. Fresh stored indexing status could not be obtained. No live Google URL test, indexing request or sitemap submission was performed; the connected MCP is read-only. The exact remaining UI actions and URLs are above.
+
+Live HTTP verification after deployment passed for **all 114 sitemap URLs**: HTTP 200, one H1, nonempty title/description, self-canonical, seven hreflang entries, no redirect and no meta/header noindex conflict. Titles and descriptions are unique within each locale. The sitemap index, child sitemap and robots.txt return 200; the sitemap has no fabricated lastmod values. Three invalid paths return 404. The deployed `/nl/merge-pdf` is included in these successful checks. Raw page-level results are in `docs/validation/production-seo.json`; the audit can be repeated with `python scripts/verify-public-seo.py`.
+
+Remaining work is external: Search Console live tests/indexing requests and optionally collapsing the existing HTTP-apex redirect chain in Vercel. Field performance and indexing outcomes need subsequent observation. No known failing application regression remains in the tested Chromium workflows.

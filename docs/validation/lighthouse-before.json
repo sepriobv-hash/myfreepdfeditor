@@ -53,5 +53,16 @@
     "tbt_ms": 3818.0239999999994,
     "fcp_ms": 811.9680000000001,
     "bytes": 400365
+  },
+  {
+    "path": "/compress-pdf",
+    "performance": 0.93,
+    "accessibility": 0.96,
+    "seo": 1,
+    "lcp_ms": 806.7585,
+    "cls": 0.04592155363198682,
+    "tbt_ms": 293,
+    "fcp_ms": 806.7585,
+    "bytes": 401476
   }
 ]

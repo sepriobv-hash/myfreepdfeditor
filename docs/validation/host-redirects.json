@@ -1,0 +1,43 @@
+[
+  {
+    "url": "http://myfreepdfeditor.com",
+    "final": "https://www.myfreepdfeditor.com/",
+    "status": 200,
+    "hops": [
+      {
+        "status": 308,
+        "from": "http://myfreepdfeditor.com",
+        "to": "https://myfreepdfeditor.com/"
+      },
+      {
+        "status": 308,
+        "from": "https://myfreepdfeditor.com/",
+        "to": "https://www.myfreepdfeditor.com/"
+      }
+    ]
+  },
+  {
+    "url": "http://www.myfreepdfeditor.com",
+    "final": "https://www.myfreepdfeditor.com/",
+    "status": 200,
+    "hops": [
+      {
+        "status": 308,
+        "from": "http://www.myfreepdfeditor.com",
+        "to": "https://www.myfreepdfeditor.com/"
+      }
+    ]
+  },
+  {
+    "url": "https://myfreepdfeditor.com",
+    "final": "https://www.myfreepdfeditor.com/",
+    "status": 200,
+    "hops": [
+      {
+        "status": 308,
+        "from": "https://myfreepdfeditor.com",
+        "to": "https://www.myfreepdfeditor.com/"
+      }
+    ]
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "path": "/",
+    "performance": 1,
+    "accessibility": 1,
+    "seo": 1,
+    "lcp_ms": 893.9359999999999,
+    "cls": 0,
+    "tbt_ms": 74,
+    "fcp_ms": 893.9359999999999,
+    "bytes": 198591
+  },
+  {
+    "path": "/nl",
+    "performance": 0.98,
+    "accessibility": 1,
+    "seo": 1,
+    "lcp_ms": 932.479,
+    "cls": 0,
+    "tbt_ms": 157,
+    "fcp_ms": 932.479,
+    "bytes": 209124
+  },
+  {
+    "path": "/all-tools",
+    "performance": 0.92,
+    "accessibility": 1,
+    "seo": 1,
+    "lcp_ms": 809.733,
+    "cls": 0,
+    "tbt_ms": 339.5,
+    "fcp_ms": 809.733,
+    "bytes": 151571
+  },
+  {
+    "path": "/edit-pdf-text",
+    "performance": 0.99,
+    "accessibility": 1,
+    "seo": 1,
+    "lcp_ms": 763.2170000000001,
+    "cls": 0,
+    "tbt_ms": 148,
+    "fcp_ms": 763.2170000000001,
+    "bytes": 165678
+  },
+  {
+    "path": "/merge-pdf",
+    "performance": 0.96,
+    "accessibility": 1,
+    "seo": 1,
+    "lcp_ms": 792.046,
+    "cls": 0,
+    "tbt_ms": 229,
+    "fcp_ms": 792.046,
+    "bytes": 169607
+  },
+  {
+    "path": "/compress-pdf",
+    "performance": 0.99,
+    "accessibility": 1,
+    "seo": 1,
+    "lcp_ms": 764.5820000000001,
+    "cls": 0,
+    "tbt_ms": 130.50000000000023,
+    "fcp_ms": 764.5820000000001,
+    "bytes": 170950
+  }
+]

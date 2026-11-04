@@ -100,7 +100,10 @@ test("Dutch merge and compression complete with translated results", async ({ pa
  await expect(page.getByText("PDF-volgorde")).toBeVisible();
  let download = page.waitForEvent("download");
  await page.getByRole("button", { name: "PDF’s samenvoegen", exact: true }).click();
- await download;
+ const merged = await download;
+ const { readFile } = await import("node:fs/promises");
+ const { PDFDocument } = await import("pdf-lib");
+ expect((await PDFDocument.load(await readFile((await merged.path())!))).getPageCount()).toBe(2);
  await expect(page.getByRole("button", { name: "Samengevoegde PDF opnieuw downloaden" })).toBeVisible();
  await page.goto("/nl/compress-pdf");
  await page.locator('input[type="file"]').setInputFiles({ name: "a.pdf", mimeType: "application/pdf", buffer: pdf });

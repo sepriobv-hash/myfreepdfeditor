@@ -11,3 +11,6 @@ playwright-report
 test-results
 *.tsbuildinfo
 /work/
+
+/public/tool-assets/
+/scripts/__pycache__/

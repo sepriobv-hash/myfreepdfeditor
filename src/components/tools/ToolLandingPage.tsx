@@ -30,6 +30,8 @@ const CompressPdfPanel = dynamic(
   { ssr: false, loading: function Loading() { return <p className="min-h-72 p-6 text-sm text-slate-600" role="status">{useTranslation()("Loading PDF compression tool…")}</p>; } },
 );
 
+const ToolkitPanel = dynamic(() => import("@/components/tools/workflows/ToolkitPanel").then(module => module.ToolkitPanel), { ssr: false, loading: function Loading() { return <p className="min-h-72 p-6 text-sm" role="status">{useTranslation()("Loading PDF tool…")}</p>; } });
+
 type ToolLandingPageProps = {
   tool: PdfTool;
   relatedTools: PdfTool[];
@@ -96,7 +98,7 @@ export function ToolLandingPage({ tool, relatedTools }: ToolLandingPageProps) {
             <li aria-current="page" className="font-medium text-ink">{tool.shortTitle}</li>
           </ol>
         </nav>
-        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
             <div className="mb-4 inline-flex items-center gap-2 rounded-md border border-rose-100 bg-white px-3 py-2 text-sm font-semibold text-rose-700 shadow-sm">
               <Sparkles className="h-4 w-4" /> {t("Free PDF tool")} </div>
@@ -125,7 +127,9 @@ export function ToolLandingPage({ tool, relatedTools }: ToolLandingPageProps) {
           </div>
 
           <div className="rounded-xl border border-rose-100 bg-white p-2 shadow-panel">
-            {tool.workflow === "merge" ? (
+            {tool.workflow && !["editor", "merge", "compress"].includes(tool.workflow) ? (
+              <ToolkitPanel workflow={tool.workflow as import("@/components/tools/workflows/ToolkitPanel").ToolkitWorkflow} slug={tool.slug} />
+            ) : tool.workflow === "merge" ? (
               <MergePdfPanel />
             ) : tool.workflow === "compress" ? (
               <CompressPdfPanel />
@@ -177,7 +181,7 @@ export function ToolLandingPage({ tool, relatedTools }: ToolLandingPageProps) {
               ? t("Choose multiple PDFs, set their order, and combine every page into one downloadable document without leaving this page.")
               : tool.workflow === "compress"
                 ? t("Choose a quality level and let the browser compare lossless optimization with a smaller image-based copy before downloading the best result.")
-                : t("This page opens the full editor workspace, focused on the task you searched for. You get the complete editor instead of a limited upload form.")}
+                : tool.workflow && tool.workflow !== "editor" ? t("Choose your file, adjust the options and review the result before downloading.") : t("This page opens the full editor workspace, focused on the task you searched for. You get the complete editor instead of a limited upload form.")}
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-3">

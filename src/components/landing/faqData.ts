@@ -118,7 +118,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Kan ik een gescande PDF bewerken?",
       answer:
-        "Je kunt tekstvakken, afbeeldingen, handtekeningen en markeringen toevoegen aan een scan. Om de oorspronkelijke tekst in een scan te herkennen, is OCR nodig. Die functie is momenteel niet beschikbaar.",
+        "Je kunt tekstvakken, afbeeldingen, handtekeningen en markeringen toevoegen aan een scan. Om de oorspronkelijke tekst in een scan te herkennen, is OCR nodig. Gebruik hiervoor de tool PDF-tekst herkennen.",
     },
   ],
   de: [

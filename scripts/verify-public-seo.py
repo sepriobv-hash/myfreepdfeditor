@@ -62,6 +62,6 @@ def main():
     out=Path('docs/validation/production-seo.json');out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
     failed=[p for p in pages if p['errors']]
     print(json.dumps({'pages':len(pages),'failed':failed,'invalid_routes':invalid,'sitemap_status':status,'robots_status':robots[0]}))
-    if failed or len(pages)!=114 or any(v!=404 for v in invalid.values()):raise SystemExit(1)
+    if failed or len(pages)!=180 or any(v!=404 for v in invalid.values()):raise SystemExit(1)
 
 if __name__=='__main__':main()

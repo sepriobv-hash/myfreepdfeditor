@@ -1,4 +1,5 @@
-export type ToolCategory = "Edit" | "Sign" | "Annotate" | "Organize" | "Optimize";
+import { additionalPdfTools } from "./additionalPdfTools";
+export type ToolCategory = "Edit" | "Sign" | "Annotate" | "Organize" | "Optimize" | "Convert" | "Protect";
 
 export type PdfTool = {
   useCase?: string;
@@ -12,7 +13,7 @@ export type PdfTool = {
   uploadTitle: string;
   uploadDescription: string;
   category: ToolCategory;
-  workflow?: "editor" | "merge" | "compress";
+  workflow?: "editor" | "merge" | "compress" | "split" | "extract" | "images-to-pdf" | "pdf-to-images" | "rotate" | "crop" | "ocr" | "forms" | "redact" | "pdf-to-word" | "word-to-pdf";
   priority: string;
   related: string[];
   steps: string[];
@@ -23,6 +24,7 @@ export type PdfTool = {
 };
 
 export const activePdfTools: PdfTool[] = [
+  ...additionalPdfTools,
   {
     slug: "edit-pdf",
     title: "Edit PDF Online Free",
@@ -75,7 +77,7 @@ export const activePdfTools: PdfTool[] = [
       "Open a PDF in the editor and select existing text to create a matching editable replacement layer.",
     category: "Edit",
     priority: "0.95",
-    related: ["edit-pdf", "add-text-to-pdf", "highlight-pdf", "draw-on-pdf"],
+    related: ["edit-pdf", "ocr-pdf", "pdf-to-word", "redact-pdf"],
     steps: [
       "Upload the PDF with the text you want to change.",
       "Select detected text and edit the replacement layer visually.",
@@ -95,7 +97,7 @@ export const activePdfTools: PdfTool[] = [
       {
         question: "Is this useful for scanned PDFs?",
         answer:
-          "Scanned PDFs need OCR before text can be detected. OCR is planned as a separate tool, while visual overlays can still be added manually.",
+          "Scanned PDFs need OCR before text can be detected. Use the OCR PDF tool first, or add visible text manually in the editor.",
       },
     ],
   },
@@ -190,7 +192,7 @@ export const activePdfTools: PdfTool[] = [
     category: "Organize",
     workflow: "merge",
     priority: "0.95",
-    related: ["compress-pdf", "edit-pdf", "reorder-pdf-pages", "delete-pdf-pages"],
+    related: ["compress-pdf", "split-pdf", "reorder-pdf-pages", "extract-pdf-pages"],
     steps: [
       "Choose two or more PDF files from your device.",
       "Arrange the files in the order you want them to appear.",
@@ -443,7 +445,7 @@ export const activePdfTools: PdfTool[] = [
       "Upload your PDF, use page thumbnails to organize pages, and download the updated file.",
     category: "Organize",
     priority: "0.82",
-    related: ["delete-pdf-pages", "edit-pdf", "annotate-pdf", "add-text-to-pdf"],
+    related: ["delete-pdf-pages", "rotate-pdf", "extract-pdf-pages", "split-pdf"],
     steps: [
       "Upload your PDF.",
       "Use the page sidebar to move pages into the right order.",
@@ -508,15 +510,7 @@ export const activePdfTools: PdfTool[] = [
 ];
 
 export const plannedPdfTools = [
-  "Split PDF",
-  "OCR PDF",
-  "Redact PDF",
   "Watermark PDF",
-  "PDF to JPG",
-  "JPG to PDF",
-  "PDF to Word",
-  "Word to PDF",
-  "Rotate PDF",
   "Protect PDF",
   "Unlock PDF",
   "Add Page Numbers",

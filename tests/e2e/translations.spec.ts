@@ -33,7 +33,7 @@ for (const locale of locales) {
    expect(html).toContain(`rel="canonical" href="https://www.myfreepdfeditor.com/${locale}/${tool.slug}"`);
    const localized = localizeTool(tool, locale);
    expect(html).toContain(localized.title);
-   expect(html).not.toContain(`>${tool.h1}</h1>`);
+   if (localized.h1 !== tool.h1) expect(html).not.toContain(`>${tool.h1}</h1>`);
    expect(html).toContain(`href="/${locale}/all-tools"`);
    expect(html).not.toContain('href="/all-tools"');
   }

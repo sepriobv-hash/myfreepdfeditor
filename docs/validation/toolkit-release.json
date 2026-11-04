@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-04",
+  "base_commit": "51959e88570ee236d06642d727269c53867545ef",
+  "new_tools": 11,
+  "total_tools": 23,
+  "indexable_urls": 180,
+  "locales": [
+    "en",
+    "nl",
+    "de",
+    "fr",
+    "es",
+    "it"
+  ],
+  "build": "passed",
+  "framework": "Next.js 15.5.29",
+  "browser_project": "chromium",
+  "tests": 45,
+  "passed": 45,
+  "retries": 0,
+  "duration": "2.6 minutes",
+  "dependency_audit": {
+    "high": 0,
+    "critical": 0,
+    "moderate_development_only": 6
+  },
+  "production_audit": "Recorded separately after deployment"
+}

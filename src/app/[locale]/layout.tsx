@@ -1,3 +1,6 @@
+import { dictionaries } from "@/lib/translations";
+import { notFound } from "next/navigation";
+import { LocaleProvider } from "@/components/i18n/LocaleProvider";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -17,15 +20,18 @@ export default async function LocaleRootLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const documentLanguage = isSupportedLocale(locale) ? locale : "en";
+  if (!isSupportedLocale(locale) || locale === "en") notFound();
+  const documentLanguage = locale;
 
   return (
     <html lang={documentLanguage}>
       <body>
+        <LocaleProvider locale={documentLanguage} messages={dictionaries[documentLanguage]}>
         <GoogleAnalytics />
         <ToastProvider>{children}</ToastProvider>
         <Analytics />
         <SpeedInsights />
+        </LocaleProvider>
       </body>
     </html>
   );

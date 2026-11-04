@@ -1,115 +1,12 @@
-import { getAbsoluteLocalizedUrl, getLanguageAlternates, indexableLocaleOptions } from "@/lib/i18n";
-import { activePdfTools } from "@/lib/pdfTools";
-import { siteUrl } from "@/lib/site";
-
-type SitemapEntry = {
-  url: string;
-  changeFrequency: "weekly" | "monthly";
-  priority: string;
-  lastModified: string;
-  alternates?: Record<string, string>;
-};
-
-const lastContentUpdate = "2026-08-29";
-const lastSeoUpdate = "2026-10-08";
-
-function xmlResponse(body: string) {
-  return new Response(body, {
-    headers: {
-      "Content-Type": "application/xml; charset=utf-8",
-      "Cache-Control": "public, max-age=3600, s-maxage=86400",
-    },
-  });
-}
-
-function escapeXml(value: string) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&apos;");
-}
-
-function renderAlternateLinks(alternates?: Record<string, string>) {
-  if (!alternates) return "";
-
-  return Object.entries(alternates)
-    .map(
-      ([hreflang, href]) =>
-        `    <xhtml:link rel="alternate" hreflang="${escapeXml(hreflang)}" href="${escapeXml(href)}" />`,
-    )
-    .join("\n");
-}
-
-function renderUrl(entry: SitemapEntry) {
-  const alternateLinks = renderAlternateLinks(entry.alternates);
-
-  return `  <url>
-    <loc>${escapeXml(entry.url)}</loc>
-    <lastmod>${entry.lastModified}</lastmod>${alternateLinks ? `\n${alternateLinks}` : ""}
-    <changefreq>${entry.changeFrequency}</changefreq>
-    <priority>${entry.priority}</priority>
-  </url>`;
-}
+import { publicRoutes } from "@/lib/routeRegistry";
+import { getAbsoluteLocalizedUrl, getLanguageAlternates } from "@/lib/i18n";
+const escapeXml = (value: string) => value.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("'", "&apos;");
 
 export function GET() {
-  const homeAlternates = getLanguageAlternates();
-  const entries: SitemapEntry[] = [
-    ...indexableLocaleOptions.map((locale) => ({
-      url: getAbsoluteLocalizedUrl(locale.code),
-      changeFrequency: "weekly" as const,
-      priority: locale.code === "en" ? "1.0" : "0.9",
-      lastModified: lastSeoUpdate,
-      alternates: homeAlternates,
-    })),
-    {
-      url: `${siteUrl}/all-tools`,
-      changeFrequency: "weekly",
-      priority: "0.9",
-      lastModified: lastSeoUpdate,
-    },
-    {
-      url: `${siteUrl}/about`,
-      changeFrequency: "monthly",
-      priority: "0.6",
-      lastModified: lastContentUpdate,
-    },
-    {
-      url: `${siteUrl}/security`,
-      changeFrequency: "monthly",
-      priority: "0.7",
-      lastModified: lastContentUpdate,
-    },
-    {
-      url: `${siteUrl}/how-it-works`,
-      changeFrequency: "monthly",
-      priority: "0.75",
-      lastModified: lastContentUpdate,
-    },
-    ...activePdfTools.map((tool) => ({
-      url: `${siteUrl}/${tool.slug}`,
-      changeFrequency: "weekly" as const,
-      priority: tool.priority,
-      lastModified: lastSeoUpdate,
-    })),
-    {
-      url: `${siteUrl}/privacy`,
-      changeFrequency: "monthly",
-      priority: "0.5",
-      lastModified: lastContentUpdate,
-    },
-    {
-      url: `${siteUrl}/terms`,
-      changeFrequency: "monthly",
-      priority: "0.3",
-      lastModified: lastContentUpdate,
-    },
-  ];
-
-  return xmlResponse(`<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${entries.map((entry) => renderUrl(entry)).join("\n")}
-</urlset>
-`);
+ const entries = publicRoutes.filter(route => route.indexable).flatMap(route => route.locales.map(locale => {
+  const alternates = Object.entries(getLanguageAlternates(route.path)).map(([lang, href]) => `    <xhtml:link rel="alternate" hreflang="${escapeXml(lang)}" href="${escapeXml(href)}" />`).join("\n");
+  // No build-time timestamps: dates are omitted until maintained content provenance exists.
+  return `  <url>\n    <loc>${escapeXml(getAbsoluteLocalizedUrl(locale, route.path))}</loc>\n${alternates}\n  </url>`;
+ }));
+ return new Response(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${entries.join("\n")}\n</urlset>\n`, { headers: { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600, s-maxage=86400" } });
 }

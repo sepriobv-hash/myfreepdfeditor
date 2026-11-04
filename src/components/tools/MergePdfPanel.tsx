@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useRef, useState } from "react";
 import {
@@ -10,7 +11,6 @@ import {
   Loader2,
   Trash2,
 } from "lucide-react";
-import { PDFDocument } from "pdf-lib";
 import { useToast } from "@/components/ui/Toaster";
 import { downloadBlob } from "@/lib/utils";
 import { fileCountBucket, fileSizeBucket, trackUsageEvent } from "@/lib/usage/client";
@@ -19,6 +19,7 @@ const MAX_FILES = 30;
 const MAX_TOTAL_BYTES = 250 * 1024 * 1024;
 
 export function MergePdfPanel() {
+  const t = useTranslation();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -29,7 +30,7 @@ export function MergePdfPanel() {
   function addFiles(selectedFiles: File[]) {
     const pdfFiles = selectedFiles.filter(isPdfFile);
     if (pdfFiles.length !== selectedFiles.length) {
-      notify("Only PDF files can be merged.", "error");
+      notify(t("Only PDF files can be merged."), "error");
     }
     if (pdfFiles.length === 0) return;
 
@@ -41,12 +42,12 @@ export function MergePdfPanel() {
     const totalBytes = nextFiles.reduce((total, file) => total + file.size, 0);
 
     if (totalBytes > MAX_TOTAL_BYTES) {
-      notify("Choose PDFs with a combined size below 250 MB.", "error");
+      notify(t("Choose PDFs with a combined size below 250 MB."), "error");
       return;
     }
 
     if (nextFiles.length === MAX_FILES && files.length + pdfFiles.length > MAX_FILES) {
-      notify(`You can merge up to ${MAX_FILES} PDFs at once.`, "error");
+      notify(t("You can merge up to 30 PDFs at once."), "error");
     }
 
     setFiles(nextFiles);
@@ -81,7 +82,7 @@ export function MergePdfPanel() {
 
   async function mergeFiles() {
     if (files.length < 2) {
-      notify("Choose at least two PDF files to merge.", "error");
+      notify(t("Choose at least two PDF files to merge."), "error");
       return;
     }
 
@@ -92,6 +93,7 @@ export function MergePdfPanel() {
         source: "merge-pdf",
         fileCountBucket: fileCountBucket(files.length),
       });
+      const { PDFDocument } = await import("pdf-lib");
       const output = await PDFDocument.create();
 
       for (const file of files) {
@@ -111,13 +113,13 @@ export function MergePdfPanel() {
         fileCountBucket: fileCountBucket(files.length),
         outputSizeBucket: fileSizeBucket(blob.size),
       });
-      notify("Your merged PDF is ready.", "success");
+      notify(t("Your merged PDF is ready."), "success");
     } catch (error) {
       trackUsageEvent("export_failed", { source: "merge-pdf" });
       notify(
         error instanceof Error && /encrypt|password/i.test(error.message)
-          ? "One of these PDFs is password protected and cannot be merged."
-          : "These PDF files could not be merged.",
+          ? t("One of these PDFs is password protected and cannot be merged.")
+          : t("These PDF files could not be merged."),
         "error",
       );
     } finally {
@@ -146,10 +148,8 @@ export function MergePdfPanel() {
         <div className="flex h-12 w-12 items-center justify-center rounded-md bg-white text-rose-600 shadow-sm">
           <Files className="h-6 w-6" />
         </div>
-        <h2 className="mt-4 text-xl font-semibold text-ink">Choose PDF files to merge</h2>
-        <p className="mt-2 max-w-md text-sm leading-6 text-slate-600">
-          Add two or more PDFs. Your files stay on this device while they are combined.
-        </p>
+        <h2 className="mt-4 text-xl font-semibold text-ink">{t("Choose PDF files to merge")}</h2>
+        <p className="mt-2 max-w-md text-sm leading-6 text-slate-600"> {t("Add two or more PDFs. Your files stay on this device while they are combined.")} </p>
         <button
           type="button"
           className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700"
@@ -158,9 +158,7 @@ export function MergePdfPanel() {
             inputRef.current?.click();
           }}
         >
-          <FilePlus2 className="h-4 w-4" />
-          Choose PDFs
-        </button>
+          <FilePlus2 className="h-4 w-4" /> {t("Choose PDFs")} </button>
         <input
           ref={inputRef}
           className="hidden"
@@ -177,28 +175,28 @@ export function MergePdfPanel() {
       {files.length > 0 && (
         <div className="mt-4">
           <div className="flex items-center justify-between text-sm">
-            <span className="font-semibold text-ink">PDF order</span>
+            <span className="font-semibold text-ink">{t("PDF order")}</span>
             <span className="text-slate-500">
-              {files.length} {files.length === 1 ? "file" : "files"} · {formatBytes(files.reduce((sum, file) => sum + file.size, 0))}
+              {files.length} {t(files.length === 1 ? "file" : "files")} · {formatBytes(files.reduce((sum, file) => sum + file.size, 0))}
             </span>
           </div>
           <div className="mt-3 max-h-64 space-y-2 overflow-y-auto pr-1">
             {files.map((file, index) => (
               <div key={fileKey(file)} className="flex min-w-0 items-center gap-3 rounded-md border border-line bg-slate-50 p-3">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-white text-xs font-semibold text-brand-600 shadow-sm">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-white text-xs font-semibold text-brand-700 shadow-sm">
                   {index + 1}
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-sm font-medium text-ink">{file.name}</div>
                   <div className="text-xs text-slate-500">{formatBytes(file.size)}</div>
                 </div>
-                <button type="button" title="Move up" aria-label={`Move ${file.name} up`} className="p-2 text-slate-500 hover:text-ink disabled:opacity-30" disabled={index === 0} onClick={() => moveFile(index, -1)}>
+                <button type="button" title={t("Move up")} aria-label={t(t("Move up")) + ": " + file.name} className="p-2 text-slate-500 hover:text-ink disabled:opacity-30" disabled={index === 0} onClick={() => moveFile(index, -1)}>
                   <ArrowUp className="h-4 w-4" />
                 </button>
-                <button type="button" title="Move down" aria-label={`Move ${file.name} down`} className="p-2 text-slate-500 hover:text-ink disabled:opacity-30" disabled={index === files.length - 1} onClick={() => moveFile(index, 1)}>
+                <button type="button" title={t("Move down")} aria-label={t(t("Move down")) + ": " + file.name} className="p-2 text-slate-500 hover:text-ink disabled:opacity-30" disabled={index === files.length - 1} onClick={() => moveFile(index, 1)}>
                   <ArrowDown className="h-4 w-4" />
                 </button>
-                <button type="button" title="Remove" aria-label={`Remove ${file.name}`} className="p-2 text-slate-500 hover:text-rose-600" onClick={() => removeFile(index)}>
+                <button type="button" title={t("Remove")} aria-label={t(t("Remove")) + ": " + file.name} className="p-2 text-slate-500 hover:text-rose-600" onClick={() => removeFile(index)}>
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
@@ -211,16 +209,14 @@ export function MergePdfPanel() {
             onClick={mergeFiles}
           >
             {isMerging ? <Loader2 className="h-4 w-4 animate-spin" /> : <Files className="h-4 w-4" />}
-            {isMerging ? "Merging PDFs..." : "Merge PDFs"}
+            {isMerging ? t("Merging PDFs...") : t("Merge PDFs")}
           </button>
         </div>
       )}
 
       {result && (
         <button type="button" className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-line bg-white px-4 py-3 text-sm font-semibold text-ink hover:bg-slate-50" onClick={() => downloadBlob(result.blob, result.name)}>
-          <Download className="h-4 w-4" />
-          Download merged PDF again
-        </button>
+          <Download className="h-4 w-4" /> {t("Download merged PDF again")} </button>
       )}
     </div>
   );

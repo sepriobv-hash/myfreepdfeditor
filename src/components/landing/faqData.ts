@@ -54,7 +54,7 @@ export const landingFaqs: LandingFaq[] = [
   {
     question: "Do I need to create an account?",
     answer:
-      "No account is required for the current free editor workflow. Future cloud features may add optional accounts for saving documents, teams, and version history.",
+      "No account is required for the current free editor workflow.",
   },
   {
     question: "Can I delete or reorder PDF pages?",
@@ -108,7 +108,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Moet ik een account maken?",
       answer:
-        "Nee. Voor de huidige gratis editorworkflow is geen account nodig. Toekomstige cloudfuncties kunnen optionele accounts toevoegen voor opslag en samenwerking.",
+        "Nee. Voor de huidige gratis editorworkflow is geen account nodig.",
     },
     {
       question: "Kan ik PDF-bestanden gratis samenvoegen of verkleinen?",
@@ -130,12 +130,12 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Wie kann ich eine PDF online kostenlos bearbeiten?",
       answer:
-        "Lade deine PDF hoch, waehle eine Seite, bearbeite oder ersetze Text, fuege Bilder ein, unterschreibe, markiere, ordne Seiten und exportiere das fertige Dokument.",
+        "Lade deine PDF hoch, wähle eine Seite, bearbeite oder ersetze Text, füge Bilder ein, unterschreibe, markiere, ordne Seiten und exportiere das fertige Dokument.",
     },
     {
       question: "Kann ich vorhandenen Text in einer PDF bearbeiten?",
       answer:
-        "Ja. Der Editor erkennt Text auf der PDF-Seite und erstellt eine bearbeitbare Ersatzebene. Text, Schriftgroesse, Staerke, Abstand, Farbe und Ausrichtung lassen sich anpassen.",
+        "Ja. Der Editor erkennt Text auf der PDF-Seite und erstellt eine bearbeitbare Ersatzebene. Text, Schriftgröße, Stärke, Abstand, Farbe und Ausrichtung lassen sich anpassen.",
     },
     {
       question: "Kann ich eine PDF online unterschreiben?",
@@ -145,19 +145,19 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Werden meine PDF-Dateien auf einem Server gespeichert?",
       answer:
-        "Der Editor ist browser-first. Dateien werden moeglichst lokal verarbeitet und standardmaessig nicht dauerhaft gespeichert. Der Homepage-Upload nutzt temporaeren Browserspeicher auf deinem Geraet.",
+        "Der Editor ist auf die Verarbeitung im Browser ausgelegt. Dateien werden möglichst lokal verarbeitet und standardmäßig nicht dauerhaft gespeichert. Der Homepage-Upload nutzt temporären Browserspeicher auf deinem Gerät.",
     },
     {
       question: "Brauche ich ein Konto?",
       answer:
-        "Nein. Fuer den aktuellen kostenlosen Editor-Workflow ist kein Konto erforderlich. Spaetere Cloud-Funktionen koennen optionale Konten fuer Speicherung und Zusammenarbeit ergaenzen.",
+        "Nein. Für den aktuellen kostenlosen Editor-Workflow ist kein Konto erforderlich.",
     },
   ],
   fr: [
     {
-      question: "MyFreePDFEditor est-il un editeur PDF gratuit?",
+      question: "MyFreePDFEditor est-il un éditeur PDF gratuit?",
       answer:
-        "Oui. MyFreePDFEditor est un editeur PDF en ligne gratuit. Vous pouvez importer, modifier dans le navigateur et telecharger le PDF modifie.",
+        "Oui. MyFreePDFEditor est un éditeur PDF en ligne gratuit. Vous pouvez importer, modifier dans le navigateur et télécharger le PDF modifié.",
     },
     {
       question: "Comment modifier un PDF en ligne gratuitement?",
@@ -167,7 +167,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Puis-je modifier le texte existant d'un PDF?",
       answer:
-        "Oui. L'editeur detecte le texte sur la page PDF et cree une couche de remplacement editable. Vous pouvez modifier le texte, la taille, l'epaisseur, l'espacement, la couleur et l'alignement.",
+        "Oui. L'éditeur détecté le texte sur la page PDF et crée une couche de remplacement modifiable. Vous pouvez modifier le texte, la taille, l'épaisseur, l'espacement, la couleur et l'alignement.",
     },
     {
       question: "Puis-je signer un PDF en ligne?",
@@ -175,53 +175,53 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
         "Oui. Vous pouvez dessiner une signature dans le navigateur ou importer une image de signature, la placer, la redimensionner et l'exporter dans le PDF final.",
     },
     {
-      question: "Mes fichiers PDF sont-ils stockes sur un serveur?",
+      question: "Mes fichiers PDF sont-ils stockés sur un serveur?",
       answer:
-        "L'editeur est browser-first. Les fichiers sont traites localement lorsque possible et ne sont pas stockes de facon permanente par defaut. L'import depuis la page d'accueil utilise un stockage temporaire du navigateur.",
+        "L'éditeur est browser-first. Les fichiers sont traités localement lorsque possible et ne sont pas stockés de façon permanente par défaut. L'import depuis la page d'accueil utilise un stockage temporaire du navigateur.",
     },
     {
-      question: "Dois-je creer un compte?",
+      question: "Dois-je créer un compte?",
       answer:
-        "Non. Aucun compte n'est necessaire pour le flux gratuit actuel. De futures fonctions cloud pourront ajouter des comptes optionnels.",
+        "Non. Aucun compte n'est nécessaire pour le flux gratuit actuel.",
     },
   ],
   es: [
     {
       question: "MyFreePDFEditor es un editor PDF gratis?",
       answer:
-        "Si. MyFreePDFEditor es un editor PDF online gratis. Puedes subir un PDF, editarlo en el navegador y descargar el PDF editado.",
+        "Sí. MyFreePDFEditor es un editor PDF online gratis. Puedes subir un PDF, editarlo en el navegador y descargar el PDF editado.",
     },
     {
-      question: "Como puedo editar un PDF online gratis?",
+      question: "Cómo puedo editar un PDF online gratis?",
       answer:
-        "Sube tu PDF, elige una pagina, agrega o reemplaza texto, inserta imagenes, firma, dibuja, resalta, organiza paginas y exporta el documento final.",
+        "Sube tu PDF, elige una página, agrega o reemplaza texto, inserta imágenes, firma, dibuja, resalta, organiza páginas y exporta el documento final.",
     },
     {
       question: "Puedo editar texto existente en un PDF?",
       answer:
-        "Si. El editor detecta texto en la pagina PDF y crea una capa editable de reemplazo. Puedes cambiar texto, tamano, grosor, espaciado, color y alineacion.",
+        "Sí. El editor detecta texto en la página PDF y crea una capa editable de reemplazo. Puedes cambiar texto, tamaño, grosor, espaciado, color y alineación.",
     },
     {
       question: "Puedo firmar un PDF online?",
       answer:
-        "Si. Puedes dibujar una firma en el navegador o subir una imagen de firma, colocarla, redimensionarla y exportarla dentro del PDF final.",
+        "Sí. Puedes dibujar una firma en el navegador o subir una imagen de firma, colocarla, redimensionarla y exportarla dentro del PDF final.",
     },
     {
       question: "Mis archivos PDF se guardan en un servidor?",
       answer:
-        "El editor es browser-first. Los archivos se procesan localmente cuando es posible y no se almacenan permanentemente por defecto. La subida desde la pagina inicial usa almacenamiento temporal del navegador.",
+        "El editor es browser-first. Los archivos se procesan localmente cuando es posible y no se almacenan permanentemente por defecto. La subida desde la página inicial usa almacenamiento temporal del navegador.",
     },
     {
       question: "Necesito crear una cuenta?",
       answer:
-        "No. El flujo gratuito actual no requiere cuenta. Las futuras funciones cloud podran agregar cuentas opcionales para guardar y colaborar.",
+        "No. El flujo gratuito actual no requiere cuenta.",
     },
   ],
   it: [
     {
-      question: "MyFreePDFEditor e un editor PDF gratuito?",
+      question: "MyFreePDFEditor è un editor PDF gratuito?",
       answer:
-        "Si. MyFreePDFEditor e un editor PDF online gratuito. Puoi caricare un PDF, modificarlo nel browser e scaricare il PDF modificato.",
+        "Sì. MyFreePDFEditor è un editor PDF online gratuito. Puoi caricare un PDF, modificarlo nel browser e scaricare il PDF modificato.",
     },
     {
       question: "Come posso modificare un PDF online gratis?",
@@ -231,22 +231,22 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
     {
       question: "Posso modificare il testo esistente in un PDF?",
       answer:
-        "Si. L'editor rileva il testo nella pagina PDF e crea un livello modificabile di sostituzione. Puoi cambiare testo, dimensione, spessore, spaziatura, colore e allineamento.",
+        "Sì. L'editor rileva il testo nella pagina PDF e crea un livello modificabile di sostituzione. Puoi cambiare testo, dimensione, spessore, spaziatura, colore e allineamento.",
     },
     {
       question: "Posso firmare un PDF online?",
       answer:
-        "Si. Puoi disegnare una firma nel browser o caricare un'immagine di firma, posizionarla, ridimensionarla ed esportarla nel PDF finale.",
+        "Sì. Puoi disegnare una firma nel browser o caricare un'immagine di firma, posizionarla, ridimensionarla ed esportarla nel PDF finale.",
     },
     {
       question: "I miei file PDF vengono salvati su un server?",
       answer:
-        "L'editor e browser-first. I file vengono gestiti localmente quando possibile e non sono salvati permanentemente per impostazione predefinita. Il caricamento dalla homepage usa archiviazione temporanea del browser.",
+        "L’editor elabora i file nel browser. I file vengono gestiti localmente quando possibile e non sono salvati permanentemente per impostazione predefinita. Il caricamento dalla homepage usa archiviazione temporanea del browser.",
     },
     {
       question: "Devo creare un account?",
       answer:
-        "No. Il flusso gratuito attuale non richiede un account. Future funzioni cloud potranno aggiungere account opzionali per salvataggio e collaborazione.",
+        "No. Il flusso gratuito attuale non richiede un account.",
     },
   ],
 };

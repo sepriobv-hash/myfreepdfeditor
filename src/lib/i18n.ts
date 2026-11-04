@@ -1,29 +1,9 @@
 import { siteUrl } from "@/lib/site";
 
-export const defaultLocale = "en";
-
-export const supportedLocales = ["en", "nl", "de", "fr", "es", "it"] as const;
-
-// Only publish language variants whose landing copy has been reviewed.
-export const indexableLocales: readonly SupportedLocale[] = ["en", "nl"];
-
-export type SupportedLocale = (typeof supportedLocales)[number];
-
-export type LocaleOption = {
-  code: SupportedLocale;
-  hreflang: string;
-  label: string;
-  nativeLabel: string;
-};
-
-export const localeOptions: LocaleOption[] = [
-  { code: "en", hreflang: "en", label: "English", nativeLabel: "English" },
-  { code: "nl", hreflang: "nl", label: "Dutch", nativeLabel: "Nederlands" },
-  { code: "de", hreflang: "de", label: "German", nativeLabel: "Deutsch" },
-  { code: "fr", hreflang: "fr", label: "French", nativeLabel: "Francais" },
-  { code: "es", hreflang: "es", label: "Spanish", nativeLabel: "Espanol" },
-  { code: "it", hreflang: "it", label: "Italian", nativeLabel: "Italiano" },
-];
+import { defaultLocale, supportedLocales, completedLocales, localeOptions, getIndexableLocales, type SupportedLocale } from "./routeRegistry";
+export { defaultLocale, supportedLocales, localeOptions, type SupportedLocale } from "./routeRegistry";
+export const indexableLocales = completedLocales;
+export type LocaleOption = (typeof localeOptions)[number];
 
 export const indexableLocaleOptions = localeOptions.filter((locale) =>
   indexableLocales.includes(locale.code),
@@ -38,19 +18,26 @@ export function isSupportedLocale(locale: string): locale is SupportedLocale {
 }
 
 export function getLocalizedPath(locale: SupportedLocale, path = "/") {
-  const normalizedPath = path === "/" ? "" : path.startsWith("/") ? path : `/${path}`;
-  if (locale === defaultLocale) return normalizedPath || "/";
-  return `/${locale}${normalizedPath}`;
+  if (!path.startsWith("/") || path.startsWith("//")) return path;
+  const boundary = path.search(/[?#]/);
+  const pathname = boundary < 0 ? path : path.slice(0, boundary);
+  const suffix = boundary < 0 ? "" : path.slice(boundary);
+  if (/^\/(api|brand|_next)(\/|$)/.test(pathname)) return path;
+  const segments = pathname.split("/").filter(Boolean);
+  if (isSupportedLocale(segments[0] ?? "")) segments.shift();
+  const base = segments.length ? `/${segments.join("/")}` : "";
+  return (locale === defaultLocale ? base || "/" : `/${locale}${base}`) + suffix;
 }
 
 export function getAbsoluteLocalizedUrl(locale: SupportedLocale, path = "/") {
   return `${siteUrl}${getLocalizedPath(locale, path) === "/" ? "" : getLocalizedPath(locale, path)}`;
 }
 
-export function getLanguageAlternates(path = "/") {
+export function getLanguageAlternates(path = "/"): Record<string, string> {
+  if (getIndexableLocales(path).length === 0) return {};
   return {
     ...Object.fromEntries(
-      indexableLocaleOptions.map((locale) => [
+      localeOptions.filter(locale => getIndexableLocales(path).includes(locale.code)).map((locale) => [
         locale.hreflang,
         getAbsoluteLocalizedUrl(locale.code, path),
       ]),

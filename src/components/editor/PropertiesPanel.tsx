@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { Copy, Layers, SendToBack, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -6,6 +7,7 @@ import { useEditorStore } from "@/store/editorStore";
 import type { EditorObject } from "@/types/editor";
 
 export function PropertiesPanel() {
+  const t = useTranslation();
   const pages = useEditorStore((state) => state.pages);
   const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
   const updateObject = useEditorStore((state) => state.updateObject);
@@ -18,10 +20,8 @@ export function PropertiesPanel() {
   if (!selected) {
     return (
       <aside className="hidden w-80 shrink-0 border-l border-line bg-white p-4 lg:block">
-        <h2 className="text-sm font-semibold text-ink">Properties</h2>
-        <div className="mt-8 rounded-md border border-dashed border-line bg-slate-50 p-5 text-center text-sm leading-6 text-slate-500">
-          Select an object to edit its text, colors, opacity, size, and layer order.
-        </div>
+        <h2 className="text-sm font-semibold text-ink">{t("Properties")}</h2>
+        <div className="mt-8 rounded-md border border-dashed border-line bg-slate-50 p-5 text-center text-sm leading-6 text-slate-500"> {t("Select an object to edit its text, colors, opacity, size, and layer order.")} </div>
       </aside>
     );
   }
@@ -32,13 +32,13 @@ export function PropertiesPanel() {
   }
 
   return (
-    <aside className="hidden w-80 shrink-0 overflow-y-auto border-l border-line bg-white p-4 lg:block editor-scrollbar">
+    <aside className="max-h-56 w-full shrink-0 overflow-y-auto border-t border-line bg-white p-4 lg:max-h-none lg:w-80 lg:border-l lg:border-t-0 editor-scrollbar">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h2 className="text-sm font-semibold text-ink">Properties</h2>
-          <p className="text-xs capitalize text-slate-500">{selected.type}</p>
+          <h2 className="text-sm font-semibold text-ink">{t("Properties")}</h2>
+          <p className="text-xs capitalize text-slate-500">{t(({ text: "Text", rectangle: "Rectangle", circle: "Circle", line: "Line", drawing: "Draw", highlight: "Highlight", image: "Add image", signature: "Signature" })[selected.type])}</p>
         </div>
-        <Button title="Delete object" variant="danger" onClick={() => deleteObject(selected.id)}>
+        <Button title={t("Delete object")} variant="danger" onClick={() => deleteObject(selected.id)}>
           <Trash2 className="h-4 w-4" />
         </Button>
       </div>
@@ -46,17 +46,15 @@ export function PropertiesPanel() {
       <div className="space-y-4">
         {selected.type === "text" && (
           <>
-            <label className="block text-sm font-medium text-slate-700">
-              Text
-              <textarea
+            <label className="block text-sm font-medium text-slate-700"> {t("Text")} <textarea
                 className="mt-2 min-h-24 w-full rounded-md border border-line px-3 py-2 text-sm outline-none focus:border-brand-500"
                 value={selected.text}
                 onChange={(event) => patch({ text: event.target.value } as Partial<EditorObject>)}
               />
             </label>
-            <NumberField label="Font size" value={selected.fontSize} onChange={(fontSize) => patch({ fontSize } as Partial<EditorObject>)} />
+            <NumberField label={t("Font size")} value={selected.fontSize} onChange={(fontSize) => patch({ fontSize } as Partial<EditorObject>)} />
             <RangeField
-              label="Boldness"
+              label={t("Boldness")}
               value={selected.fontWeight}
               min={100}
               max={900}
@@ -67,7 +65,7 @@ export function PropertiesPanel() {
               }
             />
             <RangeField
-              label="Text spacing"
+              label={t("Text spacing")}
               value={selected.characterSpacing}
               min={-2}
               max={12}
@@ -75,28 +73,24 @@ export function PropertiesPanel() {
               suffix="px"
               onChange={(characterSpacing) => patch({ characterSpacing } as Partial<EditorObject>)}
             />
-            <label className="block text-sm font-medium text-slate-700">
-              Font family
-              <input
+            <label className="block text-sm font-medium text-slate-700"> {t("Font family")} <input
                 className="mt-2 w-full rounded-md border border-line px-3 py-2 text-sm outline-none focus:border-brand-500"
                 value={selected.fontFamily}
                 onChange={(event) => patch({ fontFamily: event.target.value } as Partial<EditorObject>)}
               />
             </label>
-            <ColorField label="Text color" value={selected.color} onChange={(color) => patch({ color } as Partial<EditorObject>)} />
+            <ColorField label={t("Text color")} value={selected.color} onChange={(color) => patch({ color } as Partial<EditorObject>)} />
             <div className="grid grid-cols-1 gap-2">
-              <Toggle label="Italic" active={selected.italic} onClick={() => patch({ italic: !selected.italic } as Partial<EditorObject>)} />
+              <Toggle label={t("Italic")} active={selected.italic} onClick={() => patch({ italic: !selected.italic } as Partial<EditorObject>)} />
             </div>
-            <label className="block text-sm font-medium text-slate-700">
-              Alignment
-              <select
+            <label className="block text-sm font-medium text-slate-700"> {t("Alignment")} <select
                 className="mt-2 w-full rounded-md border border-line bg-white px-3 py-2 text-sm outline-none focus:border-brand-500"
                 value={selected.alignment}
                 onChange={(event) => patch({ alignment: event.target.value } as Partial<EditorObject>)}
               >
-                <option value="left">Left</option>
-                <option value="center">Center</option>
-                <option value="right">Right</option>
+                <option value="left">{t("Left")}</option>
+                <option value="center">{t("Center")}</option>
+                <option value="right">{t("Right")}</option>
               </select>
             </label>
           </>
@@ -104,39 +98,33 @@ export function PropertiesPanel() {
 
         {(selected.type === "rectangle" || selected.type === "circle") && (
           <>
-            <ColorField label="Fill color" value={selected.fillColor.slice(0, 7)} onChange={(fillColor) => patch({ fillColor } as Partial<EditorObject>)} />
-            <ColorField label="Border color" value={selected.strokeColor} onChange={(strokeColor) => patch({ strokeColor } as Partial<EditorObject>)} />
-            <NumberField label="Border width" value={selected.strokeWidth} onChange={(strokeWidth) => patch({ strokeWidth } as Partial<EditorObject>)} />
+            <ColorField label={t("Fill color")} value={selected.fillColor.slice(0, 7)} onChange={(fillColor) => patch({ fillColor } as Partial<EditorObject>)} />
+            <ColorField label={t("Border color")} value={selected.strokeColor} onChange={(strokeColor) => patch({ strokeColor } as Partial<EditorObject>)} />
+            <NumberField label={t("Border width")} value={selected.strokeWidth} onChange={(strokeWidth) => patch({ strokeWidth } as Partial<EditorObject>)} />
           </>
         )}
 
         {selected.type === "highlight" && (
-          <ColorField label="Highlight color" value={selected.fillColor} onChange={(fillColor) => patch({ fillColor } as Partial<EditorObject>)} />
+          <ColorField label={t("Highlight color")} value={selected.fillColor} onChange={(fillColor) => patch({ fillColor } as Partial<EditorObject>)} />
         )}
 
         {(selected.type === "drawing" || selected.type === "line") && (
           <>
-            <ColorField label="Stroke color" value={selected.strokeColor} onChange={(strokeColor) => patch({ strokeColor } as Partial<EditorObject>)} />
-            <NumberField label="Stroke width" value={selected.strokeWidth} onChange={(strokeWidth) => patch({ strokeWidth } as Partial<EditorObject>)} />
+            <ColorField label={t("Stroke color")} value={selected.strokeColor} onChange={(strokeColor) => patch({ strokeColor } as Partial<EditorObject>)} />
+            <NumberField label={t("Stroke width")} value={selected.strokeWidth} onChange={(strokeWidth) => patch({ strokeWidth } as Partial<EditorObject>)} />
           </>
         )}
 
-        {(selected.type === "image" || selected.type === "signature") && (
-          <div className="rounded-md border border-line bg-slate-50 p-3 text-sm text-slate-600">
-            Background removal can be added here when image processing is enabled.
-          </div>
-        )}
+
 
         <div className="grid grid-cols-2 gap-3">
           <NumberField label="X" value={selected.x} onChange={(x) => patch({ x } as Partial<EditorObject>)} />
           <NumberField label="Y" value={selected.y} onChange={(y) => patch({ y } as Partial<EditorObject>)} />
-          <NumberField label="Width" value={selected.width} onChange={(width) => patch({ width } as Partial<EditorObject>)} />
-          <NumberField label="Height" value={selected.height} onChange={(height) => patch({ height } as Partial<EditorObject>)} />
+          <NumberField label={t("Width")} value={selected.width} onChange={(width) => patch({ width } as Partial<EditorObject>)} />
+          <NumberField label={t("Height")} value={selected.height} onChange={(height) => patch({ height } as Partial<EditorObject>)} />
         </div>
 
-        <label className="block text-sm font-medium text-slate-700">
-          Opacity
-          <input
+        <label className="block text-sm font-medium text-slate-700"> {t("Opacity")} <input
             className="mt-2 w-full accent-brand-600"
             type="range"
             min={0.05}
@@ -149,21 +137,13 @@ export function PropertiesPanel() {
 
         <div className="grid grid-cols-2 gap-2 pt-2">
           <Button variant="secondary" onClick={() => duplicateObject(selected.id)}>
-            <Copy className="h-4 w-4" />
-            Duplicate
-          </Button>
+            <Copy className="h-4 w-4" /> {t("Duplicate")} </Button>
           <Button variant="secondary" onClick={() => bringObjectForward(selected.id)}>
-            <Layers className="h-4 w-4" />
-            Forward
-          </Button>
+            <Layers className="h-4 w-4" /> {t("Forward")} </Button>
           <Button variant="secondary" onClick={() => sendObjectBackward(selected.id)}>
-            <SendToBack className="h-4 w-4" />
-            Backward
-          </Button>
+            <SendToBack className="h-4 w-4" /> {t("Backward")} </Button>
           <Button variant="danger" onClick={() => deleteObject(selected.id)}>
-            <Trash2 className="h-4 w-4" />
-            Delete
-          </Button>
+            <Trash2 className="h-4 w-4" /> {t("Delete")} </Button>
         </div>
       </div>
     </aside>

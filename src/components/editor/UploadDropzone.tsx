@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useCallback, useRef, useState } from "react";
 import { FileUp, Loader2, ShieldCheck } from "lucide-react";
@@ -38,6 +39,7 @@ export function UploadDropzone({
   wide?: boolean;
   copy?: UploadDropzoneCopy;
 }) {
+  const t = useTranslation();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -74,7 +76,7 @@ export function UploadDropzone({
         className="hidden"
         type="file"
         accept="application/pdf,.pdf"
-        aria-label={copy.button}
+        aria-label={t(copy.button)}
         disabled={isLoading}
         onChange={(event) => {
           void handleFiles(event.target.files);
@@ -94,10 +96,10 @@ export function UploadDropzone({
         )}
       </div>
       <h2 className={cn("font-semibold text-ink", compact ? "text-base" : wide ? "text-3xl" : "text-xl")}>
-        {copy.title}
+        {t(copy.title)}
       </h2>
       <p className={cn("mx-auto mt-2 text-sm leading-6 text-slate-600", wide ? "max-w-2xl" : "max-w-md")}>
-        {copy.description}
+        {t(copy.description)}
       </p>
       <Button
         className={cn("mt-5", wide && "h-12 px-6 text-base")}
@@ -110,12 +112,12 @@ export function UploadDropzone({
       >
         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileUp className="h-4 w-4" />}
         <span role={isLoading ? "status" : undefined}>
-          {isLoading ? copy.loading ?? "Opening PDF…" : copy.button}
+          {isLoading ? t(copy.loading ?? "Opening PDF…") : t(copy.button)}
         </span>
       </Button>
       <div className="mt-4 flex items-center justify-center gap-2 text-xs text-slate-500">
         <ShieldCheck className="h-3.5 w-3.5 text-accent-600" />
-        {copy.privacy}
+        {t(copy.privacy)}
       </div>
     </div>
   );

@@ -1,0 +1,26 @@
+const processing = "Editing, merging, compression and export run in your browser. PDF files and document contents are not sent to our usage analytics endpoint.";
+const temporary = "A homepage selection is temporarily stored in IndexedDB on your device and removed when the editor consumes it. Unused pending uploads are removed after one hour when the store is next used. Active edits remain in browser memory and can be lost when you leave or reload the editor.";
+const files = "You keep ownership of files and edits. Keep backups and check exported documents before relying on them. Exports create a new file and do not overwrite your original.";
+const free = "Core tools are free, without signup or export watermarks. Features, limits and availability may change; paid or cloud features will be identified before use.";
+const usage = "We record a random per-tab session ID, event time, page path, referring domain, language, broad device/browser categories and buckets for file size, page/object/file counts and task duration to improve reliability.";
+const exclusions = "Events exclude PDF names, text, form values, exact edits, full URLs, exact sizes/counts, IP addresses and full user-agent strings. Hosting providers may process request metadata, including IP addresses, in security logs.";
+export const informationPages: Record<string, { title: string; intro: string; sections: [string, ...string[]][] }> = {
+ about: { title: "About", intro: "A free, private PDF editor for everyday document fixes", sections: [["Free PDF tool", "Edit text, images, signatures and pages directly in your browser.", free], ["Changes and contact", "Terms may change as the product develops; material updates will appear on this page. Product, accessibility and support questions: support@myfreepdfeditor.com. Terms last updated August 29, 2026."]] },
+ security: { title: "Security", intro: "Check browser file handling, local storage and export controls before editing sensitive documents.", sections: [["PDF files and document content", processing, temporary], ["Your files", files], ["Product usage data", exclusions]] },
+ "how-it-works": { title: "How it works", intro: "How local PDF processing, temporary storage and browser-generated downloads work.", sections: [["Open your PDF on this device.", temporary], ["Browser-first workflow", processing], ["Check the result and download your PDF.", files], ["Product usage data", usage, exclusions]] },
+ pricing: { title: "Pricing", intro: "Free PDF editing, without an account or export watermark.", sections: [["Free service and availability", free]] },
+ privacy: { title: "Privacy policy", intro: "Read how we handle PDF contents, limited usage data, analytics choices and deletion requests.", sections: [
+  ["PDF files and document content", processing, temporary],
+  ["Product usage data", usage, exclusions],
+  ["Analytics and legal basis", "Essential minimized product events are processed for our legitimate interest in operating, securing and improving the service. Vercel may provide aggregate web analytics. Optional Google Analytics loads only after consent; your choice is stored in your browser. Clear local data to withdraw it and decline the next prompt."],
+  ["Retention and providers", "Usage events are retained for up to 90 days; memory-only data may disappear sooner. Supabase processes events when persistent storage is configured. Vercel hosts the site. Google processes optional analytics only with consent and a configured measurement ID. We do not sell personal data; disclosure is limited to necessary service providers, legal obligations or protecting users and the service."],
+  ["Your choices and rights", "Depending on your location, you may have rights of access, correction, deletion, restriction and objection, and may complain to your data protection authority. There are no accounts, so requests need enough context to locate relevant server events. Contact privacy@myfreepdfeditor.com, which also identifies the website operator. Policy last updated August 29, 2026."],
+ ] },
+ terms: { title: "Terms of use", intro: "Read the rules for using the PDF tools, file ownership, availability and liability.", sections: [
+  ["Using the service", "Only process documents you own or are authorized to edit. Do not violate laws, intellectual property, privacy rights or security controls."],
+  ["Your files", files], ["Free service and availability", free],
+  ["No professional advice", "This is a document editing utility, not legal, financial, medical or other professional advice. It does not validate the meaning or enforceability of documents."],
+  ["Warranty and liability", "The service is provided as available, without a guarantee that every PDF, font, browser or workflow works perfectly. To the extent permitted by law, the operator is not liable for indirect losses, lost data or decisions based on an unchecked export."],
+  ["Changes and contact", "Terms may change as the product develops; material updates will appear on this page. Product, accessibility and support questions: support@myfreepdfeditor.com. Terms last updated August 29, 2026."],
+ ] },
+};

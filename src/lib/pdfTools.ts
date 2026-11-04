@@ -1,6 +1,8 @@
 export type ToolCategory = "Edit" | "Sign" | "Annotate" | "Organize" | "Optimize";
 
 export type PdfTool = {
+  useCase?: string;
+  limitation?: string;
   slug: string;
   title: string;
   shortTitle: string;

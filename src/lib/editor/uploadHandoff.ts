@@ -44,6 +44,15 @@ export async function storePendingUpload(file: File) {
 
 export async function consumePendingUpload(id: string) {
   const db = await openUploadDb();
+  await transactionPromise(db, STORE_NAME, "readwrite", (store) => {
+    const request = store.openCursor();
+    request.onsuccess = () => {
+      const cursor = request.result;
+      if (!cursor) return;
+      if ((cursor.value as PendingUploadRecord).createdAt < Date.now() - 60 * 60 * 1000) cursor.delete();
+      cursor.continue();
+    };
+  });
   const record = await getRecord(db, id);
   if (record) {
     await transactionPromise(db, STORE_NAME, "readwrite", (store) => {

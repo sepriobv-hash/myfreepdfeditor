@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useRef } from "react";
 import type { ComponentType } from "react";
@@ -47,6 +48,7 @@ export function TopToolbar({
   onOpenSignature: () => void;
   onExport: () => void;
 }) {
+  const t = useTranslation();
   const pdfInputRef = useRef<HTMLInputElement | null>(null);
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const tool = useEditorStore((state) => state.tool);
@@ -61,7 +63,7 @@ export function TopToolbar({
   const isExporting = useEditorStore((state) => state.isExporting);
 
   return (
-    <header className="flex min-h-16 items-center gap-2 overflow-x-auto border-b border-line bg-white px-3 py-2 editor-scrollbar">
+    <header className="flex min-h-16 shrink-0 flex-wrap items-center gap-2 border-b border-line bg-white px-3 py-2 editor-scrollbar">
       <input
         ref={pdfInputRef}
         type="file"
@@ -85,20 +87,18 @@ export function TopToolbar({
         }}
       />
 
-      <Button title="Upload new PDF" variant="tool" onClick={() => pdfInputRef.current?.click()}>
+      <Button title={t("Upload new PDF")} variant="tool" onClick={() => pdfInputRef.current?.click()}>
         <FileUp className="h-4 w-4" />
       </Button>
-      <Button title="Save / Export PDF" variant="tool" disabled={isExporting} onClick={onExport}>
-        {isExporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-        Export
-      </Button>
+      <Button title={t("Save / Export PDF")} variant="tool" disabled={isExporting} onClick={onExport}>
+        {isExporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} {t("Export")} </Button>
 
       <div className="mx-1 h-8 w-px shrink-0 bg-line" />
 
-      <Button title="Undo" variant="tool" disabled={!historyLength} onClick={undo}>
+      <Button title={t("Undo")} variant="tool" disabled={!historyLength} onClick={undo}>
         <Undo2 className="h-4 w-4" />
       </Button>
-      <Button title="Redo" variant="tool" disabled={!futureLength} onClick={redo}>
+      <Button title={t("Redo")} variant="tool" disabled={!futureLength} onClick={redo}>
         <Redo2 className="h-4 w-4" />
       </Button>
 
@@ -109,7 +109,7 @@ export function TopToolbar({
         return (
           <Button
             key={item.tool}
-            title={item.label}
+            title={t(item.label)}
             variant="tool"
             active={tool === item.tool}
             onClick={() => setTool(item.tool)}
@@ -119,31 +119,29 @@ export function TopToolbar({
         );
       })}
 
-      <Button title="Add image" variant="tool" onClick={() => imageInputRef.current?.click()}>
+      <Button title={t("Add image")} variant="tool" onClick={() => imageInputRef.current?.click()}>
         <FileImage className="h-4 w-4" />
       </Button>
-      <Button title="Signature" variant="tool" onClick={onOpenSignature}>
+      <Button title={t("Signature")} variant="tool" onClick={onOpenSignature}>
         <Signature className="h-4 w-4" />
       </Button>
-      <Button title="Delete selected object" variant="tool" onClick={() => deleteObject()}>
+      <Button title={t("Delete selected object")} variant="tool" onClick={() => deleteObject()}>
         <Eraser className="h-4 w-4" />
       </Button>
 
       <div className="mx-1 h-8 w-px shrink-0 bg-line" />
 
-      <Button title="Zoom out" variant="tool" onClick={() => setZoom(zoom - 0.1)}>
+      <Button title={t("Zoom out")} variant="tool" onClick={() => setZoom(zoom - 0.1)}>
         <Minus className="h-4 w-4" />
       </Button>
       <div className="min-w-16 text-center text-sm font-medium text-slate-700">{Math.round(zoom * 100)}%</div>
-      <Button title="Zoom in" variant="tool" onClick={() => setZoom(zoom + 0.1)}>
+      <Button title={t("Zoom in")} variant="tool" onClick={() => setZoom(zoom + 0.1)}>
         <Plus className="h-4 w-4" />
       </Button>
 
       <div className="ml-auto flex items-center gap-2">
-        <Button title="Download edited PDF" variant="primary" disabled={isExporting} onClick={onExport}>
-          {isExporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-          Download
-        </Button>
+        <Button title={t("Download edited PDF")} variant="primary" disabled={isExporting} onClick={onExport}>
+          {isExporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />} {t("Download")} </Button>
       </div>
     </header>
   );

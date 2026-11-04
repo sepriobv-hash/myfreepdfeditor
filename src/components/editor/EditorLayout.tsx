@@ -1,7 +1,8 @@
 "use client";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/i18n/LocaleLink";
 import { useSearchParams } from "next/navigation";
 import { FileText, Loader2 } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
@@ -31,6 +32,7 @@ import { useEditorStore } from "@/store/editorStore";
 import type { PageState } from "@/types/editor";
 
 export function EditorLayout() {
+  const t = useTranslation();
   const searchParams = useSearchParams();
   const [signatureOpen, setSignatureOpen] = useState(false);
   const trackedDocumentIdRef = useRef<string | null>(null);
@@ -57,7 +59,7 @@ export function EditorLayout() {
       .then(async (file) => {
         if (cancelled) return;
         if (!file) {
-          notify("The uploaded PDF could not be found. Please upload it again.", "error");
+          notify(t("The uploaded PDF could not be found. Please upload it again."), "error");
           return;
         }
         await loadPdf(file);
@@ -65,18 +67,18 @@ export function EditorLayout() {
           source: searchParams.get("tool") ?? "homepage",
           fileSizeBucket: fileSizeBucket(file.size),
         });
-        if (!cancelled) notify("PDF uploaded.", "success");
+        if (!cancelled) notify(t("PDF uploaded."), "success");
       })
-      .catch((error) => {
+      .catch(() => {
         if (!cancelled) {
-          notify(error instanceof Error ? error.message : "Could not load this PDF.", "error");
+          notify(t("Could not load this PDF."), "error");
         }
       });
 
     return () => {
       cancelled = true;
     };
-  }, [document, isLoading, loadPdf, notify, searchParams]);
+  }, [document, isLoading, loadPdf, notify, searchParams, t]);
 
   useEffect(() => {
     if (!document) return;
@@ -113,7 +115,7 @@ export function EditorLayout() {
 
   const handleExport = useCallback(async () => {
     if (!document || !pages.length) {
-      notify("Upload a PDF before exporting.", "error");
+      notify(t("Upload a PDF before exporting."), "error");
       return;
     }
     try {
@@ -133,17 +135,17 @@ export function EditorLayout() {
         pageCountBucket: pageCountBucket(pages.length),
         objectCountBucket: objectCountBucket(objectCount),
       });
-      notify("Export successful. Your edited PDF is downloading.", "success");
+      notify(t("Export successful. Your edited PDF is downloading."), "success");
     } catch (error) {
       trackUsageEvent("export_failed", {
         pageCountBucket: pageCountBucket(pages.length),
         errorCode: getExportErrorCode(error),
       });
-      notify(error instanceof Error ? error.message : "Could not export this PDF.", "error");
+      notify(t("Could not export this PDF."), "error");
     } finally {
       setIsExporting(false);
     }
-  }, [document, notify, pages, setIsExporting]);
+  }, [document, notify, pages, setIsExporting, t]);
 
   useKeyboardShortcuts(handleExport);
 
@@ -158,9 +160,9 @@ export function EditorLayout() {
         source: "editor",
         fileSizeBucket: fileSizeBucket(file.size),
       });
-      notify("PDF uploaded.", "success");
-    } catch (error) {
-      notify(error instanceof Error ? error.message : "Could not load this PDF.", "error");
+      notify(t("PDF uploaded."), "success");
+    } catch {
+      notify(t("Could not load this PDF."), "error");
     }
   }
 
@@ -178,9 +180,9 @@ export function EditorLayout() {
         }),
       );
       trackUsageEvent("image_added", { pageCountBucket: pageCountBucket(pages.length) });
-      notify("Image added.", "success");
-    } catch (error) {
-      notify(error instanceof Error ? error.message : "Could not add this image.", "error");
+      notify(t("Image added."), "success");
+    } catch {
+      notify(t("Could not add this image."), "error");
     }
   }
 
@@ -197,7 +199,7 @@ export function EditorLayout() {
       }),
     );
     trackUsageEvent("signature_added", { pageCountBucket: pageCountBucket(pages.length) });
-    notify("Signature added.", "success");
+    notify(t("Signature added."), "success");
   }
 
   if (!document || !pdfDoc || !activePage) {
@@ -210,9 +212,7 @@ export function EditorLayout() {
           <Link
             className="inline-flex h-10 items-center justify-center rounded-md border border-line bg-white px-3 text-sm font-medium text-ink transition hover:bg-slate-50"
             href="/"
-          >
-            Home
-          </Link>
+          > {t("Home")} </Link>
         </nav>
         <section className="mx-auto max-w-2xl px-5 py-12">
           <div className="mb-6 flex items-center justify-center">
@@ -238,21 +238,22 @@ export function EditorLayout() {
         onOpenSignature={() => setSignatureOpen(true)}
         onExport={() => void handleExport()}
       />
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
+        <div className="flex min-h-0 flex-1">
         <PageSidebar pdfDoc={pdfDoc} />
         <section className="relative min-w-0 flex-1 overflow-auto bg-[#e9edf3] p-4 editor-scrollbar">
           <div className="mx-auto flex min-h-full w-max items-start justify-center p-2">
             <PDFCanvas pdfDoc={pdfDoc} page={activePage} zoom={zoom} />
           </div>
         </section>
+        </div>
         <PropertiesPanel />
       </div>
-      <footer className="flex min-h-10 items-center justify-between border-t border-line bg-white px-4 text-xs text-slate-600">
-        <span>
-          Page {pages.findIndex((page) => page.id === activePage.id) + 1} of {pages.length}
+      <footer className="flex min-h-10 shrink-0 items-center justify-between gap-3 border-t border-line bg-white px-4 text-xs text-slate-600">
+        <span> {t("Page")} {pages.findIndex((page) => page.id === activePage.id) + 1} {t("of")} {pages.length}
         </span>
-        <span>{document.fileName}</span>
-        <span>Zoom {Math.round(zoom * 100)}%</span>
+        <span className="min-w-0 truncate">{document.fileName}</span>
+        <span>{t("Zoom")} {Math.round(zoom * 100)}%</span>
       </footer>
       <SignatureModal
         open={signatureOpen}

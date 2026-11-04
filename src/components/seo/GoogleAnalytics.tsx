@@ -1,7 +1,8 @@
 "use client";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/i18n/LocaleLink";
 import Script from "next/script";
 import { Button } from "@/components/ui/Button";
 import {
@@ -11,6 +12,7 @@ import {
 } from "@/lib/privacy";
 
 export function GoogleAnalytics() {
+  const t = useTranslation();
   const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
   const [consent, setConsent] = useState<AnalyticsConsent | null>(null);
   const [ready, setReady] = useState(false);
@@ -49,12 +51,10 @@ export function GoogleAnalytics() {
       )}
       {consent === null && (
         <aside
-          aria-label="Analytics preference"
+          aria-label={t("Analytics preference")}
           className="fixed inset-x-3 bottom-3 z-[110] mx-auto max-w-3xl rounded-lg border border-line bg-white p-4 shadow-panel sm:flex sm:items-center sm:justify-between sm:gap-5"
         >
-          <p className="text-sm leading-6 text-slate-700">
-            We use optional Google Analytics to understand which pages help users. PDF files and
-            document contents are never sent to analytics. <Link className="font-semibold text-brand-700 hover:underline" href="/privacy">Privacy details</Link>
+          <p className="text-sm leading-6 text-slate-700"> {t("We use optional Google Analytics to understand which pages help users. PDF files and document contents are never sent to analytics.")} <Link className="font-semibold text-brand-700 hover:underline" href="/privacy">{t("Privacy details")}</Link>
           </p>
           <div className="mt-3 flex shrink-0 gap-2 sm:mt-0">
             <Button
@@ -63,18 +63,14 @@ export function GoogleAnalytics() {
                 setAnalyticsConsent("denied");
                 setConsent("denied");
               }}
-            >
-              Decline
-            </Button>
+            > {t("Decline")} </Button>
             <Button
               variant="primary"
               onClick={() => {
                 setAnalyticsConsent("granted");
                 setConsent("granted");
               }}
-            >
-              Allow analytics
-            </Button>
+            > {t("Allow analytics")} </Button>
           </div>
         </aside>
       )}

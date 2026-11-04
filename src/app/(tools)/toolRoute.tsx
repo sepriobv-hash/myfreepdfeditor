@@ -1,38 +1,20 @@
+import { localizeTool } from "@/lib/localizedTools";
+import { getAbsoluteLocalizedUrl, type SupportedLocale } from "@/lib/i18n";
+import { translators } from "@/lib/translations";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ToolLandingPage } from "@/components/tools/ToolLandingPage";
-import { getToolBySlug } from "@/lib/pdfTools";
-import { siteName, siteUrl } from "@/lib/site";
+import { getToolBySlug, getRelatedTools } from "@/lib/pdfTools";
+import { pageMetadata } from "@/lib/pageMetadata";
 
-export function createToolMetadata(slug: string): Metadata {
-  const tool = getToolBySlug(slug);
-  if (!tool) return {};
+export function createToolMetadata(slug: string, locale: SupportedLocale = "en"): Metadata { return pageMetadata(`/${slug}`, locale); }
 
-  return {
-    title: tool.title,
-    description: tool.description,
-    alternates: {
-      canonical: `/${tool.slug}`,
-    },
-    openGraph: {
-      title: `${tool.title} - ${siteName}`,
-      description: tool.description,
-      url: `${siteUrl}/${tool.slug}`,
-      siteName,
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${tool.title} - ${siteName}`,
-      description: tool.description,
-    },
-  };
-}
-
-export function ToolRoutePage({ slug }: { slug: string }) {
-  const tool = getToolBySlug(slug);
+export function ToolRoutePage({ slug, locale = "en" }: { slug: string; locale?: SupportedLocale }) {
+  const original = getToolBySlug(slug);
+  const tool = original ? localizeTool(original, locale) : undefined;
   if (!tool) notFound();
 
+  const t = translators[locale];
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -52,7 +34,7 @@ export function ToolRoutePage({ slug }: { slug: string }) {
     name: tool.title,
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
-    url: `${siteUrl}/${tool.slug}`,
+    url: getAbsoluteLocalizedUrl(locale, `/${tool.slug}`),
     description: tool.description,
     offers: {
       "@type": "Offer",
@@ -67,20 +49,20 @@ export function ToolRoutePage({ slug }: { slug: string }) {
       {
         "@type": "ListItem",
         position: 1,
-        name: "Home",
-        item: siteUrl,
+        name: t("Home"),
+        item: getAbsoluteLocalizedUrl(locale),
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: "All PDF Tools",
-        item: `${siteUrl}/all-tools`,
+        name: t("All PDF tools"),
+        item: getAbsoluteLocalizedUrl(locale, "/all-tools"),
       },
       {
         "@type": "ListItem",
         position: 3,
         name: tool.shortTitle,
-        item: `${siteUrl}/${tool.slug}`,
+        item: getAbsoluteLocalizedUrl(locale, `/${tool.slug}`),
       },
     ],
   };
@@ -99,7 +81,7 @@ export function ToolRoutePage({ slug }: { slug: string }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <ToolLandingPage tool={tool} />
+      <ToolLandingPage tool={tool} relatedTools={getRelatedTools(tool).map(item => localizeTool(item, locale))} />
     </>
   );
 }

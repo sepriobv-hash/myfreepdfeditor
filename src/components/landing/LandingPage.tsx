@@ -1,7 +1,8 @@
 "use client";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/i18n/LocaleLink";
 import {
   ArrowRight,
   BadgeCheck,
@@ -171,17 +172,8 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
     ...copy.tools.cards[index],
   }));
   const primaryToolLinks = primaryToolLinksByLocale[locale];
-  const uploadFeedback = locale === "nl"
-    ? {
-        invalid: "Kies een geldig PDF-bestand.",
-        ready: "PDF klaar. De editor wordt geopend…",
-        failed: "De PDF kon niet worden voorbereid. Probeer opnieuw of kies een ander bestand.",
-      }
-    : {
-        invalid: "Please choose a valid PDF file.",
-        ready: "PDF ready. Opening editor…",
-        failed: "Could not prepare this PDF. Try again or choose another file.",
-      };
+  const t = useTranslation();
+  const uploadFeedback = { invalid: t("Please choose a valid PDF file."), ready: t("PDF uploaded. Opening editor..."), failed: t("Could not prepare this PDF.") };
 
   useEffect(() => {
     trackUsageEvent("landing_view", { page: "home", locale });
@@ -205,7 +197,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
         fileSizeBucket: fileSizeBucket(file.size),
       });
       notify(uploadFeedback.ready, "success");
-      window.location.assign(`/editor?uploadId=${encodeURIComponent(uploadId)}`);
+      window.location.assign(getLocalizedPath(locale, `/editor?uploadId=${encodeURIComponent(uploadId)}`));
     } catch {
       setIsUploading(false);
       trackUsageEvent("upload_failed", { source: "homepage" });
@@ -227,7 +219,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
               </Link>
             ))}
           </div>
-          <Button className="h-auto min-h-11 max-w-[48%] shrink-0 px-3 py-2 text-center lg:max-w-none" variant="primary" onClick={() => window.location.assign("/editor")}>
+          <Button className="h-auto min-h-11 max-w-[48%] shrink-0 px-3 py-2 text-center lg:max-w-none" variant="primary" onClick={() => window.location.assign(getLocalizedPath(locale, "/editor"))}>
             {copy.nav.cta}
             <ArrowRight className="h-4 w-4" />
           </Button>
@@ -284,7 +276,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
           <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-slate-500">
             <span>{uploadNotesByLocale[locale][0]}</span>
             <span>{uploadNotesByLocale[locale][1]}</span>
-            <Link className="font-semibold text-brand-600 hover:text-brand-700" href="/how-it-works">
+            <Link className="font-semibold text-brand-700 hover:text-brand-700" href="/how-it-works">
               {howItWorksLabel[locale]}
             </Link>
           </div>
@@ -310,7 +302,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
       <section id="tools" className="mx-auto max-w-7xl px-5 py-16">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-normal text-brand-600">{copy.tools.eyebrow}</p>
+            <p className="text-sm font-semibold uppercase tracking-normal text-brand-700">{copy.tools.eyebrow}</p>
             <h2 className="mt-3 text-3xl font-semibold text-ink md:text-4xl">
               {copy.tools.title}
             </h2>
@@ -350,7 +342,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
       <section className="bg-white">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-normal text-brand-600">{copy.workflow.eyebrow}</p>
+            <p className="text-sm font-semibold uppercase tracking-normal text-brand-700">{copy.workflow.eyebrow}</p>
             <h2 className="mt-3 text-3xl font-semibold text-ink md:text-4xl">
               {copy.workflow.title}
             </h2>
@@ -450,7 +442,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
                   >
                     <Icon className="h-5 w-5" />
                   </div>
-                  <span className="text-sm font-semibold text-slate-400">0{index + 1}</span>
+                  <span className="text-sm font-semibold text-slate-500">0{index + 1}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-ink">{step.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600">{step.text}</p>
@@ -463,7 +455,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
       <section id="security" className="border-y border-line bg-white">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-normal text-brand-600">{copy.security.eyebrow}</p>
+            <p className="text-sm font-semibold uppercase tracking-normal text-brand-700">{copy.security.eyebrow}</p>
             <h2 className="mt-3 text-3xl font-semibold text-ink">
               {copy.security.title}
             </h2>
@@ -500,7 +492,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
 
       <section id="faq" className="mx-auto max-w-4xl px-5 pb-16">
         <div className="text-center">
-          <p className="text-sm font-semibold uppercase tracking-normal text-brand-600">{copy.faq.eyebrow}</p>
+          <p className="text-sm font-semibold uppercase tracking-normal text-brand-700">{copy.faq.eyebrow}</p>
           <h2 className="mt-3 text-3xl font-semibold text-ink md:text-4xl">
             {copy.faq.title}
           </h2>
@@ -510,7 +502,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
             <details key={faq.question} className="group p-5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-ink">
                 {faq.question}
-                <RotateCw className="h-4 w-4 shrink-0 text-slate-400 transition group-open:rotate-45" />
+                <RotateCw className="h-4 w-4 shrink-0 text-slate-500 transition group-open:rotate-45" />
               </summary>
               <p className="mt-3 text-sm leading-6 text-slate-600">{faq.answer}</p>
             </details>
@@ -526,7 +518,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
               {copy.cta.description}
             </p>
           </div>
-          <Button variant="primary" className="h-12 px-5" onClick={() => window.location.assign("/editor")}>
+          <Button variant="primary" className="h-12 px-5" onClick={() => window.location.assign(getLocalizedPath(locale, "/editor"))}>
             {copy.cta.button}
             <ArrowRight className="h-4 w-4" />
           </Button>

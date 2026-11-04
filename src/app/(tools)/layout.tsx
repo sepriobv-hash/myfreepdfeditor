@@ -1,3 +1,4 @@
+import { LocaleProvider } from "@/components/i18n/LocaleProvider";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -12,10 +13,12 @@ export default function ToolRootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
+        <LocaleProvider locale={"en"}>
         <GoogleAnalytics />
         <ToastProvider>{children}</ToastProvider>
         <Analytics />
         <SpeedInsights />
+        </LocaleProvider>
       </body>
     </html>
   );

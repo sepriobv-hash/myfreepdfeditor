@@ -22,5 +22,8 @@ jobs:
       - run: npm audit --audit-level=high
       - run: npm run typecheck
       - run: npm run build
+      - run: sudo apt-get update && sudo apt-get install -y poppler-utils
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e:chromium
+        env:
+          PLAYWRIGHT_PRODUCTION: "1"

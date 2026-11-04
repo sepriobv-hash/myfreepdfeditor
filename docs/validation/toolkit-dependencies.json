@@ -1,0 +1,62 @@
+{
+  "summary": {
+    "info": 0,
+    "low": 0,
+    "moderate": 6,
+    "high": 0,
+    "critical": 0,
+    "total": 6
+  },
+  "remaining": [
+    {
+      "package": "@typescript-eslint/eslint-plugin",
+      "severity": "moderate",
+      "development_only": true,
+      "nodes": [
+        "node_modules/@typescript-eslint/eslint-plugin"
+      ]
+    },
+    {
+      "package": "@typescript-eslint/parser",
+      "severity": "moderate",
+      "development_only": true,
+      "nodes": [
+        "node_modules/@typescript-eslint/parser"
+      ]
+    },
+    {
+      "package": "@typescript-eslint/type-utils",
+      "severity": "moderate",
+      "development_only": true,
+      "nodes": [
+        "node_modules/@typescript-eslint/type-utils"
+      ]
+    },
+    {
+      "package": "@typescript-eslint/typescript-estree",
+      "severity": "moderate",
+      "development_only": true,
+      "nodes": [
+        "node_modules/@typescript-eslint/parser/node_modules/@typescript-eslint/typescript-estree",
+        "node_modules/@typescript-eslint/typescript-estree"
+      ]
+    },
+    {
+      "package": "@typescript-eslint/utils",
+      "severity": "moderate",
+      "development_only": true,
+      "nodes": [
+        "node_modules/@typescript-eslint/utils"
+      ]
+    },
+    {
+      "package": "minimatch",
+      "severity": "moderate",
+      "development_only": true,
+      "nodes": [
+        "node_modules/@typescript-eslint/parser/node_modules/minimatch",
+        "node_modules/@typescript-eslint/typescript-estree/node_modules/minimatch"
+      ]
+    }
+  ]
+}

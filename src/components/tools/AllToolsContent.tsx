@@ -5,7 +5,7 @@ import { activePdfTools } from "@/lib/pdfTools";
 import { localizeTool } from "@/lib/localizedTools";
 import { translators } from "@/lib/translations";
 import type { SupportedLocale } from "@/lib/i18n";
-const categoryOrder = ["Edit", "Sign", "Annotate", "Organize", "Optimize"] as const;
+const categoryOrder = ["Edit", "Sign", "Organize", "Convert", "Optimize", "Protect", "Annotate"] as const;
 
 export default function AllToolsContent({ locale = "en" }: { locale?: SupportedLocale }) {
   const t = translators[locale];

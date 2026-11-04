@@ -1,7 +1,7 @@
 "use client";
 import { useTranslation } from "@/components/i18n/LocaleProvider";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AlertCircle, Download, FileDown, FileText, Loader2, Trash2 } from "lucide-react";
 import { useToast } from "@/components/ui/Toaster";
 import { getPdfJs } from "@/lib/pdf/renderPdf";
@@ -25,6 +25,7 @@ type CompressionResult = {
   originalSize: number;
   outputSize: number;
   flattened: boolean;
+  targetBytes?: number;
 };
 
 export function CompressPdfPanel() {
@@ -36,6 +37,10 @@ export function CompressPdfPanel() {
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<CompressionResult | null>(null);
   const { notify } = useToast();
+  const [target, setTarget] = useState(0);
+  const [preserve, setPreserve] = useState(false);
+  const cancelled = useRef(false);
+  useEffect(() => () => { cancelled.current = true; }, []);
 
   function chooseFile(nextFile?: File) {
     if (!nextFile) return;
@@ -63,6 +68,7 @@ export function CompressPdfPanel() {
     if (!file) return;
 
     try {
+      cancelled.current = false;
       setIsCompressing(true);
       setProgress(2);
       setResult(null);
@@ -76,19 +82,17 @@ export function CompressPdfPanel() {
       const optimizedBytes = await optimizeStructure(originalBuffer);
       setProgress(10);
 
-      const rasterizedBytes = await rasterizePdf(
-        originalBuffer,
-        compressionLevels[level],
-        setProgress,
-      );
-      const candidates = [
-        { bytes: originalBytes, flattened: false },
-        { bytes: optimizedBytes, flattened: false },
-        { bytes: rasterizedBytes, flattened: true },
-      ];
-      const best = candidates.reduce((smallest, candidate) =>
-        candidate.bytes.byteLength < smallest.bytes.byteLength ? candidate : smallest,
-      );
+      let best = optimizedBytes.byteLength < originalBytes.byteLength ? { bytes: optimizedBytes, flattened: false } : { bytes: originalBytes, flattened: false };
+      const profiles = target ? [compressionLevels[level], { quality: 0.5, scale: 1 }, { quality: 0.4, scale: 0.75 }, { quality: 0.3, scale: 0.5 }] : [compressionLevels[level]];
+      if (!preserve && (!target || best.bytes.byteLength > target)) {
+        for (let i = 0; i < profiles.length; i++) {
+          if (cancelled.current) throw new Error("CANCELLED");
+          const rasterized = await rasterizePdf(originalBuffer, profiles[i], value => setProgress(Math.round(10 + (i + value / 100) / profiles.length * 85)), () => cancelled.current);
+          if (rasterized.byteLength < best.bytes.byteLength) best = { bytes: rasterized, flattened: true };
+          if (target && best.bytes.byteLength <= target) break;
+        }
+      }
+      if (cancelled.current) throw new Error("CANCELLED");
 
       const blob = new Blob([toArrayBuffer(best.bytes)], { type: "application/pdf" });
       const baseName = sanitizeFileName(file.name).replace(/\.pdf$/i, "") || "document";
@@ -98,6 +102,7 @@ export function CompressPdfPanel() {
         originalSize: file.size,
         outputSize: blob.size,
         flattened: best.flattened,
+        targetBytes: target || undefined,
       };
       setResult(nextResult);
       setProgress(100);
@@ -114,6 +119,7 @@ export function CompressPdfPanel() {
         "success",
       );
     } catch (error) {
+      if (cancelled.current) { notify(t("Processing cancelled. Your original file is unchanged."), "info"); return; }
       trackUsageEvent("export_failed", { source: "compress-pdf" });
       notify(
         error instanceof Error && /page limit/i.test(error.message)
@@ -195,6 +201,15 @@ export function CompressPdfPanel() {
             </div>
           </div>
 
+          <div className="mt-5 space-y-3">
+            <label className="block text-sm font-semibold">{t("Target file size")}
+              <select className="mt-2 min-h-11 w-full rounded-md border border-line bg-white px-3" disabled={isCompressing} value={target} onChange={event => { setTarget(Number(event.target.value)); setResult(null); }}>
+                <option value={0}>{t("No size target")}</option>{[100000, 500000, 1000000, 2000000, 5000000].map(bytes => <option key={bytes} value={bytes}>{bytes < 1000000 ? `${bytes / 1000} KB` : `${bytes / 1000000} MB`}</option>)}
+              </select>
+            </label>
+            <label className="flex items-start gap-2 text-sm"><input className="mt-0.5 h-5 w-5" type="checkbox" disabled={isCompressing} checked={preserve} onChange={event => { setPreserve(event.target.checked); setResult(null); }} />{t("Preserve selectable text and forms (lossless only)")}</label>
+            {target > 0 && <p className="text-xs leading-5 text-slate-600">{t("The tool tries progressively stronger compression. If the target cannot be reached, it reports this and offers the smallest result. Review readability before sharing.")}</p>}
+          </div>
           <div className="mt-5 flex gap-3 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <p>{t("Strong compression may flatten pages into images. That can remove selectable text, links, and form fields from the compressed copy.")}</p>
@@ -219,6 +234,7 @@ export function CompressPdfPanel() {
         </div>
       )}
 
+      {isCompressing && <button type="button" className="mt-3 min-h-11 w-full rounded-md border border-line px-3 text-sm font-semibold" onClick={() => { cancelled.current = true; }}>{t("Cancel")}</button>}
       {result && (
         <div className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 p-4">
           <div className="grid grid-cols-3 gap-3 text-center text-sm">
@@ -226,6 +242,7 @@ export function CompressPdfPanel() {
             <ResultStat label={t("After")} value={formatBytes(result.outputSize)} />
             <ResultStat label={t("Reduction")} value={`${reduction}%`} />
           </div>
+          {result.targetBytes && <p role="status" className="mt-3 font-semibold">{t(result.outputSize <= result.targetBytes ? "Target reached" : "Target not reached — smallest available result")} ({result.targetBytes < 1000000 ? `${result.targetBytes / 1000} KB` : `${result.targetBytes / 1000000} MB`})</p>}
           <p className="mt-3 text-xs leading-5 text-emerald-900">
             {result.outputSize < result.originalSize
               ? result.flattened
@@ -260,6 +277,7 @@ async function rasterizePdf(
   bytes: ArrayBuffer,
   settings: { quality: number; scale: number },
   onProgress: (progress: number) => void,
+  isCancelled: () => boolean,
 ) {
   const pdfjs = await getPdfJs();
   const loadingTask = pdfjs.getDocument({ data: bytes.slice(0) });
@@ -273,6 +291,7 @@ async function rasterizePdf(
   const output = await PDFDocument.create();
   try {
     for (let pageNumber = 1; pageNumber <= source.numPages; pageNumber += 1) {
+      if (isCancelled()) throw new Error("CANCELLED");
       const page = await source.getPage(pageNumber);
       const baseViewport = page.getViewport({ scale: 1 });
       const renderViewport = page.getViewport({ scale: settings.scale });

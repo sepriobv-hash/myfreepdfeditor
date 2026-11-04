@@ -40,9 +40,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           return (
             <div
               key={toast.id}
+              role={toast.tone === "error" ? "alert" : "status"}
               className="flex items-start gap-3 rounded-md border border-line bg-white p-3 text-sm text-slate-800 shadow-panel"
             >
               <Icon
+                aria-hidden="true"
                 className={
                   toast.tone === "error"
                     ? "mt-0.5 h-4 w-4 text-rose-600"

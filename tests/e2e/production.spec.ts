@@ -15,8 +15,60 @@ test("homepage and localized metadata are accessible and index-safe", async ({ p
 
   await page.goto("/nl");
   await expect(page.locator("html")).toHaveAttribute("lang", "nl");
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /^index, follow$/);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://www.myfreepdfeditor.com/nl");
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", "https://www.myfreepdfeditor.com");
+  await expect(page.locator('link[rel="alternate"][hreflang="nl"]')).toHaveAttribute("href", "https://www.myfreepdfeditor.com/nl");
   await expect(page.getByRole("button", { name: /Kies PDF/i })).toBeVisible();
+
+  await page.goto("/de");
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+});
+
+test("sitemap only advertises reachable, indexable canonical pages", async ({ request }) => {
+  const sitemap = await request.get("/sitemaps/pages.xml");
+  expect(sitemap.status()).toBe(200);
+  const xml = await sitemap.text();
+  const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  expect(urls).toContain("https://www.myfreepdfeditor.com/nl");
+  expect(xml).toContain('hreflang="nl" href="https://www.myfreepdfeditor.com/nl"');
+  expect(xml).toContain('hreflang="en" href="https://www.myfreepdfeditor.com"');
+
+  for (const url of urls) {
+    const response = await request.get(new URL(url).pathname);
+    expect(response.status(), url).toBe(200);
+    const html = await response.text();
+    expect(html, url).toContain(`rel="canonical" href="${url}"`);
+    expect(html, url).not.toMatch(/name="robots" content="[^"]*noindex/);
+  }
+});
+
+test("Dutch mobile navigation and upload feedback stay usable", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/nl");
+  await expect(page.locator("nav a").first()).toHaveAttribute("href", "/nl");
+  const merge = page.getByRole("link", { name: "PDF samenvoegen", exact: true }).first();
+  await expect(merge).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.locator('input[type="file"]').setInputFiles({
+    name: "wrong-file.txt", mimeType: "text/plain", buffer: Buffer.from("not a PDF"),
+  });
+  await expect(page.getByText("Kies een geldig PDF-bestand.", { exact: true })).toBeVisible();
+  await expect(page.locator('input[type="file"]')).toHaveValue("");
+  await merge.click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Merge PDF Files Online Free");
+});
+
+test("homepage upload hands the selected PDF to the editor", async ({ page }) => {
+  const pdf = await createDigitalPdf();
+  await page.goto("/nl");
+  await page.locator('input[type="file"]').setInputFiles({
+    name: "homepage-upload.pdf", mimeType: "application/pdf", buffer: pdf,
+  });
+  await expect(page).toHaveURL(/\/editor\?uploadId=/);
+  await expect(page.getByRole("button", { name: "Download" })).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByText(/Page 1 of 1/)).toBeVisible();
 });
 
 test("privacy controls clear local upload and analytics data", async ({ page }) => {

@@ -20,11 +20,11 @@ import { fileSizeBucket, trackUsageEvent } from "@/lib/usage/client";
 
 const MergePdfPanel = dynamic(
   () => import("@/components/tools/MergePdfPanel").then((module) => module.MergePdfPanel),
-  { ssr: false },
+  { ssr: false, loading: () => <p className="p-6 text-sm text-slate-600" role="status">Loading PDF merge tool…</p> },
 );
 const CompressPdfPanel = dynamic(
   () => import("@/components/tools/CompressPdfPanel").then((module) => module.CompressPdfPanel),
-  { ssr: false },
+  { ssr: false, loading: () => <p className="p-6 text-sm text-slate-600" role="status">Loading PDF compression tool…</p> },
 );
 
 type ToolLandingPageProps = {
@@ -69,7 +69,7 @@ export function ToolLandingPage({ tool }: ToolLandingPageProps) {
   return (
     <main className="min-h-screen bg-mist text-ink">
       <nav className="border-b border-line bg-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-5 gap-y-2 px-5 py-4">
           <Link className="text-sm font-semibold text-ink" href="/">
             MyFreePDFEditor
           </Link>
@@ -88,6 +88,15 @@ export function ToolLandingPage({ tool }: ToolLandingPageProps) {
       </nav>
 
       <section className="mx-auto max-w-7xl px-5 py-12 md:py-16">
+        <nav aria-label="Breadcrumb" className="mb-6 text-sm text-slate-600">
+          <ol className="flex flex-wrap items-center gap-2">
+            <li><Link className="hover:text-ink" href="/">Home</Link></li>
+            <li aria-hidden="true">/</li>
+            <li><Link className="hover:text-ink" href="/all-tools">All PDF tools</Link></li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" className="font-medium text-ink">{tool.shortTitle}</li>
+          </ol>
+        </nav>
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
             <div className="mb-4 inline-flex items-center gap-2 rounded-md border border-rose-100 bg-white px-3 py-2 text-sm font-semibold text-rose-700 shadow-sm">

@@ -28,7 +28,7 @@ export function BrandLogo({ compact = false }: BrandLogoProps) {
       alt={siteName}
       width={360}
       height={90}
-      className="h-12 w-auto object-contain"
+      className="h-auto w-full max-w-48 object-contain sm:max-w-60"
       priority
     />
   );

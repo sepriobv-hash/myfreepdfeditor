@@ -214,6 +214,11 @@ export const activePdfTools: PdfTool[] = [
         question: "Will the merged PDF have a watermark?",
         answer: "No. MyFreePDFEditor does not add a watermark to the merged file.",
       },
+      {
+        question: "How many PDFs can I combine at once?",
+        answer:
+          "You can combine up to 30 PDF files with a total size below 250 MB. Password-protected files need to be unlocked before merging.",
+      },
     ],
   },
   {
@@ -257,6 +262,16 @@ export const activePdfTools: PdfTool[] = [
         question: "Can every PDF be made smaller?",
         answer:
           "No. Some PDFs are already efficiently compressed. The tool compares its output and tells you when the original file is already smaller.",
+      },
+      {
+        question: "What PDF size and page limits are supported?",
+        answer:
+          "Browser compression supports PDF files up to 100 MB and 100 pages. If your document exceeds those limits, remove pages or split it before compressing.",
+      },
+      {
+        question: "Will text remain searchable after compression?",
+        answer:
+          "The lossless result preserves the original page content. When a smaller image-based result is chosen, pages are flattened and text is no longer selectable. The result panel tells you when flattening was used.",
       },
     ],
   },

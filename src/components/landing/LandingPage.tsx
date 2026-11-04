@@ -28,7 +28,7 @@ import { landingCopyByLocale } from "@/components/landing/landingCopy";
 import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toaster";
 import { storePendingUpload } from "@/lib/editor/uploadHandoff";
-import { defaultLocale, type SupportedLocale } from "@/lib/i18n";
+import { defaultLocale, getLocalizedPath, type SupportedLocale } from "@/lib/i18n";
 import { fileSizeBucket, trackUsageEvent } from "@/lib/usage/client";
 
 const toolCards = [
@@ -171,6 +171,17 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
     ...copy.tools.cards[index],
   }));
   const primaryToolLinks = primaryToolLinksByLocale[locale];
+  const uploadFeedback = locale === "nl"
+    ? {
+        invalid: "Kies een geldig PDF-bestand.",
+        ready: "PDF klaar. De editor wordt geopend…",
+        failed: "De PDF kon niet worden voorbereid. Probeer opnieuw of kies een ander bestand.",
+      }
+    : {
+        invalid: "Please choose a valid PDF file.",
+        ready: "PDF ready. Opening editor…",
+        failed: "Could not prepare this PDF. Try again or choose another file.",
+      };
 
   useEffect(() => {
     trackUsageEvent("landing_view", { page: "home", locale });
@@ -178,7 +189,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
 
   async function handleUpload(file: File) {
     if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
-      notify("Please choose a valid PDF file.", "error");
+      notify(uploadFeedback.invalid, "error");
       return;
     }
 
@@ -193,46 +204,53 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
         source: "homepage",
         fileSizeBucket: fileSizeBucket(file.size),
       });
-      notify("PDF uploaded. Opening editor...", "success");
+      notify(uploadFeedback.ready, "success");
       window.location.assign(`/editor?uploadId=${encodeURIComponent(uploadId)}`);
-    } catch (error) {
+    } catch {
       setIsUploading(false);
       trackUsageEvent("upload_failed", { source: "homepage" });
-      notify(error instanceof Error ? error.message : "Could not prepare this PDF.", "error");
+      notify(uploadFeedback.failed, "error");
     }
   }
 
   return (
     <main className="min-h-screen bg-mist text-ink">
       <nav className="sticky top-0 z-30 border-b border-line bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
-          <Link className="flex items-center gap-3" href="/" aria-label="MyFreePDFEditor home">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-4">
+          <Link className="flex min-w-0 items-center gap-3" href={getLocalizedPath(locale)} aria-label={locale === "nl" ? "MyFreePDFEditor startpagina" : "MyFreePDFEditor home"}>
             <BrandLogo />
           </Link>
-          <div className="hidden items-center gap-1 lg:flex">
+          <div className="hidden min-w-0 flex-1 flex-wrap items-center justify-center gap-1 lg:flex">
             {primaryToolLinks.map((link) => (
               <Link key={link.href} className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href={link.href}>
                 {link.label}
               </Link>
             ))}
           </div>
-          <Button variant="primary" onClick={() => window.location.assign("/editor")}>
+          <Button className="h-auto min-h-11 max-w-[48%] shrink-0 px-3 py-2 text-center lg:max-w-none" variant="primary" onClick={() => window.location.assign("/editor")}>
             {copy.nav.cta}
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
+        <div className="mx-auto flex max-w-7xl gap-4 overflow-x-auto border-t border-line px-5 py-2 lg:hidden">
+          {primaryToolLinks.map((link) => (
+            <Link key={link.href} className="inline-flex min-h-11 shrink-0 items-center whitespace-nowrap text-sm font-medium text-slate-600 hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600" href={link.href}>
+              {link.label}
+            </Link>
+          ))}
+        </div>
       </nav>
 
-      <section className="mx-auto max-w-7xl px-5 pb-14 pt-12 md:pb-20 md:pt-16">
+      <section className="mx-auto max-w-7xl px-5 pb-14 pt-8 md:pb-20 md:pt-16">
         <div className="mx-auto max-w-4xl text-center">
           <div className="mb-5 inline-flex items-center gap-2 rounded-md border border-rose-100 bg-white px-3 py-2 text-sm font-medium text-rose-700 shadow-sm">
             <BadgeCheck className="h-4 w-4 text-rose-600" />
             {copy.hero.badge}
           </div>
-          <h1 className="text-5xl font-semibold leading-tight tracking-normal text-ink md:text-6xl">
+          <h1 className="text-3xl font-semibold leading-tight tracking-normal text-ink sm:text-4xl md:text-6xl">
             {copy.hero.title}
           </h1>
-          <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-slate-600">
+          <p className="mx-auto mt-5 max-w-3xl text-base leading-7 text-slate-600 md:text-lg md:leading-8">
             {copy.hero.description}
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-2 text-sm font-medium">
@@ -348,7 +366,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
               ))}
             </div>
           </div>
-          <div className="rounded-lg border border-line bg-mist p-4 shadow-soft">
+          <div className="min-w-0 rounded-lg border border-line bg-mist p-4 shadow-soft">
               <div className="rounded-md border border-line bg-white shadow-soft">
               <div className="flex items-center justify-between border-b border-line px-4 py-3">
                 <div className="flex items-center gap-2">
@@ -358,20 +376,20 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
                 </div>
                 <span className="text-xs font-medium text-slate-500">{copy.workflow.previewLabel}</span>
               </div>
-              <div className="grid min-h-96 grid-cols-[84px_1fr]">
-                <div className="border-r border-line bg-rose-50/40 p-3">
+              <div className="grid min-h-96 grid-cols-[56px_minmax(0,1fr)] sm:grid-cols-[84px_minmax(0,1fr)]">
+                <div className="border-r border-line bg-rose-50/40 p-2 sm:p-3">
                   {[1, 2, 3].map((page) => (
                     <div
                       key={page}
                       className="mb-3 h-20 rounded-sm border border-line bg-white p-2 shadow-sm"
                     >
-                      <div className="mb-2 h-2 w-10 rounded bg-slate-200" />
-                      <div className="h-2 w-8 rounded bg-slate-100" />
+                      <div className="mb-2 h-2 w-full rounded bg-slate-200" />
+                      <div className="h-2 w-4/5 rounded bg-slate-100" />
                     </div>
                   ))}
                 </div>
-                <div className="p-5">
-                  <div className="mb-4 flex gap-2">
+                <div className="min-w-0 p-3 sm:p-5">
+                  <div className="mb-4 flex flex-wrap gap-2">
                     {[TextCursorInput, FileImage, Signature, Highlighter, Stamp].map((Icon, index) => (
                       <div
                         key={index}
@@ -391,20 +409,20 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
                       </div>
                     ))}
                   </div>
-                  <div className="mx-auto h-72 max-w-sm rounded-sm border border-line bg-white p-8 shadow-soft">
-                    <div className="h-5 w-44 rounded bg-slate-800" />
+                  <div className="mx-auto h-72 max-w-sm rounded-sm border border-line bg-white p-4 shadow-soft sm:p-8">
+                    <div className="h-5 w-44 max-w-full rounded bg-slate-800" />
                     <div className="mt-5 space-y-2">
                       <div className="h-2.5 rounded bg-slate-200" />
                       <div className="h-2.5 rounded bg-slate-200" />
                       <div className="h-2.5 w-4/5 rounded bg-slate-200" />
                     </div>
                     <div className="mt-8 rounded-md border border-rose-300 bg-rose-50 p-3">
-                      <div className="h-3 w-36 rounded bg-brand-600" />
-                      <div className="mt-2 h-2 w-48 rounded bg-rose-200" />
+                      <div className="h-3 w-36 max-w-full rounded bg-brand-600" />
+                      <div className="mt-2 h-2 w-48 max-w-full rounded bg-rose-200" />
                     </div>
                     <div className="mt-8 flex items-center justify-between">
-                      <div className="h-12 w-28 rounded-sm border-2 border-dashed border-teal-500 bg-teal-50" />
-                      <Signature className="h-10 w-10 text-amber-500" />
+                      <div className="h-12 w-28 max-w-[65%] rounded-sm border-2 border-dashed border-teal-500 bg-teal-50" />
+                      <Signature className="h-10 w-10 shrink-0 text-amber-500" />
                     </div>
                   </div>
                 </div>

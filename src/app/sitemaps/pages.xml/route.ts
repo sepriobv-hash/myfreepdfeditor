@@ -11,6 +11,7 @@ type SitemapEntry = {
 };
 
 const lastContentUpdate = "2026-08-29";
+const lastSeoUpdate = "2026-10-08";
 
 function xmlResponse(body: string) {
   return new Response(body, {
@@ -59,14 +60,14 @@ export function GET() {
       url: getAbsoluteLocalizedUrl(locale.code),
       changeFrequency: "weekly" as const,
       priority: locale.code === "en" ? "1.0" : "0.9",
-      lastModified: lastContentUpdate,
+      lastModified: lastSeoUpdate,
       alternates: homeAlternates,
     })),
     {
       url: `${siteUrl}/all-tools`,
       changeFrequency: "weekly",
       priority: "0.9",
-      lastModified: lastContentUpdate,
+      lastModified: lastSeoUpdate,
     },
     {
       url: `${siteUrl}/about`,
@@ -90,7 +91,7 @@ export function GET() {
       url: `${siteUrl}/${tool.slug}`,
       changeFrequency: "weekly" as const,
       priority: tool.priority,
-      lastModified: lastContentUpdate,
+      lastModified: lastSeoUpdate,
     })),
     {
       url: `${siteUrl}/privacy`,

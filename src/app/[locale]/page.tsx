@@ -6,6 +6,7 @@ import { getLandingFaqs } from "@/components/landing/faqData";
 import {
   getAbsoluteLocalizedUrl,
   getLanguageAlternates,
+  isIndexableLocale,
   isSupportedLocale,
   supportedLocales,
   type SupportedLocale,
@@ -23,9 +24,9 @@ const localizedMetadata: Record<SupportedLocale, { title: string; description: s
       "Free PDF editor for editing PDFs online. Upload a PDF, edit text, add signatures, images, highlights, and export with no signup and no watermark.",
   },
   nl: {
-    title: "Gratis PDF Editor Online - PDF Bewerken in je Browser",
+    title: "Gratis PDF Bewerken Online - Zonder Account of Watermerk",
     description:
-      "Gratis online PDF-editor. Upload een PDF, bewerk tekst, voeg handtekeningen, afbeeldingen en markeringen toe, zonder account en zonder watermerk.",
+      "Bewerk gratis je PDF online: pas tekst visueel aan, voeg een handtekening of afbeelding toe en download zonder watermerk. Je PDF blijft op je apparaat.",
   },
   de: {
     title: "Kostenloser PDF Editor Online - PDFs im Browser bearbeiten",
@@ -83,7 +84,7 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
       description: copy.description,
     },
     robots: {
-      index: false,
+      index: isIndexableLocale(locale),
       follow: true,
     },
   };

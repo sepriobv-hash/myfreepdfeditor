@@ -25,6 +25,7 @@ export type LandingCopy = {
     description: string;
     button: string;
     privacy: string;
+    loading?: string;
     socialProof: {
       rating: string;
       text: string;
@@ -217,10 +218,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       cta: "PDF gratis bewerken",
     },
     hero: {
-      badge: "Gratis online PDF-editor met browsergerichte bestandsverwerking",
-      title: "Gratis PDF Editor Online",
+      badge: "PDF bewerken, rechtstreeks in je browser",
+      title: "Gratis PDF bewerken online",
       description:
-        "Upload gratis een PDF, bewerk bestaande tekst visueel, voeg afbeeldingen, handtekeningen, markeringen, tekeningen en paginawijzigingen toe en download daarna je bewerkte PDF zonder account en zonder watermerk.",
+        "Pas tekst visueel aan, voeg een handtekening of afbeelding toe en beheer je pagina's. Download je bewerkte PDF gratis, zonder account en zonder watermerk.",
       badges: ["Geen account nodig", "Geen watermerk", "Bestanden blijven op je apparaat"],
     },
     upload: {
@@ -228,7 +229,8 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       description:
         "Upload een PDF om tekst, afbeeldingen, markeringen, handtekeningen, tekeningen en pagina's in je browser te bewerken.",
       button: "Kies PDF",
-      privacy: "Bestanden blijven standaard in het browsergeheugen",
+      loading: "PDF openen…",
+      privacy: "Je PDF wordt lokaal op je apparaat verwerkt",
       socialProof: {
         rating: "Gratis",
         text: "Geen account, geen watermerk, browsergericht bewerken",
@@ -244,9 +246,9 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       eyebrow: "Gratis PDF-tools",
       title: "Alles voor dagelijkse PDF-bewerkingen",
       description:
-        "Gemaakt voor veelgebruikte documenttaken: snelle correcties, handtekeningen, review-notities, merkpagina's en veilige export vanuit de browser.",
+        "Corrigeer een document, onderteken een formulier, voeg opmerkingen toe of zet pagina's in de juiste volgorde. Je werkt rechtstreeks in je browser.",
       cards: [
-        { title: "PDF-tekst bewerken", text: "Klik op gevonden tekst, vervang die visueel en pas lettergrootte, kleur en spacing aan." },
+        { title: "PDF-tekst bewerken", text: "Klik op herkende tekst, plaats een visuele vervanging en pas lettergrootte, kleur en tekenafstand aan." },
         { title: "Afbeeldingen toevoegen", text: "Voeg PNG-, JPG- en WebP-afbeeldingen toe en verplaats, schaal en roteer ze op elke pagina." },
         { title: "Documenten ondertekenen", text: "Teken of upload een handtekening en plaats die precies waar je wilt." },
         { title: "Markeren en annoteren", text: "Gebruik markeringen, vormen, lijnen en vrije tekeningen voor opmerkingen en review." },
@@ -255,10 +257,10 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
       ],
     },
     workflow: {
-      eyebrow: "Gratis editor workflow",
-      title: "Een complete editor, niet alleen een uploadvak",
+      eyebrow: "Zo bewerk je een PDF",
+      title: "Alle bewerkingen op één plek",
       description:
-        "De editor opent met paginavoorbeelden, een nauwkeurig canvas, toolbar, eigenschappen, zoom, sneltoetsen, undo, redo en een echte downloadflow.",
+        "Bekijk je pagina's, selecteer een gereedschap en pas je document aan. Je kunt inzoomen, wijzigingen ongedaan maken en het resultaat als PDF downloaden.",
       features: [
         "Bestaande tekst visueel vervangen",
         "Tekstvakken toevoegen",
@@ -267,13 +269,13 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
         "Afbeeldingen en logo's toevoegen",
         "Belangrijke tekst markeren",
         "Pagina's dupliceren en verwijderen",
-        "Undo en redo",
+        "Wijzigingen ongedaan maken en opnieuw uitvoeren",
         "Bewerkte PDF's exporteren",
         "PDF-bestanden comprimeren in je browser",
         "Meerdere PDF's lokaal samenvoegen",
         "Werk standaard zonder cloudopslag",
       ],
-      previewLabel: "MyFreePDFEditor editor",
+      previewLabel: "MyFreePDFEditor",
     },
     steps: [
       { title: "Upload je PDF", text: "Sleep een bestand naar het brede uploadvlak of kies er een op je computer." },
@@ -282,16 +284,16 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
     ],
     security: {
       eyebrow: "Privacy die logisch voelt",
-      title: "Bewerk je bestand zonder je hele documentproces weg te geven",
+      title: "Je PDF blijft op je eigen apparaat",
       paragraphs: [
         "Meestal wil je gewoon een typefout herstellen, een formulier ondertekenen, een afbeelding toevoegen of iets markeren. Daarvoor zou je geen account, permanente cloudopslag of betaalgegevens nodig moeten hebben.",
-        "MyFreePDFEditor houdt de gratis editor browser-first. De upload vanaf de homepage gebruikt tijdelijke opslag op je eigen apparaat om het bestand veilig naar de editor te brengen.",
+        "Je PDF wordt op je eigen apparaat verwerkt. Tijdelijke browseropslag brengt het bestand van deze pagina naar de editor; de inhoud wordt niet naar een server voor documentverwerking gestuurd.",
       ],
       cards: [
         { title: "Start zonder account", text: "Open de editor en werk direct aan je PDF." },
         { title: "Tijdelijke lokale overdracht", text: "De uploadoverdracht staat in je browser, niet als publiek bestand." },
         { title: "Download wanneer je klaar bent", text: "Exporteer je PDF en bepaal zelf waar die wordt opgeslagen." },
-        { title: "Cloud later, op keuze", text: "Toekomstige accounts horen optioneel te zijn voor opgeslagen werkruimtes." },
+        { title: "Opslag zelf beheren", text: "Via de privacypagina kun je tijdelijke bestandsgegevens op dit apparaat wissen." },
       ],
     },
     faq: { eyebrow: "FAQ", title: "Vragen over PDF's online bewerken" },

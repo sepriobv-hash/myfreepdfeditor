@@ -1,4 +1,5 @@
 "use client";
+import { additionalToolContent } from "@/lib/additionalPdfTools";
 import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useEffect, useState } from "react";
@@ -339,9 +340,7 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 pb-12"><h2 className="text-2xl font-semibold">{t("More ways to finish your PDF task")}</h2><div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">{[
-        ["split-pdf", "Split PDF"], ["extract-pdf-pages", "Extract PDF pages"], ["jpg-to-pdf", "JPG and PNG to PDF"], ["pdf-to-jpg", "PDF to JPG or PNG"], ["rotate-pdf", "Rotate PDF"], ["crop-pdf", "Crop PDF"], ["ocr-pdf", "OCR PDF"], ["fill-pdf", "Fill PDF forms"], ["redact-pdf", "Redact PDF"], ["pdf-to-word", "PDF to Word"], ["word-to-pdf", "Word to PDF"],
-      ].map(([slug, label]) => <Link key={slug} href={`/${slug}`} className="flex min-h-14 items-center justify-between gap-2 rounded-md border border-line bg-white p-4 text-sm font-semibold shadow-soft hover:bg-slate-50">{t(label)}<ArrowRight className="h-4 w-4 shrink-0" /></Link>)}</div></section>
+      <section className="mx-auto max-w-7xl px-5 pb-12"><h2 className="text-2xl font-semibold">{t("More ways to finish your PDF task")}</h2><div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">{additionalToolContent.map(({slug, name: label}) => <Link key={slug} href={`/${slug}`} className="flex min-h-14 items-center justify-between gap-2 rounded-md border border-line bg-white p-4 text-sm font-semibold shadow-soft hover:bg-slate-50">{t(label)}<ArrowRight className="h-4 w-4 shrink-0" /></Link>)}</div></section>
 
       <section className="bg-white">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">

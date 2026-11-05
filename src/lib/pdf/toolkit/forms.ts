@@ -111,5 +111,5 @@ export async function fillForm(
     form.acroForm.dict.delete(lib.PDFName.of("CO"));
   }
   job.progress(100);
-  return pdfOutput(await pdf.save(), `${fileBase(name)}-filled.pdf`);
+  return pdfOutput(await pdf.save(), `${fileBase(name)}-${flatten ? "flattened" : "filled"}.pdf`);
 }

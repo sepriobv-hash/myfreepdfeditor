@@ -14,6 +14,8 @@ export function checkCancelled(signal?: AbortSignal) {
   if (signal?.aborted) throw new DOMException("Cancelled", "AbortError");
 }
 export function errorKey(error: unknown) {
+  if (error instanceof Error && error.message === "PNG_REQUIRED")
+    return "Please choose PNG images for this tool.";
   if (error instanceof Error && /encrypt|password/i.test(error.message))
     return "Unlock password-protected PDFs before using this tool.";
   if (

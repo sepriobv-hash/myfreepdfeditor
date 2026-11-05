@@ -52,3 +52,36 @@ test('equivalent tools have reciprocal alternates and private routes remain excl
  }
  for (const url of ['/zz','/zz/merge-pdf','/nl/not-a-tool','/not-a-tool']) expect((await request.get(url)).status()).toBe(404);
 });
+
+test("each language directory links directly to every published tool without JavaScript", async ({ browser }) => {
+ const context = await browser.newContext({ javaScriptEnabled: false, baseURL: test.info().project.use.baseURL });
+ try {
+  const page = await context.newPage();
+  const routes = publicRoutes.filter(route => route.kind === "tool");
+  for (const locale of supportedLocales) {
+   const routePath = (path: string) => new URL(getAbsoluteLocalizedUrl(locale, path)).pathname;
+   await page.goto(routePath("/all-tools"));
+   const links = await page.locator("a[data-tool-slug]").evaluateAll(links => links.map(a => a.getAttribute("href")));
+   expect(links.sort()).toEqual(routes.map(route => routePath(route.path)).sort());
+  }
+ } finally { await context.close(); }
+});
+
+test("Dutch mobile directory fits the viewport, filters and keeps the selected language", async ({ page }) => {
+ await page.setViewportSize({ width: 390, height: 844 });
+ await page.goto("/nl/all-tools");
+ const firstCard = page.locator("a[data-tool-slug]").first();
+ expect((await firstCard.boundingBox())!.y).toBeLessThan(350);
+ expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+ await page.getByRole("searchbox").fill("onvindbaar123");
+ await expect(page.locator("a[data-tool-slug]")).toHaveCount(0);
+ await page.getByRole("button", { name: "Filters wissen" }).click();
+ await page.getByRole("combobox").selectOption("Convert");
+ await page.getByRole("searchbox").fill("PNG");
+ await page.locator('a[data-tool-slug="pdf-to-png"]').click();
+ await expect(page).toHaveURL(/\/nl\/pdf-to-png$/);
+ await page.locator("header summary").click();
+ await page.locator('header a[hreflang="fr"]').click();
+ await expect(page).toHaveURL(/\/fr\/pdf-to-png$/);
+ await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+});

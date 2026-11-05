@@ -29,7 +29,14 @@ import {
 } from "@/lib/usage/client";
 import { downloadBlob } from "@/lib/utils";
 import { useEditorStore } from "@/store/editorStore";
-import type { PageState } from "@/types/editor";
+import type { EditorTool, PageState } from "@/types/editor";
+
+const landingTools: Partial<Record<string, EditorTool>> = {
+  "add-text-to-pdf": "text",
+  "highlight-pdf": "highlight",
+  "draw-on-pdf": "draw",
+  "add-shapes-to-pdf": "rectangle",
+};
 
 export function EditorLayout() {
   const t = useTranslation();
@@ -63,6 +70,8 @@ export function EditorLayout() {
           return;
         }
         await loadPdf(file);
+        const requestedTool = landingTools[searchParams.get("tool") ?? ""];
+        if (requestedTool) useEditorStore.getState().setTool(requestedTool);
         trackUsageEvent("upload_success", {
           source: searchParams.get("tool") ?? "homepage",
           fileSizeBucket: fileSizeBucket(file.size),

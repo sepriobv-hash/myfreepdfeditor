@@ -55,6 +55,9 @@ export function ToolkitPanel({
 }) {
   const t = useTranslation(),
     locale = useLocale();
+  const pngInput = slug === "png-to-pdf";
+  const flattenForm = slug === "flatten-pdf-form";
+  const textOutput = slug === "scanned-pdf-to-text";
   const [files, setFiles] = useState<File[]>([]),
     [bytes, setBytes] = useState<ArrayBuffer | null>(null),
     [count, setCount] = useState(0),
@@ -63,7 +66,7 @@ export function ToolkitPanel({
     [angle, setAngle] = useState(90),
     [rect, setRect] = useState<Rect>(),
     [masks, setMasks] = useState<Record<number, Rect[]>>({}),
-    [format, setFormat] = useState<"png" | "jpeg">("jpeg"),
+    [format, setFormat] = useState<"png" | "jpeg">(slug === "pdf-to-png" ? "png" : "jpeg"),
     [imageSize, setImageSize] = useState<"fit" | "a4">("a4"),
     [scale, setScale] = useState(1.5),
     [ocrLanguage, setOcrLanguage] = useState(locale),
@@ -97,7 +100,7 @@ export function ToolkitPanel({
   const images = workflow === "images-to-pdf",
     wordInput = workflow === "word-to-pdf",
     editingArea = workflow === "crop" || workflow === "redact";
-  const accept = images
+  const accept = pngInput ? "image/png,.png" : images
     ? "image/jpeg,image/png,.jpg,.jpeg,.png"
     : wordInput
       ? ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -132,6 +135,8 @@ export function ToolkitPanel({
       )
         throw new Error("LIMIT");
       if (images) {
+        if (pngInput && incoming.some(file => file.type ? file.type !== "image/png" : !/\.png$/i.test(file.name)))
+          throw new Error("PNG_REQUIRED");
         if (
           incoming.some(
             (f) =>
@@ -277,10 +282,11 @@ export function ToolkitPanel({
             ocrLanguage,
             selection,
             job,
+            textOutput,
           );
         } else if (workflow === "forms") {
           const { fillForm } = await import("@/lib/pdf/toolkit/forms");
-          output = await fillForm(bytes, files[0].name, fields, flatten, job);
+          output = await fillForm(bytes, files[0].name, fields, flattenForm || flatten, job);
         } else {
           const { pdfToWord } = await import("@/lib/pdf/toolkit/office");
           output = await pdfToWord(bytes, files[0].name, wordMode, job);
@@ -318,7 +324,7 @@ export function ToolkitPanel({
     files.length > 0 &&
     !reading &&
     hasArea &&
-    (workflow !== "forms" || fields.some((f) => !f.readOnly));
+    (workflow !== "forms" || (flattenForm ? fields.length > 0 : fields.some((f) => !f.readOnly)));
   return (
     <div className="p-3 sm:p-5">
       {!files.length && (
@@ -334,7 +340,7 @@ export function ToolkitPanel({
           <FileUp aria-hidden="true" className="h-9 w-9 text-rose-700" />
           <h2 className="mt-4 text-xl font-semibold">
             {t(
-              images
+              pngInput ? "Choose PNG images" : images
                 ? "Choose JPG or PNG images"
                 : wordInput
                   ? "Choose a Word document"
@@ -832,7 +838,7 @@ export function ToolkitPanel({
                   </label>
                 ))
               )}
-              {fields.length > 0 && (
+              {!flattenForm && fields.length > 0 && (
                 <label className="flex items-start gap-2 text-sm">
                   <input
                     type="checkbox"
@@ -855,7 +861,7 @@ export function ToolkitPanel({
             disabled={!ready}
             onClick={() => void run()}
           >
-            {t(workflow === "redact" ? "Create redacted PDF" : "Create file")}
+            {t(flattenForm ? "Flatten PDF form fields" : workflow === "redact" ? "Create redacted PDF" : "Create file")}
           </button>
         </fieldset>
       )}
@@ -917,7 +923,7 @@ export function ToolkitPanel({
           </button>
           {result.text !== undefined && (
             <>
-              <details>
+              <details open={textOutput || undefined}>
                 <summary className="cursor-pointer text-sm font-semibold">
                   {t("Recognized text")}
                 </summary>
@@ -929,7 +935,7 @@ export function ToolkitPanel({
                   aria-label={t("Recognized text")}
                 />
               </details>
-              <button
+              {!textOutput && <button
                 className={button}
                 onClick={() =>
                   downloadBlob(
@@ -941,7 +947,7 @@ export function ToolkitPanel({
                 }
               >
                 {t("Download text")}
-              </button>
+              </button>}
             </>
           )}
           {result.blob.type === "application/pdf" && (

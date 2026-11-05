@@ -11,13 +11,13 @@ import {
   LockKeyhole,
   RotateCw,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
 import { UploadDropzone } from "@/components/editor/UploadDropzone";
 import { useToast } from "@/components/ui/Toaster";
 import { storePendingUpload } from "@/lib/editor/uploadHandoff";
 import { type PdfTool } from "@/lib/pdfTools";
 import { getLocalizedPath } from "@/lib/i18n";
+import { ToolHeader } from "./ToolHeader";
 import { LanguageSelector } from "@/components/landing/LanguageSelector";
 import { fileSizeBucket, trackUsageEvent } from "@/lib/usage/client";
 
@@ -75,21 +75,9 @@ export function ToolLandingPage({ tool, relatedTools }: ToolLandingPageProps) {
 
   return (
     <main className="min-h-screen bg-mist text-ink">
-      <nav className="border-b border-line bg-white">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-5 gap-y-2 px-5 py-4">
-          <Link className="text-sm font-semibold text-ink" href="/">
-            MyFreePDFEditor
-          </Link>
-          <div className="flex items-center gap-4 text-sm font-medium text-slate-600">
-            <Link className="hover:text-ink" href="/all-tools"> {t("All Tools")} </Link>
-            <Link className="hover:text-ink" href="/security"> {t("Security")} </Link>
-            <Link className="hover:text-ink" href="/privacy"> {t("Privacy")} </Link>
-          </div>
-        </div>
-      </nav>
-
-      <section className="mx-auto max-w-7xl px-5 py-12 md:py-16">
-        <nav aria-label={t("Breadcrumb")} className="mb-6 text-sm text-slate-600">
+      <ToolHeader locale={locale} path={`/${tool.slug}`} languageLabel={t("Language")} />
+      <section className="mx-auto max-w-7xl px-4 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+        <nav aria-label={t("Breadcrumb")} className="mb-4 text-sm text-slate-600">
           <ol className="flex flex-wrap items-center gap-2">
             <li><Link className="hover:text-ink" href="/">{t("Home")}</Link></li>
             <li aria-hidden="true">/</li>
@@ -98,32 +86,10 @@ export function ToolLandingPage({ tool, relatedTools }: ToolLandingPageProps) {
             <li aria-current="page" className="font-medium text-ink">{tool.shortTitle}</li>
           </ol>
         </nav>
-        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <div className="grid gap-5 lg:gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
-            <div className="mb-4 inline-flex items-center gap-2 rounded-md border border-rose-100 bg-white px-3 py-2 text-sm font-semibold text-rose-700 shadow-sm">
-              <Sparkles className="h-4 w-4" /> {t("Free PDF tool")} </div>
-            <h1 className="text-4xl font-semibold leading-tight text-ink md:text-5xl">
-              {tool.h1}
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">{tool.intro}</p>
-            <div className="mt-6 flex flex-wrap gap-2 text-sm font-medium">
-              {[t("Free"), t("No signup"), t("No watermark"), t("Files stay on your device")].map((label, index) => (
-                <span
-                  key={label}
-                  className={
-                    index === 0
-                      ? "rounded-md bg-rose-50 px-3 py-2 text-rose-700"
-                      : index === 1
-                        ? "rounded-md bg-amber-50 px-3 py-2 text-amber-700"
-                        : index === 2
-                          ? "rounded-md bg-emerald-50 px-3 py-2 text-emerald-700"
-                          : "rounded-md bg-teal-50 px-3 py-2 text-teal-700"
-                  }
-                >
-                  {label}
-                </span>
-              ))}
-            </div>
+            <h1 className="text-3xl font-bold leading-tight tracking-tight text-ink sm:text-4xl lg:text-5xl">{tool.h1}</h1>
+            <p className="mt-2 max-w-2xl text-base leading-6 text-slate-600 sm:mt-3 sm:text-lg sm:leading-7">{tool.intro}</p>
           </div>
 
           <div className="rounded-xl border border-rose-100 bg-white p-2 shadow-panel">
@@ -255,7 +221,13 @@ export function ToolLandingPage({ tool, relatedTools }: ToolLandingPageProps) {
           ))}
         </div>
       </section>
-      <div className="mx-auto max-w-7xl px-5 pb-10"><LanguageSelector currentLocale={locale} label={t("Language")} /></div>
+      <footer className="mx-auto max-w-7xl px-5 pb-10">
+        <LanguageSelector currentLocale={locale} label={t("Language")} />
+        <nav className="mt-4 flex gap-5 text-sm text-slate-600">
+          <Link href="/security" className="hover:underline">{t("Security")}</Link>
+          <Link href="/privacy" className="hover:underline">{t("Privacy")}</Link>
+        </nav>
+      </footer>
     </main>
   );
 }

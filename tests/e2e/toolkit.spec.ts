@@ -616,3 +616,57 @@ test("DOCX inflation is bounded even when archive metadata understates its size"
     page.getByRole("button", { name: "Download file", exact: true }),
   ).toHaveCount(0);
 });
+
+test("dedicated PNG routes accept PNG input and export PNG by default", async ({page}) => {
+  await page.goto("/png-to-pdf");
+  const input = page.locator("input[type=file]");
+  await expect(input).toHaveAttribute("accept", "image/png,.png");
+  await input.setInputFiles({ name: "photo.jpg", mimeType: "image/jpeg", buffer: Buffer.from("test") });
+  await expect(page.locator("p[role=alert]")).toHaveText("Please choose PNG images for this tool.");
+  const image = await sharp({create:{width:40,height:30,channels:4,background:"#eef"}}).png().toBuffer();
+  await input.setInputFiles({ name: "diagram.png", mimeType: "image/png", buffer: image });
+  await create(page);
+  await upload(page, "/pdf-to-png", await download(page));
+  await expect(page.getByLabel("Image format")).toHaveValue("png");
+  await create(page);
+  expect((await sharp(await download(page)).metadata()).format).toBe("png");
+});
+
+test("standalone form flattening retains read-only values and removes fields", async ({page}) => {
+  const document = await PDFDocument.create();
+  const sheet = document.addPage();
+  const field = document.getForm().createTextField("Reference");
+  field.setText("Invoice 875");
+  field.addToPage(sheet, {x:40,y:600,width:200,height:40});
+  field.enableReadOnly();
+  await upload(page, "/flatten-pdf-form", Buffer.from(await document.save()));
+  await page.getByRole("button", {name:"Flatten PDF form fields",exact:true}).click();
+  const output = await download(page);
+  expect((await PDFDocument.load(output)).getForm().getFields()).toHaveLength(0);
+  expect(textOf(output)).toContain("Invoice 875");
+});
+
+test("scan-to-text produces a readable TXT download", async ({page}) => {
+  await upload(page, "/scanned-pdf-to-text", await scannedInvoice());
+  await create(page);
+  await expect(page.getByRole("textbox", {name:"Recognized text"})).toBeVisible();
+  const pending = page.waitForEvent("download");
+  await page.getByRole("button", {name:"Download file"}).click();
+  const file = await pending;
+  expect(file.suggestedFilename()).toBe("sample.txt");
+  expect(await readFile((await file.path())!,"utf8")).toContain("INVOICE 104");
+});
+
+test("shape and duplicate-page routes open the editor for the selected task", async ({page}) => {
+  const file = {name:"two.pdf",mimeType:"application/pdf",buffer:await createDigitalPdf(2)};
+  await page.goto("/add-shapes-to-pdf");
+  await page.locator('input[type=file]').setInputFiles(file);
+  await expect(page.getByTitle("Rectangle", {exact:true})).toHaveAttribute("aria-pressed", "true");
+  await page.goto("/duplicate-pdf-pages");
+  await page.locator('input[type=file]').setInputFiles(file);
+  await page.getByTitle("Duplicate page", {exact:true}).first().click();
+  const buffer = await download(page, "Download");
+  expect((await PDFDocument.load(buffer)).getPageCount()).toBe(3);
+  const pages = textOf(buffer).trim().split("\f");
+  expect(pages[0].trim()).toBe(pages[1].trim());
+});

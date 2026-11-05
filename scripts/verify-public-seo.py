@@ -1,4 +1,5 @@
 """Read-only production SEO smoke audit; run with Python 3 after deployment."""
+import argparse
 import concurrent.futures
 from collections import Counter
 from html.parser import HTMLParser
@@ -11,9 +12,10 @@ import xml.etree.ElementTree as ET
 BASE = 'https://www.myfreepdfeditor.com'
 class Page(HTMLParser):
     def __init__(self):
-        super().__init__(); self.lang=None; self.canonical=None; self.alternates={}; self.robots=''; self.h1=0; self.title=''; self.description=''; self.in_title=False
+        super().__init__(); self.lang=None; self.canonical=None; self.alternates={}; self.robots=''; self.h1=0; self.title=''; self.description=''; self.in_title=False; self.tools=[]
     def handle_starttag(self,tag,attrs):
         a=dict(attrs)
+        if tag=='a' and 'data-tool-slug' in a: self.tools.append(a.get('href'))
         if tag=='html': self.lang=a.get('lang')
         if tag=='h1': self.h1+=1
         if tag=='title': self.in_title=True
@@ -48,20 +50,38 @@ def inspect(url):
     if 'noindex' in p.robots.lower() or any(k.lower()=='x-robots-tag' and 'noindex' in v.lower() for k,v in headers.items()):errors.append('noindex')
     if set(p.alternates)!=set(['en','nl','de','fr','es','it','x-default']):errors.append('alternates')
     if not p.title or not p.description:errors.append('metadata')
-    return {'url':url,'status':status,'lang':p.lang,'canonical':p.canonical,'h1':p.h1,'robots':p.robots,'alternates':p.alternates,'title':p.title,'description':p.description,'errors':errors}
+    return {'url':url,'status':status,'lang':p.lang,'canonical':p.canonical,'h1':p.h1,'robots':p.robots,'alternates':p.alternates,'title':p.title,'description':p.description,'errors':errors,'tool_links':p.tools}
 
 def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--output',type=Path,default=Path('docs/validation/production-seo.json'))
+    args=parser.parse_args()
+    tool_dir=Path(__file__).resolve().parents[1]/'src/app/(tools)'
+    slugs={file.parent.name for file in tool_dir.glob('*/page.tsx')}
+    assert slugs, 'Expected tool routes in source checkout'
+    locales=['en','nl','de','fr','es','it']
+    paths=slugs | {'','all-tools','about','security','how-it-works','privacy','terms'}
+    expected={BASE+('' if lang=='en' else '/'+lang)+('/'+path if path else '') for lang in locales for path in paths}
     status,xml,_,_=fetch(BASE+'/sitemaps/pages.xml')
     urls=[n.text for n in ET.fromstring(xml).findall('{*}url/{*}loc')]
     print(f'Checking {len(urls)} published URLs',flush=True)
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:pages=list(executor.map(inspect,urls))
+    for page in pages:
+        if page['url'].endswith('/all-tools'):
+            prefix='' if page['lang']=='en' else '/'+str(page['lang'])
+            if sorted(page['tool_links'])!=sorted(prefix+'/'+slug for slug in slugs):
+                page['errors'].append('directory tool links')
     index=fetch(BASE+'/sitemap.xml');robots=fetch(BASE+'/robots.txt')
     invalid={p:fetch(BASE+p)[0] for p in ['/nl/not-a-tool','/zz','/zz/merge-pdf']}
-    result={'sitemap_status':status,'sitemap_count':len(urls),'lastmod_present':'<lastmod>' in xml,'sitemap_index_status':index[0],'robots_status':robots[0],'robots_body':robots[1],'invalid_routes':invalid,'pages':[{k:v for k,v in page.items() if k not in ['title','description','alternates']} | {'alternate_count':len(page['alternates'])} for page in pages]}
+    result={'sitemap_status':status,'sitemap_count':len(urls),'lastmod_present':'<lastmod>' in xml,'sitemap_index_status':index[0],'robots_status':robots[0],'robots_body':robots[1],'invalid_routes':invalid,'pages':[{k:v for k,v in page.items() if k not in ['title','description','alternates','tool_links']} | {'alternate_count':len(page['alternates'])} for page in pages]}
     result['duplicate_metadata']={field:[{'locale':lang,'value':value,'count':count} for (lang,value),count in Counter((page['lang'],page[field]) for page in pages).items() if count>1] for field in ['title','description']}
-    out=Path('docs/validation/production-seo.json');out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    result['missing_urls']=sorted(expected-set(urls))
+    result['unexpected_urls']=sorted(set(urls)-expected)
+    out=args.output;out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
     failed=[p for p in pages if p['errors']]
     print(json.dumps({'pages':len(pages),'failed':failed,'invalid_routes':invalid,'sitemap_status':status,'robots_status':robots[0]}))
-    if failed or len(pages)!=180 or any(v!=404 for v in invalid.values()):raise SystemExit(1)
+    if (failed or len(urls)!=len(expected) or set(urls)!=expected or any(result['duplicate_metadata'].values())
+        or any(v!=404 for v in invalid.values()) or (status,index[0],robots[0])!=(200,200,200)):
+        raise SystemExit(1)
 
 if __name__=='__main__':main()

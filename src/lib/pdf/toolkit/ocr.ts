@@ -38,6 +38,7 @@ export async function recognizePdf(
   language: keyof typeof ocrLanguages,
   selection: string,
   job: Job,
+  textOnly = false,
 ) {
   const source = await openPdf(bytes, 20);
   let worker:
@@ -51,7 +52,7 @@ export async function recognizePdf(
     const pages = parsePages(selection, source.numPages);
     checkCancelled(job.signal);
     const { PDFDocument } = await import("pdf-lib");
-    const out = await PDFDocument.create();
+    const out = textOnly ? null : await PDFDocument.create();
     let text = "",
       pageIndex = 0;
     const { createWorker } = await import("tesseract.js");
@@ -95,19 +96,21 @@ export async function recognizePdf(
           active.recognize(
             canvas,
             { pdfTitle: "", pdfTextOnly: false },
-            { text: true, pdf: true },
+            { text: true, pdf: !textOnly },
           ),
           job.signal,
         );
         checkCancelled(job.signal);
-        if (!result.data.pdf) throw new Error("OCR PDF unavailable");
-        const pagePdf = await PDFDocument.load(new Uint8Array(result.data.pdf));
-        const [page] = await out.copyPages(pagePdf, [0]);
-        page.scale(
-          natural.width / page.getWidth(),
-          natural.height / page.getHeight(),
-        );
-        out.addPage(page);
+        if (out) {
+          if (!result.data.pdf) throw new Error("OCR PDF unavailable");
+          const pagePdf = await PDFDocument.load(new Uint8Array(result.data.pdf));
+          const [page] = await out.copyPages(pagePdf, [0]);
+          page.scale(
+            natural.width / page.getWidth(),
+            natural.height / page.getHeight(),
+          );
+          out.addPage(page);
+        }
         text += result.data.text + "\n\n";
       } finally {
         releaseCanvas(canvas);
@@ -115,6 +118,12 @@ export async function recognizePdf(
     }
     checkCancelled(job.signal);
     job.progress(100);
+    if (!out) return {
+      blob: new Blob([text], { type: "text/plain;charset=utf-8" }),
+      name: `${fileBase(name)}.txt`,
+      text,
+      message: "Check the recognized text before reusing it.",
+    };
     return {
       ...pdfOutput(await out.save(), `${fileBase(name)}-searchable.pdf`),
       text,

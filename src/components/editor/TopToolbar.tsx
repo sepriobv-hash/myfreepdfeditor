@@ -111,6 +111,7 @@ export function TopToolbar({
             key={item.tool}
             title={t(item.label)}
             variant="tool"
+            aria-pressed={tool === item.tool}
             active={tool === item.tool}
             onClick={() => setTool(item.tool)}
           >

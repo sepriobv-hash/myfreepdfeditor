@@ -1,57 +1,60 @@
-import { LanguageSelector } from "@/components/landing/LanguageSelector";
-import Link from "@/components/i18n/LocaleLink";
-import { ArrowRight, Check } from "lucide-react";
 import { activePdfTools } from "@/lib/pdfTools";
 import { localizeTool } from "@/lib/localizedTools";
 import { translators } from "@/lib/translations";
-import type { SupportedLocale } from "@/lib/i18n";
-const categoryOrder = ["Edit", "Sign", "Organize", "Convert", "Optimize", "Protect", "Annotate"] as const;
+import { getLocalizedPath, type SupportedLocale } from "@/lib/i18n";
+import { ToolHeader } from "./ToolHeader";
+import { ToolDirectory } from "./ToolDirectory";
+
+const categoryOrder = ["Edit", "Organize", "Convert", "Sign", "Annotate", "Optimize", "Protect"] as const;
+
+// Short, complete actions distinguish similar tools even on narrow screens.
+const directoryDescriptions: Record<string, string> = {
+  "edit-pdf": "Edit text, images and pages in one workspace.",
+  "edit-pdf-text": "Replace existing text on the page.",
+  "add-text-to-pdf": "Place a new text box anywhere on a page.",
+  "add-image-to-pdf": "Insert a photo or logo into a document.",
+  "fill-pdf": "Fill in interactive fields and checkboxes.",
+  "flatten-pdf-form": "Fix completed form values onto the page.",
+  "merge-pdf": "Combine several PDFs into one file.",
+  "reorder-pdf-pages": "Change the order of pages in a document.",
+  "delete-pdf-pages": "Remove unwanted pages from a PDF.",
+  "split-pdf": "Save each selected page as its own PDF.",
+  "extract-pdf-pages": "Save a selection of pages together in one PDF.",
+  "rotate-pdf": "Turn sideways or upside-down pages upright.",
+  "crop-pdf": "Trim the visible edges of a page.",
+  "duplicate-pdf-pages": "Repeat a page inside the same document.",
+  "jpg-to-pdf": "Arrange JPG photos on PDF pages.",
+  "png-to-pdf": "Combine PNG screenshots into a PDF.",
+  "pdf-to-jpg": "Download pages as JPG photos.",
+  "pdf-to-png": "Export crisp PNG images of selected pages.",
+  "ocr-pdf": "Make scanned pages searchable.",
+  "scanned-pdf-to-text": "Download recognized text as a TXT file.",
+  "pdf-to-word": "Convert a PDF into a Word document.",
+  "word-to-pdf": "Save a DOCX document as a PDF.",
+  "sign-pdf": "Draw or place your signature on a page.",
+  "annotate-pdf": "Mark up a document with notes and drawings.",
+  "highlight-pdf": "Mark important passages with color.",
+  "draw-on-pdf": "Draw freehand on a page.",
+  "add-shapes-to-pdf": "Draw rectangles, circles and lines.",
+  "compress-pdf": "Reduce the file size for sharing or uploads.",
+  "redact-pdf": "Permanently remove the areas you mark.",
+};
 
 export default function AllToolsContent({ locale = "en" }: { locale?: SupportedLocale }) {
   const t = translators[locale];
+  const groups = categoryOrder.map(category => ({
+    category,
+    label: t(category),
+    tools: activePdfTools.filter(tool => tool.category === category)
+      .sort((a, b) => Number(b.priority) - Number(a.priority))
+      .map(tool => localizeTool(tool, locale))
+      .map(tool => ({ slug: tool.slug, href: getLocalizedPath(locale, `/${tool.slug}`), name: tool.shortTitle, description: directoryDescriptions[tool.slug] ? t(directoryDescriptions[tool.slug]) : tool.intro })),
+  }));
   return (
     <main className="min-h-screen bg-mist text-ink">
-      <section className="mx-auto max-w-7xl px-5 py-12 md:py-16">
-        <Link className="text-sm font-semibold text-brand-700 hover:text-brand-700" href="/">
-          MyFreePDFEditor
-        </Link>
-        <div className="mt-8 max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-normal text-brand-700">{t("All tools")}</p>
-          <h1 className="mt-3 text-4xl font-semibold leading-tight text-ink md:text-5xl">{t("Free PDF tools that work in your browser")}</h1>
-          <p className="mt-5 text-lg leading-8 text-slate-600">{t("Edit text, sign a document, combine files or reduce the size of a PDF. Choose a tool below; your PDF is processed on your device, with no account and no watermark.")}</p>
-        </div>
-
-        <div className="mt-10 space-y-10">
-          {categoryOrder.map((category) => {
-            const tools = activePdfTools.filter((tool) => tool.category === category).map(tool => localizeTool(tool, locale));
-            if (tools.length === 0) return null;
-
-            return (
-              <section key={category}>
-                <h2 className="text-2xl font-semibold text-ink">{t(category)}</h2>
-                <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                  {tools.map((tool) => (
-                    <Link
-                      key={tool.slug}
-                      href={`/${tool.slug}`}
-                      className="group rounded-lg border border-line bg-white p-6 shadow-soft transition hover:-translate-y-0.5 hover:shadow-panel"
-                    >
-                      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-md bg-rose-50 text-rose-600">
-                        <Check className="h-4 w-4" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-ink">{tool.shortTitle}</h3>
-                      <p className="mt-2 text-sm leading-6 text-slate-600">{tool.intro}</p>
-                      <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700">{t("Open tool")}<ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            );
-          })}
-        </div>
-      </section>
-      <div className="mx-auto max-w-7xl px-5 pb-10"><LanguageSelector currentLocale={locale} label={t("Language")} /></div>
+      <ToolHeader locale={locale} path="/all-tools" languageLabel={t("Language")} />
+      <ToolDirectory groups={groups} heading={t("All PDF tools")} searchLabel={t("Search tools")} categoryLabel={t("Category")}
+        allLabel={t("All tools")} emptyLabel={t("No matching tools")} clearLabel={t("Clear filters")} />
     </main>
   );
 }

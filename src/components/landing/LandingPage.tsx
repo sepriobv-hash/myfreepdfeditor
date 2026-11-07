@@ -1,5 +1,7 @@
 "use client";
 import { additionalToolContent } from "@/lib/additionalPdfTools";
+import { extraLocalePacks, type AddedLocale } from "@/lib/extraLocalePacks";
+import { extraToolCopy } from "@/lib/extraToolCopy";
 import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useEffect, useState } from "react";
@@ -78,7 +80,7 @@ const toolCards = [
   },
 ];
 
-const primaryToolLinksByLocale: Record<SupportedLocale, Array<{ href: string; label: string }>> = {
+const primaryToolLinksByLocale: Partial<Record<SupportedLocale, Array<{ href: string; label: string }>>> = {
   en: [
     { href: "/edit-pdf", label: "Edit PDF" },
     { href: "/sign-pdf", label: "Sign PDF" },
@@ -123,7 +125,7 @@ const primaryToolLinksByLocale: Record<SupportedLocale, Array<{ href: string; la
   ],
 };
 
-const howItWorksLabel: Record<SupportedLocale, string> = {
+const howItWorksLabel: Partial<Record<SupportedLocale, string>> = {
   en: "How it works",
   nl: "Hoe het werkt",
   de: "So funktioniert es",
@@ -141,7 +143,7 @@ const trustItems = [
   { icon: LockKeyhole, tone: "bg-emerald-50 text-emerald-600" },
 ];
 
-const uploadNotesByLocale: Record<SupportedLocale, [string, string]> = {
+const uploadNotesByLocale: Partial<Record<SupportedLocale, [string, string]>> = {
   en: ["Best for PDFs under 100 MB", "Password-protected files may not open"],
   nl: ["Werkt het best met PDF's onder 100 MB", "Beveiligde PDF's openen mogelijk niet"],
   de: ["Am besten fuer PDFs unter 100 MB", "Passwortgeschuetzte PDFs lassen sich eventuell nicht oeffnen"],
@@ -150,7 +152,7 @@ const uploadNotesByLocale: Record<SupportedLocale, [string, string]> = {
   it: ["Ideale per PDF sotto i 100 MB", "I PDF protetti da password potrebbero non aprirsi"],
 };
 
-const termsLabel: Record<SupportedLocale, string> = {
+const termsLabel: Partial<Record<SupportedLocale, string>> = {
   en: "Terms",
   nl: "Voorwaarden",
   de: "Nutzungsbedingungen",
@@ -172,7 +174,18 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
     ...tool,
     ...copy.tools.cards[index],
   }));
-  const primaryToolLinks = primaryToolLinksByLocale[locale];
+  const extra = locale in extraLocalePacks ? extraLocalePacks[locale as AddedLocale] : null;
+  const primaryToolLinks = primaryToolLinksByLocale[locale] ?? [
+    ...["edit-pdf", "sign-pdf", "merge-pdf", "compress-pdf"].map(slug => ({
+      href: `/${slug}`, label: extraToolCopy[locale as AddedLocale][slug].title,
+    })),
+    { href: "/all-tools", label: extra?.nav[1] ?? "All Tools" },
+  ];
+  const uploadNotes = uploadNotesByLocale[locale] ?? [extra?.trust[1] ?? "", extra?.trust[3] ?? ""];
+  const howLabel = howItWorksLabel[locale] ?? extra?.workflow[0] ?? "How it works";
+  const termsText = termsLabel[locale] ?? ({
+    "pt-BR": "Termos", id: "Ketentuan", tr: "Koşullar", pl: "Warunki", hi: "शर्तें",
+  } as Record<AddedLocale, string>)[locale as AddedLocale];
   const t = useTranslation();
   const uploadFeedback = { invalid: t("Please choose a valid PDF file."), ready: t("PDF uploaded. Opening editor..."), failed: t("Could not prepare this PDF.") };
 
@@ -275,10 +288,10 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
             copy={copy.upload}
           />
           <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-slate-500">
-            <span>{uploadNotesByLocale[locale][0]}</span>
-            <span>{uploadNotesByLocale[locale][1]}</span>
+            <span>{uploadNotes[0]}</span>
+            <span>{uploadNotes[1]}</span>
             <Link className="font-semibold text-brand-700 hover:text-brand-700" href="/how-it-works">
-              {howItWorksLabel[locale]}
+              {howLabel}
             </Link>
           </div>
         </div>
@@ -543,9 +556,9 @@ export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
               <Link href="/all-tools" className="hover:text-ink">{copy.footer.allTools}</Link>
               <Link href="/about" className="hover:text-ink">{copy.footer.about}</Link>
               <Link href="/security" className="hover:text-ink">{copy.footer.security}</Link>
-              <Link href="/how-it-works" className="hover:text-ink">{howItWorksLabel[locale]}</Link>
+              <Link href="/how-it-works" className="hover:text-ink">{howLabel}</Link>
               <Link href="/privacy" className="hover:text-ink">{copy.footer.privacy}</Link>
-              <Link href="/terms" className="hover:text-ink">{termsLabel[locale]}</Link>
+              <Link href="/terms" className="hover:text-ink">{termsText}</Link>
               <a href="#faq" className="hover:text-ink">{copy.footer.faq}</a>
             </div>
           </div>

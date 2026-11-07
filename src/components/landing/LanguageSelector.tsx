@@ -16,6 +16,9 @@ type LanguageSelectorProps = {
 
 export function LanguageSelector({ currentLocale = defaultLocale, label = "Language" }: LanguageSelectorProps) {
   const pathname = usePathname();
+  // Keep the footer compact; every regional locale remains accessible via a real link.
+  const featured = localeOptions.filter((option, i) => i < 6 || option.code === currentLocale);
+  const more = localeOptions.filter(option => !featured.includes(option));
   return (
     <div className="flex flex-col gap-3 rounded-lg border border-line bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
@@ -25,7 +28,7 @@ export function LanguageSelector({ currentLocale = defaultLocale, label = "Langu
         <span>{label}</span>
       </div>
       <div className="flex flex-wrap gap-2">
-        {localeOptions.map((locale) => {
+        {featured.map((locale) => {
           const isActive = locale.code === currentLocale;
           return (
             <a
@@ -43,6 +46,21 @@ export function LanguageSelector({ currentLocale = defaultLocale, label = "Langu
             </a>
           );
         })}
+        {more.length > 0 && (
+          <details className="relative">
+            <summary className="inline-flex h-9 cursor-pointer items-center rounded-md border border-line bg-white px-3 text-sm font-medium text-slate-700">
+              {label} +
+            </summary>
+            <nav aria-label={label} className="absolute right-0 z-20 mt-1 max-h-72 min-w-44 overflow-y-auto rounded-lg border border-line bg-white p-2 shadow-panel">
+              {more.map((option) => (
+                <a key={option.code} href={getLocalizedPath(option.code, pathname)} hrefLang={option.hreflang} lang={option.hreflang}
+                  className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                  {option.nativeLabel}
+                </a>
+              ))}
+            </nav>
+          </details>
+        )}
       </div>
     </div>
   );

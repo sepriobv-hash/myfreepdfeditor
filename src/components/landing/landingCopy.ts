@@ -1,4 +1,5 @@
 import type { SupportedLocale } from "@/lib/i18n";
+import { extraLocalePacks, type AddedLocale } from "@/lib/extraLocalePacks";
 
 type TextBlock = {
   title: string;
@@ -73,7 +74,7 @@ export type LandingCopy = {
   };
 };
 
-export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
+const originalLandingCopy = {
   en: {
     nav: {
       tools: "Tools",
@@ -644,3 +645,53 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
     footer: { language: "Lingua", tagline: "Modifica PDF moderna nel browser", editor: "Editor", allTools: "Tutti gli strumenti", about: "Chi siamo", security: "Sicurezza", privacy: "Privacy", faq: "FAQ" },
   },
 };
+
+function newLocaleLandingCopy(locale: AddedLocale): LandingCopy {
+  const pack = extraLocalePacks[locale];
+  return {
+    nav: {
+      tools: pack.nav[0], allTools: pack.nav[1], about: pack.nav[2],
+      security: pack.nav[3], faq: pack.nav[4], cta: pack.nav[5],
+    },
+    hero: {
+      badge: pack.hero[0], title: pack.hero[1], description: pack.hero[2],
+      badges: [...pack.badges],
+    },
+    upload: {
+      title: pack.upload[0], description: pack.upload[1], button: pack.upload[2],
+      privacy: pack.upload[3],
+      socialProof: { rating: pack.badges[0], text: pack.badges.join(" · ") },
+    },
+    trustItems: [...pack.trust],
+    tools: {
+      eyebrow: pack.toolSection[0], title: pack.toolSection[1],
+      description: pack.toolSection[2],
+      cards: pack.cards.map(([title, text]) => ({title, text})),
+    },
+    workflow: {
+      eyebrow: pack.workflow[0], title: pack.workflow[1],
+      description: pack.workflow[2], features: [...pack.features],
+      previewLabel: pack.workflow[3],
+    },
+    steps: pack.steps.map(([title, text]) => ({title, text})),
+    security: {
+      eyebrow: pack.security[0], title: pack.security[1],
+      paragraphs: [pack.security[2], pack.security[3]],
+      cards: pack.securityCards.map(([title, text]) => ({title, text})),
+    },
+    faq: { eyebrow: "FAQ", title: pack.faqTitle },
+    cta: { title: pack.cta[0], description: pack.cta[1], button: pack.cta[2] },
+    footer: {
+      language: pack.footer[0], tagline: pack.footer[1],
+      editor: pack.footer[2], allTools: pack.footer[3],
+      about: pack.footer[4], security: pack.footer[5],
+      privacy: pack.footer[6], faq: pack.footer[7],
+    },
+  };
+}
+
+export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
+  ...originalLandingCopy,
+  ...Object.fromEntries((Object.keys(extraLocalePacks) as AddedLocale[])
+    .map(locale => [locale, newLocaleLandingCopy(locale)])),
+} as Record<SupportedLocale, LandingCopy>;

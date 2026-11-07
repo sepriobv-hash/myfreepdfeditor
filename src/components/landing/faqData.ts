@@ -1,4 +1,5 @@
 import type { SupportedLocale } from "@/lib/i18n";
+import { extraLocalePacks, type AddedLocale } from "@/lib/extraLocalePacks";
 
 export type LandingFaq = {
   question: string;
@@ -252,5 +253,7 @@ const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
 };
 
 export function getLandingFaqs(locale: SupportedLocale = "en") {
+  if (locale in extraLocalePacks)
+    return extraLocalePacks[locale as AddedLocale].faqs.map(([question, answer]) => ({ question, answer }));
   return localizedFaqs[locale] ?? landingFaqs;
 }

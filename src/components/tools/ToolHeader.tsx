@@ -11,7 +11,7 @@ export function ToolHeader({ locale, path, languageLabel }: { locale: SupportedL
           <summary aria-label={languageLabel} className="flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 [&::-webkit-details-marker]:hidden">
             <Globe2 aria-hidden="true" size={17} />{locale.toUpperCase()}<ChevronDown aria-hidden="true" size={14} className="group-open:rotate-180" />
           </summary>
-          <ul className="absolute right-0 z-20 mt-1 w-40 rounded-lg border border-line bg-white p-1 shadow-panel">
+          <ul className="absolute right-0 z-20 mt-1 max-h-80 w-48 overflow-y-auto rounded-lg border border-line bg-white p-1 shadow-panel">
             {localeOptions.map(option => <li key={option.code}>
               <a href={getLocalizedPath(option.code, path)} hrefLang={option.code} lang={option.code} aria-current={locale === option.code ? "page" : undefined}
                 className="flex min-h-10 items-center rounded-md px-3 text-sm hover:bg-slate-50 aria-[current=page]:bg-rose-50 aria-[current=page]:font-semibold aria-[current=page]:text-brand-700">{option.nativeLabel}</a>

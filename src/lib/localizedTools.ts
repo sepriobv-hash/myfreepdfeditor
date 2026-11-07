@@ -1,4 +1,6 @@
 import { additionalToolContent } from "./additionalPdfTools";
+import { extraToolCopy } from "./extraToolCopy";
+import { extraLocalePacks, type AddedLocale } from "./extraLocalePacks";
 import { toolEducation } from "./toolEducation";
 import type { PdfTool } from "./pdfTools";
 import type { SupportedLocale } from "./i18n";
@@ -19,11 +21,30 @@ const instructions: Record<string, string> = {
   "draw-on-pdf": "Choose Draw, drag on the page and adjust the stroke color and width.",
 };
 export function localizeTool(tool: PdfTool, locale: SupportedLocale): PdfTool {
+  if (locale in extraToolCopy) {
+    const entry = extraToolCopy[locale as AddedLocale][tool.slug];
+    const pack = extraLocalePacks[locale as AddedLocale];
+    if (!entry) throw new Error(`Missing localized tool: ${locale}/${tool.slug}`);
+    return {
+      ...tool,
+      title: entry.title, h1: entry.title, shortTitle: entry.title,
+      description: entry.description, intro: entry.description,
+      uploadTitle: entry.title, uploadDescription: entry.description,
+      useCase: `${entry.description} ${pack.tool[2]}`,
+      limitation: pack.tool[3],
+      steps: [pack.tool[4], pack.tool[5], pack.tool[6]],
+      faqs: [
+        { question: pack.tool[7], answer: pack.tool[8] },
+        { question: pack.tool[9], answer: pack.tool[10] },
+        { question: pack.tool[11], answer: pack.tool[3] },
+      ],
+    };
+  }
 
   const t = translators[locale];
   const added = additionalToolContent.find(item => item.slug === tool.slug);
   if (added) return { ...tool, title:t(added.name), h1:t(added.name), shortTitle:t(added.name), intro:t(added.intro), description:t(added.intro), uploadTitle:t(added.name), uploadDescription:t(added.intro), useCase:t(added.example), limitation:t(added.limit), steps:[t("Choose files"), t(added.action), t("Review the result and download your file.")], faqs:[{question:t("What should I know before using this tool?"),answer:t(added.limit)},{question:t("Are my PDF files uploaded to a server?"),answer:t("PDF processing happens on your device. Temporary browser storage may be used to open a selected PDF in the editor.")},{question:t("Is this tool free?"),answer:t("Yes. No account is needed and no watermark is added to your PDF.")}] };
-  const title = locale === "en" ? tool.title : (names[locale] as Record<string, string>)[tool.slug];
+  const title = locale === "en" ? tool.title : (names[locale as keyof typeof names] as Record<string, string>)[tool.slug];
   if (!title || !instructions[tool.slug]) throw new Error(`Missing localized tool: ${locale}/${tool.slug}`);
   const intro = t(instructions[tool.slug]);
   const limitation = tool.workflow === "merge"

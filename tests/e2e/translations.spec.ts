@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { activePdfTools } from "../../src/lib/pdfTools";
 import { localizeTool } from "../../src/lib/localizedTools";
-import { getLocalizedPath } from "../../src/lib/i18n";
+import { getLocalizedPath, localeOptions } from "../../src/lib/i18n";
 import { dictionaries, translators } from "../../src/lib/translations";
 import { createDigitalPdf } from "./fixtures";
 
@@ -52,7 +52,7 @@ for (const locale of locales) {
   test.setTimeout(120_000);
   await page.goto(`/${locale}`);
   const links = await page.locator('main a[href^="/"]').evaluateAll(elements => elements.map(el => el.getAttribute("href")!));
-  const languageLinks = ["/", "/nl", "/de", "/fr", "/es", "/it"];
+  const languageLinks = localeOptions.map(option => option.code === "en" ? "/" : `/${option.code}`);
   expect(links.filter(href => !languageLinks.includes(href)).every(href => href.startsWith(`/${locale}/`))).toBe(true);
   await page.locator(`a[href="/${locale}/sign-pdf"]`).first().click();
   await expect(page).toHaveURL(new RegExp(`/${locale}/sign-pdf$`));

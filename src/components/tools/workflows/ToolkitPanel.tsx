@@ -44,6 +44,8 @@ export type ToolkitWorkflow =
   | "word-to-pdf";
 const button =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-line bg-white px-4 py-2 text-sm font-semibold text-ink hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50";
+type OcrLanguage = "en" | "nl" | "de" | "fr" | "es" | "it";
+const ocrSupported = ["en", "nl", "de", "fr", "es", "it"];
 const input =
   "min-h-11 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm";
 export function ToolkitPanel({
@@ -69,7 +71,7 @@ export function ToolkitPanel({
     [format, setFormat] = useState<"png" | "jpeg">(slug === "pdf-to-png" ? "png" : "jpeg"),
     [imageSize, setImageSize] = useState<"fit" | "a4">("a4"),
     [scale, setScale] = useState(1.5),
-    [ocrLanguage, setOcrLanguage] = useState(locale),
+    [ocrLanguage, setOcrLanguage] = useState<OcrLanguage>(ocrSupported.includes(locale) ? locale as OcrLanguage : "en"),
     [wordMode, setWordMode] = useState<"text" | "images">("text"),
     [fields, setFields] = useState<FormField[]>([]),
     [flatten, setFlatten] = useState(false),
@@ -561,7 +563,7 @@ export function ToolkitPanel({
                 className={`${input} mt-2`}
                 value={ocrLanguage}
                 onChange={(e) => {
-                  setOcrLanguage(e.target.value as typeof locale);
+                  setOcrLanguage(e.target.value as OcrLanguage);
                   invalidate();
                 }}
               >

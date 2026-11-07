@@ -1,4 +1,6 @@
 import { activePdfTools } from "@/lib/pdfTools";
+import { extraToolCopy } from "@/lib/extraToolCopy";
+import type { AddedLocale } from "@/lib/extraLocalePacks";
 import { localizeTool } from "@/lib/localizedTools";
 import { translators } from "@/lib/translations";
 import { getLocalizedPath, type SupportedLocale } from "@/lib/i18n";
@@ -48,7 +50,9 @@ export default function AllToolsContent({ locale = "en" }: { locale?: SupportedL
     tools: activePdfTools.filter(tool => tool.category === category)
       .sort((a, b) => Number(b.priority) - Number(a.priority))
       .map(tool => localizeTool(tool, locale))
-      .map(tool => ({ slug: tool.slug, href: getLocalizedPath(locale, `/${tool.slug}`), name: tool.shortTitle, description: directoryDescriptions[tool.slug] ? t(directoryDescriptions[tool.slug]) : tool.intro })),
+      .map(tool => ({ slug: tool.slug, href: getLocalizedPath(locale, `/${tool.slug}`), name: tool.shortTitle, description: locale in extraToolCopy
+        ? extraToolCopy[locale as AddedLocale][tool.slug].description
+        : directoryDescriptions[tool.slug] ? t(directoryDescriptions[tool.slug]) : tool.intro })),
   }));
   return (
     <main className="min-h-screen bg-mist text-ink">

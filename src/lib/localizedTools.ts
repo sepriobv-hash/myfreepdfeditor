@@ -1,4 +1,6 @@
 import { additionalToolContent } from "./additionalPdfTools";
+import { extraToolCopy } from "./extraToolCopy";
+import { extraLocalePacks, type AddedLocale } from "./extraLocalePacks";
 import { toolEducation } from "./toolEducation";
 import type { PdfTool } from "./pdfTools";
 import type { SupportedLocale } from "./i18n";
@@ -19,6 +21,25 @@ const instructions: Record<string, string> = {
   "draw-on-pdf": "Choose Draw, drag on the page and adjust the stroke color and width.",
 };
 export function localizeTool(tool: PdfTool, locale: SupportedLocale): PdfTool {
+  if (locale in extraToolCopy) {
+    const entry = extraToolCopy[locale as AddedLocale][tool.slug];
+    const pack = extraLocalePacks[locale as AddedLocale];
+    if (!entry) throw new Error(`Missing localized tool: ${locale}/${tool.slug}`);
+    return {
+      ...tool,
+      title: entry.title, h1: entry.title, shortTitle: entry.title,
+      description: entry.description, intro: entry.description,
+      uploadTitle: entry.title, uploadDescription: entry.description,
+      useCase: `${entry.description} ${pack.tool[2]}`,
+      limitation: pack.tool[3],
+      steps: [pack.tool[4], pack.tool[5], pack.tool[6]],
+      faqs: [
+        { question: pack.tool[7], answer: pack.tool[8] },
+        { question: pack.tool[9], answer: pack.tool[10] },
+        { question: pack.tool[11], answer: pack.tool[3] },
+      ],
+    };
+  }
 
   const t = translators[locale];
   const added = additionalToolContent.find(item => item.slug === tool.slug);

@@ -18,7 +18,7 @@ test("all five languages have tool metadata, complete keys and non-English homep
     expect(html).toContain(`<html lang="${locale}"`);
     expect(html).toContain(extraLocalePacks[locale].hero[1]);
     expect(html).toContain(`rel="canonical" href="https://www.myfreepdfeditor.com/${locale}"`);
-    expect(html).toContain(`hreflang="${locale}"`);
+    expect(html).toContain(`hrefLang="${locale}"`);
     for (const slug of ["edit-pdf", "merge-pdf", "compress-pdf", "redact-pdf", "pdf-to-word"]) {
       const res = await request.get(`/${locale}/${slug}`);
       expect(res.status()).toBe(200);

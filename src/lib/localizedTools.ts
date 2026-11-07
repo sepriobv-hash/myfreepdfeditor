@@ -44,7 +44,7 @@ export function localizeTool(tool: PdfTool, locale: SupportedLocale): PdfTool {
   const t = translators[locale];
   const added = additionalToolContent.find(item => item.slug === tool.slug);
   if (added) return { ...tool, title:t(added.name), h1:t(added.name), shortTitle:t(added.name), intro:t(added.intro), description:t(added.intro), uploadTitle:t(added.name), uploadDescription:t(added.intro), useCase:t(added.example), limitation:t(added.limit), steps:[t("Choose files"), t(added.action), t("Review the result and download your file.")], faqs:[{question:t("What should I know before using this tool?"),answer:t(added.limit)},{question:t("Are my PDF files uploaded to a server?"),answer:t("PDF processing happens on your device. Temporary browser storage may be used to open a selected PDF in the editor.")},{question:t("Is this tool free?"),answer:t("Yes. No account is needed and no watermark is added to your PDF.")}] };
-  const title = locale === "en" ? tool.title : (names[locale] as Record<string, string>)[tool.slug];
+  const title = locale === "en" ? tool.title : (names[locale as keyof typeof names] as Record<string, string>)[tool.slug];
   if (!title || !instructions[tool.slug]) throw new Error(`Missing localized tool: ${locale}/${tool.slug}`);
   const intro = t(instructions[tool.slug]);
   const limitation = tool.workflow === "merge"

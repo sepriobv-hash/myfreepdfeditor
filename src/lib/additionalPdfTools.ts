@@ -221,7 +221,7 @@ const relatedTools: Record<string, string[]> = {
   "flatten-pdf-form": ["fill-pdf", "sign-pdf", "edit-pdf"],
   "scanned-pdf-to-text": ["ocr-pdf", "pdf-to-word", "edit-pdf-text"],
   "split-pdf": ["merge-pdf", "extract-pdf-pages", "reorder-pdf-pages"],
-  "extract-pdf-pages": ["split-pdf", "delete-pdf-pages", "merge-pdf"],
+  "extract-pdf-pages": ["split-pdf", "reorder-pdf-pages", "merge-pdf", "compress-pdf"],
   "jpg-to-pdf": ["png-to-pdf", "pdf-to-jpg", "merge-pdf"],
   "pdf-to-jpg": ["pdf-to-png", "jpg-to-pdf", "crop-pdf"],
   "rotate-pdf": ["crop-pdf", "reorder-pdf-pages", "extract-pdf-pages"],

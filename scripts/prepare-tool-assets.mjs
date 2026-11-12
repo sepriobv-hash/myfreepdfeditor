@@ -47,3 +47,5 @@ for (const [source, name] of [
     join(root, "node_modules", source),
     join(dest, "licenses", name),
   );
+
+await import("./prepare-example-assets.mjs");

@@ -497,5 +497,7 @@
   "Draw freehand on a page.": "Buat coretan dan penanda langsung pada halaman PDF.",
   "Draw rectangles, circles and lines.": "Gambar kotak, lingkaran, dan garis di atas halaman PDF.",
   "Reduce the file size for sharing or uploads.": "Perkecil ukuran file PDF di browser dan periksa kualitas hasilnya.",
-  "Permanently remove the areas you mark.": "Tandai area rahasia lalu buat salinan PDF yang diratakan."
+  "Permanently remove the areas you mark.": "Tandai area rahasia lalu buat salinan PDF yang diratakan.",
+  "Download sample PDF": "Unduh PDF contoh",
+  "File size": "Ukuran file"
 }

@@ -1007,6 +1007,8 @@ export function ToolkitPanel({
                     ["/pdf-to-word", "PDF to Word"],
                     ["/fill-pdf", "Fill PDF forms"],
                     ["/extract-pdf-pages", "Extract PDF pages"],
+                    ["/merge-pdf", "Merge PDF"],
+                    ["/compress-pdf", "Compress PDF"],
                   ]
                     .filter(([path]) => path !== `/${slug}`)
                     .map(([path, label]) => (

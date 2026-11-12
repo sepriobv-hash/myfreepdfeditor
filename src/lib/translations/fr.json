@@ -497,5 +497,7 @@
   "Draw freehand on a page.": "Dessinez à main levée sur une page.",
   "Draw rectangles, circles and lines.": "Tracez des rectangles, des cercles et des lignes.",
   "Reduce the file size for sharing or uploads.": "Réduisez la taille du fichier pour l’envoyer.",
-  "Permanently remove the areas you mark.": "Supprimez définitivement les zones marquées."
+  "Permanently remove the areas you mark.": "Supprimez définitivement les zones marquées.",
+  "Download sample PDF": "Télécharger le PDF d’exemple",
+  "File size": "Taille du fichier"
 }

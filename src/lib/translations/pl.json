@@ -497,5 +497,7 @@
   "Draw freehand on a page.": "Dodaj odręczne rysunki i oznaczenia na stronach dokumentu.",
   "Draw rectangles, circles and lines.": "Rysuj prostokąty, koła i linie na stronach PDF.",
   "Reduce the file size for sharing or uploads.": "Zmniejsz rozmiar PDF w przeglądarce i sprawdź jakość wyniku.",
-  "Permanently remove the areas you mark.": "Zaznacz wrażliwe obszary i utwórz spłaszczoną kopię PDF."
+  "Permanently remove the areas you mark.": "Zaznacz wrażliwe obszary i utwórz spłaszczoną kopię PDF.",
+  "Download sample PDF": "Pobierz przykładowy PDF",
+  "File size": "Rozmiar pliku"
 }

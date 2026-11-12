@@ -10,6 +10,9 @@ import urllib.request
 import xml.etree.ElementTree as ET
 
 BASE = 'https://www.myfreepdfeditor.com'
+LOCALES = ['en','nl','de','fr','es','it','pt-BR','id','tr','pl','hi']
+EDITORIAL_LOCALES = LOCALES[:6]
+INFORMATION = {'about','security','how-it-works','privacy','terms'}
 class Page(HTMLParser):
     def __init__(self):
         super().__init__(); self.lang=None; self.canonical=None; self.alternates={}; self.robots=''; self.h1=0; self.title=''; self.description=''; self.in_title=False; self.tools=[]
@@ -37,9 +40,9 @@ def inspect(url):
     status,html,headers,final=fetch(url);p=Page();p.feed(html)
     errors=[]
     segments=url[len(BASE):].strip('/').split('/')
-    locale=segments.pop(0) if segments[0] in ['nl','de','fr','es','it'] else 'en'
+    locale=segments.pop(0) if segments[0] in LOCALES[1:] else 'en'
     suffix='/'+'/'.join(segments) if any(segments) else ''
-    expected={lang:BASE+('' if lang=='en' else '/'+lang)+suffix for lang in ['en','nl','de','fr','es','it']}
+    expected={lang:BASE+('' if lang=='en' else '/'+lang)+suffix for lang in (EDITORIAL_LOCALES if suffix.lstrip('/') in INFORMATION else LOCALES)}
     expected['x-default']=expected['en']
     if p.lang!=locale:errors.append('html lang')
     if p.alternates!=expected:errors.append('alternate destinations')
@@ -48,7 +51,7 @@ def inspect(url):
     if p.canonical!=url:errors.append('canonical')
     if p.h1!=1:errors.append('H1')
     if 'noindex' in p.robots.lower() or any(k.lower()=='x-robots-tag' and 'noindex' in v.lower() for k,v in headers.items()):errors.append('noindex')
-    if set(p.alternates)!=set(['en','nl','de','fr','es','it','x-default']):errors.append('alternates')
+    if set(p.alternates)!=set(expected):errors.append('alternates')
     if not p.title or not p.description:errors.append('metadata')
     return {'url':url,'status':status,'lang':p.lang,'canonical':p.canonical,'h1':p.h1,'robots':p.robots,'alternates':p.alternates,'title':p.title,'description':p.description,'errors':errors,'tool_links':p.tools}
 
@@ -59,9 +62,9 @@ def main():
     tool_dir=Path(__file__).resolve().parents[1]/'src/app/(tools)'
     slugs={file.parent.name for file in tool_dir.glob('*/page.tsx')}
     assert slugs, 'Expected tool routes in source checkout'
-    locales=['en','nl','de','fr','es','it']
+    locales=LOCALES
     paths=slugs | {'','all-tools','about','security','how-it-works','privacy','terms'}
-    expected={BASE+('' if lang=='en' else '/'+lang)+('/'+path if path else '') for lang in locales for path in paths}
+    expected={BASE+('' if lang=='en' else '/'+lang)+('/'+path if path else '') for lang in locales for path in paths if path not in INFORMATION or lang in EDITORIAL_LOCALES}
     status,xml,_,_=fetch(BASE+'/sitemaps/pages.xml')
     urls=[n.text for n in ET.fromstring(xml).findall('{*}url/{*}loc')]
     print(f'Checking {len(urls)} published URLs',flush=True)

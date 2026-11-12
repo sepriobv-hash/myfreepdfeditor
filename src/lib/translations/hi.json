@@ -497,5 +497,7 @@
   "Draw freehand on a page.": "PDF पेज पर फ़्रीहैंड ड्रॉइंग और निशान जोड़ें।",
   "Draw rectangles, circles and lines.": "PDF पर आयत, गोले और रेखाएं बनाएं।",
   "Reduce the file size for sharing or uploads.": "PDF फ़ाइल का आकार ब्राउज़र में घटाएं और गुणवत्ता जांचें।",
-  "Permanently remove the areas you mark.": "गोपनीय हिस्सों को चिह्नित करके नई फ़्लैटन PDF बनाएं।"
+  "Permanently remove the areas you mark.": "गोपनीय हिस्सों को चिह्नित करके नई फ़्लैटन PDF बनाएं।",
+  "Download sample PDF": "उदाहरण PDF डाउनलोड करें",
+  "File size": "फ़ाइल का आकार"
 }

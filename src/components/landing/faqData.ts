@@ -45,7 +45,7 @@ export const landingFaqs: LandingFaq[] = [
   {
     question: "Does the edited file download as a real PDF?",
     answer:
-      "Yes. MyFreePDFEditor uses pdf-lib to embed your new text, images, drawings, highlights, shapes, and signatures into a real downloadable PDF file.",
+      "Yes. Download a PDF with your text, images, drawings, highlights and signatures included. Open the downloaded copy to review it before sharing.",
   },
   {
     question: "Are my PDF files uploaded to a server?",

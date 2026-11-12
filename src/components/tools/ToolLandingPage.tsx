@@ -32,6 +32,11 @@ const CompressPdfPanel = dynamic(
 
 const ToolkitPanel = dynamic(() => import("@/components/tools/workflows/ToolkitPanel").then(module => module.ToolkitPanel), { ssr: false, loading: function Loading() { return <p className="min-h-72 p-6 text-sm" role="status">{useTranslation()("Loading PDF tool…")}</p>; } });
 
+function readableBytes(bytes: number, locale: string) {
+ const unit = bytes >= 1_000_000 ? "MB" : "KB";
+ return `${(bytes / (unit === "MB" ? 1_000_000 : 1_000)).toLocaleString(locale, { maximumFractionDigits: 1 })} ${unit}`;
+}
+
 type ToolLandingPageProps = {
   tool: PdfTool;
   relatedTools: PdfTool[];
@@ -163,16 +168,22 @@ export function ToolLandingPage({ tool, relatedTools }: ToolLandingPageProps) {
       <section className="mx-auto grid max-w-7xl gap-6 px-5 pb-14 md:grid-cols-2">
         <article className="rounded-lg border border-line bg-white p-6"><h2 className="text-xl font-semibold">{t("Example use")}</h2><p className="mt-3 leading-7 text-slate-600">{tool.useCase}</p>
           {tool.slug === "edit-pdf-text" && <div className="mt-5" aria-label={t("Sample correction")}><p className="mb-2 text-sm font-medium">{t("Sample correction")}</p><div className="grid grid-cols-2 gap-3"><div className="rounded border border-rose-200 bg-rose-50 p-4"><span className="text-xs">{t("Before")}</span><p className="mt-2 font-mono">{({en:"Invocie",nl:"Factur",de:"Rechnug",fr:"Factre",es:"Factra",it:"Fattua","pt-BR":"Fatuar",id:"Tagiahn",tr:"Fatrura",pl:"Faktuar",hi:"इनवॉयस्स"})[locale]} #104</p></div><div className="rounded border border-emerald-200 bg-emerald-50 p-4"><span className="text-xs">{t("After")}</span><p className="mt-2 font-mono">{({en:"Invoice",nl:"Factuur",de:"Rechnung",fr:"Facture",es:"Factura",it:"Fattura","pt-BR":"Fatura",id:"Tagihan",tr:"Fatura",pl:"Faktura",hi:"इनवॉयस"})[locale]} #104</p></div></div></div>}
+          {tool.slug === "extract-pdf-pages" && <figure className="mt-5 rounded-lg border border-line bg-mist p-4">
+            <figcaption className="text-sm font-semibold">{t("Sample page order")}</figcaption>
+            <div className="mt-3 flex flex-wrap gap-2" aria-label={t("Before")}>{[1,2,3,4,5].map(n => <span key={n} className={`flex h-14 w-10 items-center justify-center rounded border ${[1,2,5].includes(n) ? "border-rose-300 bg-rose-50 font-bold" : "border-line bg-white text-slate-500"}`}>{n}</span>)}</div>
+            <p className="my-3 text-sm"><code>5,1-2</code> → {t("After")}</p>
+            <div className="flex gap-2">{[5,1,2].map(n => <span key={n} className="flex h-14 w-10 items-center justify-center rounded border border-emerald-300 bg-emerald-50 font-bold">{n}</span>)}</div>
+          </figure>}
           {tool.slug === "sign-pdf" && <div className="mt-5 rounded border border-line bg-mist p-4"><h3 className="font-semibold">{t("Signature placement")}</h3><p className="mt-2 leading-7">{t("Draw or upload → place and resize → download and review.")}</p></div>}
           {["reorder-pdf-pages", "delete-pdf-pages"].includes(tool.slug) && <div className="mt-5 rounded border border-line bg-mist p-4"><h3 className="font-semibold">{t("Sample page order")}</h3><p className="mt-2">{t("Before")}: 1 · 2 · 3</p><p>{t("After")}: {tool.slug === "reorder-pdf-pages" ? "3 · 1 · 2" : "1 · 3"}</p></div>}
         </article>
         <article className="rounded-lg border border-amber-200 bg-amber-50 p-6"><h2 className="text-xl font-semibold">{t("Important limits")}</h2><p className="mt-3 leading-7 text-slate-700">{tool.limitation}</p></article>
       </section>
 
-      {tool.workflow === "compress" && <section className="mx-auto max-w-7xl px-5 pb-14"><h2 className="text-2xl font-semibold">{t("Measured compression examples")}</h2><p className="mt-3 max-w-3xl leading-7 text-slate-600">{t("One-page samples measured in Chromium: a short text invoice and a generated 1200 × 1600 RGB gradient embedded as a PNG. Results depend on the document and browser; these are examples, not expected savings.")}</p><div className="mt-5 overflow-x-auto"><table className="w-full border-collapse text-left text-sm"><caption className="sr-only">{t("Measured compression examples")}</caption><thead><tr>{[t("Sample"), t("Compression level"), t("Input → output (bytes)")].map(label=><th key={label} className="border-b border-line p-3">{label}</th>)}</tr></thead><tbody>{[
+      {tool.workflow === "compress" && <section className="mx-auto max-w-7xl px-5 pb-14"><h2 className="text-2xl font-semibold">{t("Measured compression examples")}</h2><p className="mt-3 max-w-3xl leading-7 text-slate-600">{t("One-page samples measured in Chromium: a short text invoice and a generated 1200 × 1600 RGB gradient embedded as a PNG. Results depend on the document and browser; these are examples, not expected savings.")}</p><div className="mt-5 overflow-x-auto"><table className="w-full border-collapse text-left text-sm"><caption className="sr-only">{t("Measured compression examples")}</caption><thead><tr>{[t("Sample"), t("Compression level"), t("File size")].map(label=><th key={label} className="border-b border-line p-3">{label}</th>)}</tr></thead><tbody>{[
         ["Text sample", "Strong", 1304, 888], ["Text sample", "Balanced", 1304, 888], ["Text sample", "High quality", 1304, 888],
         ["Generated image sample", "Strong", 1205231, 44502], ["Generated image sample", "Balanced", 1205231, 70809], ["Generated image sample", "High quality", 1205231, 121061],
-      ].map(([sample,mode,input,output])=><tr key={`${sample}-${mode}`}><td className="border-b border-line p-3">{t(String(sample))}</td><td className="border-b border-line p-3">{t(String(mode))}</td><td className="border-b border-line p-3 tabular-nums">{Number(input).toLocaleString(locale)} → {Number(output).toLocaleString(locale)}</td></tr>)}</tbody></table></div></section>}
+      ].map(([sample,mode,input,output])=><tr key={`${sample}-${mode}`}><td className="border-b border-line p-3">{t(String(sample))}</td><td className="border-b border-line p-3">{t(String(mode))}</td><td className="border-b border-line p-3 tabular-nums">{readableBytes(Number(input), locale)} → {readableBytes(Number(output), locale)}</td></tr>)}</tbody></table></div><a className="mt-5 inline-flex min-h-11 items-center rounded-md border border-line bg-white px-4 text-sm font-medium hover:bg-slate-50" href="/examples/compression-sample.pdf" download>{t("Download sample PDF")}</a></section>}
 
       {relatedTools.length > 0 && (
         <section className="bg-white">

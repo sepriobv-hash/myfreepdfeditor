@@ -695,3 +695,85 @@ export const landingCopyByLocale: Record<SupportedLocale, LandingCopy> = {
   ...Object.fromEntries((Object.keys(extraLocalePacks) as AddedLocale[])
     .map(locale => [locale, newLocaleLandingCopy(locale)])),
 } as Record<SupportedLocale, LandingCopy>;
+
+// Keep the homepage focused on actions users can complete today.
+const homepageBenefits: Record<SupportedLocale, readonly [string, string, string, string]> = {
+  "en": [
+    "Free PDF tools. No account. No watermark.",
+    "Your documents stay on your device",
+    "Edit, sign or organize a PDF without creating an account or entering payment details.",
+    "Your document is processed in your browser. Download the finished file to keep your own copy."
+  ],
+  "nl": [
+    "Gratis PDF-tools. Geen account. Geen watermerk.",
+    "Je documenten blijven op je apparaat",
+    "Bewerk, onderteken of orden een PDF zonder account of betaalgegevens.",
+    "Je document wordt in je browser verwerkt. Download het resultaat om je eigen kopie te bewaren."
+  ],
+  "de": [
+    "Kostenlose PDF-Tools. Ohne Konto oder Wasserzeichen.",
+    "Deine Dokumente bleiben auf deinem Gerät",
+    "Bearbeite, unterschreibe oder ordne eine PDF ohne Konto oder Zahlungsdaten.",
+    "Dein Dokument wird im Browser verarbeitet. Lade das Ergebnis herunter, um deine eigene Kopie zu behalten."
+  ],
+  "fr": [
+    "Outils PDF gratuits. Sans compte ni filigrane.",
+    "Vos documents restent sur votre appareil",
+    "Modifiez, signez ou organisez un PDF sans créer de compte ni saisir de données de paiement.",
+    "Votre document est traité dans votre navigateur. Téléchargez le résultat pour conserver votre copie."
+  ],
+  "es": [
+    "Herramientas PDF gratis. Sin cuenta ni marca de agua.",
+    "Tus documentos se quedan en tu dispositivo",
+    "Edita, firma u organiza un PDF sin crear una cuenta ni introducir datos de pago.",
+    "El documento se procesa en tu navegador. Descarga el resultado para guardar tu propia copia."
+  ],
+  "it": [
+    "Strumenti PDF gratuiti. Senza account né filigrana.",
+    "I documenti restano sul tuo dispositivo",
+    "Modifica, firma o organizza un PDF senza creare un account né inserire dati di pagamento.",
+    "Il documento viene elaborato nel browser. Scarica il risultato per conservare la tua copia."
+  ],
+  "pt-BR": [
+    "Ferramentas PDF grátis. Sem conta nem marca-d’água.",
+    "Seus documentos ficam no seu dispositivo",
+    "Edite, assine ou organize um PDF sem criar conta nem informar dados de pagamento.",
+    "O documento é processado no navegador. Baixe o resultado para guardar sua cópia."
+  ],
+  "id": [
+    "Alat PDF gratis. Tanpa akun atau tanda air.",
+    "Dokumen tetap di perangkat Anda",
+    "Edit, tanda tangani atau atur PDF tanpa membuat akun atau memasukkan data pembayaran.",
+    "Dokumen diproses di browser Anda. Unduh hasilnya untuk menyimpan salinan Anda sendiri."
+  ],
+  "tr": [
+    "Ücretsiz PDF araçları. Hesap ve filigran yok.",
+    "Belgeleriniz cihazınızda kalır",
+    "Hesap oluşturmadan veya ödeme bilgisi girmeden PDF düzenleyin, imzalayın ya da sayfalarını sıralayın.",
+    "Belgeniz tarayıcınızda işlenir. Kendi kopyanızı saklamak için sonucu indirin."
+  ],
+  "pl": [
+    "Darmowe narzędzia PDF. Bez konta i znaku wodnego.",
+    "Dokumenty pozostają na Twoim urządzeniu",
+    "Edytuj, podpisuj lub porządkuj PDF bez zakładania konta i podawania danych płatniczych.",
+    "Dokument jest przetwarzany w przeglądarce. Pobierz wynik, aby zachować własną kopię."
+  ],
+  "hi": [
+    "मुफ़्त PDF टूल। बिना खाते या वॉटरमार्क के।",
+    "आपके दस्तावेज़ आपके डिवाइस पर रहते हैं",
+    "बिना खाता बनाए या भुगतान जानकारी दिए PDF संपादित करें, हस्ताक्षर करें या पेज व्यवस्थित करें।",
+    "दस्तावेज़ आपके ब्राउज़र में प्रोसेस होता है। अपनी कॉपी रखने के लिए परिणाम डाउनलोड करें।"
+  ]
+};
+for (const locale of Object.keys(homepageBenefits) as SupportedLocale[]) {
+ const copy = landingCopyByLocale[locale];
+ const [badge, title, intro, detail] = homepageBenefits[locale];
+ copy.hero.badge = badge;
+ copy.security.title = title;
+ copy.security.paragraphs = [intro, detail];
+ copy.security.cards = [
+  { title: copy.steps[0].title, text: copy.steps[0].text },
+  { title: copy.steps[1].title, text: copy.steps[1].text },
+  { title: copy.steps[2].title, text: copy.steps[2].text },
+ ];
+}

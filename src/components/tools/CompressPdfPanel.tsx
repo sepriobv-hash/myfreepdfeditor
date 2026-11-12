@@ -1,4 +1,5 @@
 "use client";
+import { usePendingToolUpload } from "@/hooks/usePendingToolUpload";
 import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useEffect, useRef, useState } from "react";
@@ -37,6 +38,7 @@ export function CompressPdfPanel() {
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<CompressionResult | null>(null);
   const { notify } = useToast();
+  usePendingToolUpload(file => chooseFile(file), () => notify(t("The temporary file is no longer available. Choose it again."), "error"));
   const [target, setTarget] = useState(0);
   const [preserve, setPreserve] = useState(false);
   const cancelled = useRef(false);

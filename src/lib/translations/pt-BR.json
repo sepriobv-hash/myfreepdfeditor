@@ -497,5 +497,7 @@
   "Draw freehand on a page.": "Faça desenhos e marcações à mão livre nas páginas do PDF.",
   "Draw rectangles, circles and lines.": "Desenhe retângulos, círculos e linhas sobre páginas PDF.",
   "Reduce the file size for sharing or uploads.": "Reduza o tamanho de arquivos PDF sem instalar programas e confira a qualidade.",
-  "Permanently remove the areas you mark.": "Marque áreas confidenciais e crie uma nova cópia achatada do PDF."
+  "Permanently remove the areas you mark.": "Marque áreas confidenciais e crie uma nova cópia achatada do PDF.",
+  "Download sample PDF": "Baixar PDF de exemplo",
+  "File size": "Tamanho do arquivo"
 }

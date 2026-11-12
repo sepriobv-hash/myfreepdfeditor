@@ -1,3 +1,4 @@
+import { applySearchCopy } from "./toolSearchCopy";
 import { additionalToolContent } from "./additionalPdfTools";
 import { extraToolCopy } from "./extraToolCopy";
 import { extraLocalePacks, type AddedLocale } from "./extraLocalePacks";
@@ -20,7 +21,7 @@ const instructions: Record<string, string> = {
   "delete-pdf-pages": "Remove unwanted pages in the sidebar and check the remaining pages before downloading.",
   "draw-on-pdf": "Choose Draw, drag on the page and adjust the stroke color and width.",
 };
-export function localizeTool(tool: PdfTool, locale: SupportedLocale): PdfTool {
+function localizeToolBase(tool: PdfTool, locale: SupportedLocale): PdfTool {
   if (locale in extraToolCopy) {
     const entry = extraToolCopy[locale as AddedLocale][tool.slug];
     const pack = extraLocalePacks[locale as AddedLocale];
@@ -71,4 +72,8 @@ export function localizeTool(tool: PdfTool, locale: SupportedLocale): PdfTool {
       { question: t("What should I know before using this tool?"), answer: t(limitation) },
     ],
   };
+}
+
+export function localizeTool(tool: PdfTool, locale: SupportedLocale): PdfTool {
+ return applySearchCopy(localizeToolBase(tool, locale), locale);
 }

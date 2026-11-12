@@ -1,5 +1,8 @@
 "use client";
-import { useTranslation } from "@/components/i18n/LocaleProvider";
+import { usePendingToolUpload } from "@/hooks/usePendingToolUpload";
+import { getLocalizedPath } from "@/lib/i18n";
+import { storePendingUpload } from "@/lib/editor/uploadHandoff";
+import { useLocale, useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useRef, useState } from "react";
 import {
@@ -20,12 +23,15 @@ const MAX_TOTAL_BYTES = 250 * 1024 * 1024;
 
 export function MergePdfPanel() {
   const t = useTranslation();
+  const locale = useLocale();
+  const [continuing, setContinuing] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isMerging, setIsMerging] = useState(false);
   const [result, setResult] = useState<{ blob: Blob; name: string } | null>(null);
   const { notify } = useToast();
+  usePendingToolUpload(file => addFiles([file]), () => notify(t("The temporary file is no longer available. Choose it again."), "error"));
 
   function addFiles(selectedFiles: File[]) {
     const pdfFiles = selectedFiles.filter(isPdfFile);
@@ -215,8 +221,18 @@ export function MergePdfPanel() {
       )}
 
       {result && (
-        <button type="button" className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-line bg-white px-4 py-3 text-sm font-semibold text-ink hover:bg-slate-50" onClick={() => downloadBlob(result.blob, result.name)}>
+        <><button type="button" className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-line bg-white px-4 py-3 text-sm font-semibold text-ink hover:bg-slate-50" onClick={() => downloadBlob(result.blob, result.name)}>
           <Download className="h-4 w-4" /> {t("Download merged PDF again")} </button>
+        <button type="button" disabled={continuing} className="mt-3 min-h-11 w-full rounded-md border border-line bg-white px-4 py-3 text-sm font-semibold hover:bg-slate-50 disabled:opacity-50" onClick={async () => {
+          setContinuing(true);
+          try {
+            const id = await storePendingUpload(new File([result.blob], result.name, { type: "application/pdf" }));
+            window.location.assign(getLocalizedPath(locale, `/compress-pdf?uploadId=${encodeURIComponent(id)}`));
+          } catch {
+            notify(t("Could not prepare this PDF."), "error");
+            setContinuing(false);
+          }
+        }}>{t("Continue")} → {t("Compress PDF")}</button></>
       )}
     </div>
   );

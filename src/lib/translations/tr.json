@@ -497,5 +497,7 @@
   "Draw freehand on a page.": "PDF sayfalarına serbest çizim ve işaretler ekleyin.",
   "Draw rectangles, circles and lines.": "PDF üzerine dikdörtgen, daire ve çizgi çizin.",
   "Reduce the file size for sharing or uploads.": "PDF dosyasının boyutunu tarayıcıda azaltıp kaliteyi kontrol edin.",
-  "Permanently remove the areas you mark.": "Hassas alanları işaretleyip düzleştirilmiş yeni PDF oluşturun."
+  "Permanently remove the areas you mark.": "Hassas alanları işaretleyip düzleştirilmiş yeni PDF oluşturun.",
+  "Download sample PDF": "Örnek PDF indir",
+  "File size": "Dosya boyutu"
 }

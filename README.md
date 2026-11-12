@@ -1,6 +1,8 @@
-# PDF Studio Web
+# MyFreePDFEditor — free online PDF tools
 
-A browser-first PDF editor built with Next.js, TypeScript, Tailwind CSS, PDF.js, pdf-lib, Konva, and Zustand.
+[MyFreePDFEditor](https://www.myfreepdfeditor.com/) offers free PDF editing, signing, merging, compression and page tools without an account or watermark. Document processing runs on your device.
+
+Built with Next.js, TypeScript, Tailwind CSS, PDF.js, pdf-lib, Konva and Zustand.
 
 ## Features
 
@@ -34,6 +36,14 @@ npm run build
 
 ## Notes
 
-The editor uses visual overlay editing. Existing PDF text is preserved in the original page content; new edits are added as exported PDF objects. OCR, cloud storage, authentication, subscriptions, and team workspaces are product areas that can keep expanding over time.
+The editor uses visual overlay editing. Existing PDF text is preserved in the original page content; new edits are added as exported PDF objects. Use the dedicated redaction tool to remove marked sensitive areas in a flattened copy. OCR recognizes printed text in English, Dutch, German, French, Spanish and Italian. Review exported files before sharing.
 
 Files are processed in browser memory by default. No upload API route is required for the core editor workflow.
+
+## Useful tools
+
+- [Extract PDF pages](https://www.myfreepdfeditor.com/extract-pdf-pages) — keep selected pages in your chosen order.
+- [OCR PDF](https://www.myfreepdfeditor.com/ocr-pdf) — make scanned pages searchable.
+- [Scan to text](https://www.myfreepdfeditor.com/scanned-pdf-to-text) — download recognized text as TXT.
+- [Redact PDF](https://www.myfreepdfeditor.com/redact-pdf) — remove marked sensitive areas in a flattened copy.
+- [All PDF tools](https://www.myfreepdfeditor.com/all-tools).

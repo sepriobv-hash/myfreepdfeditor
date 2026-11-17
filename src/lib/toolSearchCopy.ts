@@ -56,6 +56,12 @@ const copy: Record<SupportedLocale, Record<string, readonly [string, string, str
     ]
   },
   "de": {
+    "reorder-pdf-pages": [
+      "PDF-Seiten Neu Sortieren — Kostenlos Online",
+      "Ändere die Reihenfolge deiner PDF-Seiten online. Verschiebe Seiten in der Übersicht und lade die sortierte Datei herunter, ohne das Original zu ändern.",
+      "Wie kann ich PDF-Seiten in eine andere Reihenfolge bringen?",
+      "Öffne die PDF, verschiebe Seiten über die Seitenleiste und prüfe die Reihenfolge vor dem Export. Für eine Auswahl nutze PDF-Seiten extrahieren."
+    ],
     "redact-pdf": [
       "PDF Schwärzen Kostenlos — Daten Entfernen",
       "Schwärze persönliche Daten in einer PDF kostenlos. Markiere private Bereiche, prüfe jede Seite und lade eine reduzierte Kopie ohne Konto herunter.",
@@ -82,6 +88,12 @@ const copy: Record<SupportedLocale, Record<string, readonly [string, string, str
     ]
   },
   "fr": {
+    "reorder-pdf-pages": [
+      "Réorganiser les Pages d’un PDF Gratuitement",
+      "Changez l’ordre des pages PDF en ligne, vérifiez les miniatures et téléchargez une nouvelle copie sans modifier l’original.",
+      "Comment changer l’ordre des pages d’un PDF ?",
+      "Ouvrez le document, déplacez les pages dans la barre latérale et vérifiez le résultat avant l’export. Pour ne garder que certaines pages, utilisez Extraire des pages PDF."
+    ],
     "redact-pdf": [
       "Caviarder un PDF Gratuitement — Masquer des Données",
       "Supprimez des données personnelles de votre PDF. Marquez les zones privées, vérifiez chaque page et téléchargez une copie aplatie sans compte.",
@@ -160,6 +172,12 @@ const copy: Record<SupportedLocale, Record<string, readonly [string, string, str
     ]
   },
   "pt-BR": {
+    "reorder-pdf-pages": [
+      "Reordenar Páginas de PDF Online e Grátis",
+      "Mude a ordem das páginas de um PDF gratuitamente. Organize as páginas na visualização e baixe uma nova cópia, sem alterar o arquivo original.",
+      "Como mudar a ordem das páginas de um PDF?",
+      "Abra o PDF, mova as páginas na barra lateral e confira a ordem antes de exportar. Para salvar somente algumas páginas, use Extrair Páginas. Para remover páginas, use Excluir Páginas."
+    ],
     "redact-pdf": [
       "Tarjar PDF Grátis — Remover Dados Pessoais",
       "Remova dados pessoais do PDF grátis. Marque as áreas privadas, revise cada página e baixe uma cópia achatada sem criar conta.",
@@ -173,16 +191,16 @@ const copy: Record<SupportedLocale, Record<string, readonly [string, string, str
       "Escolha o PDF, um dos idiomas disponíveis e as páginas. Execute o reconhecimento e baixe o PDF pesquisável ou o texto. Confira nomes e números na digitalização. O reconhecimento em português ainda não está disponível."
     ],
     "extract-pdf-pages": [
-      "Extrair Páginas de PDF Grátis",
-      "Salve as páginas selecionadas em um novo PDF. Informe páginas ou intervalos e escolha a ordem, sem conta nem marca-d’água.",
-      "Como extrair uma página ou um intervalo de um PDF?",
-      "Digite 3 para a página 3, 2-5 para um intervalo ou 5,1-3 para uma ordem personalizada. Extrair cria um PDF; Dividir PDF cria arquivos separados. O original não muda."
+      "Extrator de PDF Gratuito — Extrair Páginas Online",
+      "Use o extrator de PDF gratuito para extrair uma página ou várias páginas de um PDF. Selecione intervalos, organize a sequência e baixe um novo arquivo sem cadastro.",
+      "Como extrair páginas de um PDF gratuitamente?",
+      "Selecione o arquivo e digite 3 para uma página, 2-5 para um intervalo ou 5,1-3 para mudar a ordem. A extração gera um PDF com a seleção; a ferramenta Dividir PDF cria arquivos separados. O original não muda. Limite: 100 páginas e 100 MB."
     ],
     "scanned-pdf-to-text": [
-      "Converter PDF Digitalizado em Texto Grátis",
-      "Extraia texto impresso de um PDF digitalizado e baixe um TXT. Reconhecimento local nos idiomas disponíveis, sem criar conta.",
-      "Como copiar texto de um PDF digitalizado?",
-      "Escolha a digitalização e um idioma disponível e execute o reconhecimento. Revise o texto e baixe o TXT. Para manter as imagens em um PDF pesquisável, use OCR PDF. O reconhecimento em português ainda não está disponível."
+      "Extrair Texto de PDF Digitalizado Grátis — OCR",
+      "Extraia texto de PDF digitalizado e salve em TXT com OCR no navegador. Funciona em seis idiomas disponíveis; o reconhecimento de texto em português ainda não é suportado.",
+      "Como extrair texto de um PDF digitalizado?",
+      "Envie a digitalização, escolha entre inglês, neerlandês, alemão, francês, espanhol e italiano e reconheça o texto. Revise nomes e números antes de baixar o TXT. Para manter as páginas em PDF pesquisável, use OCR PDF; o reconhecimento em português ainda não está disponível."
     ]
   },
   "id": {

@@ -16,6 +16,7 @@ import { UploadDropzone } from "@/components/editor/UploadDropzone";
 import { useToast } from "@/components/ui/Toaster";
 import { storePendingUpload } from "@/lib/editor/uploadHandoff";
 import { type PdfTool } from "@/lib/pdfTools";
+import { getToolGuide } from "@/lib/toolGuides";
 import { getLocalizedPath } from "@/lib/i18n";
 import { ToolHeader } from "./ToolHeader";
 import { LanguageSelector } from "@/components/landing/LanguageSelector";
@@ -45,6 +46,7 @@ type ToolLandingPageProps = {
 export function ToolLandingPage({ tool, relatedTools }: ToolLandingPageProps) {
   const t = useTranslation();
   const locale = useLocale();
+  const guide = getToolGuide(locale, tool.slug);
   const [isUploading, setIsUploading] = useState(false);
   const { notify } = useToast();
 
@@ -184,6 +186,45 @@ export function ToolLandingPage({ tool, relatedTools }: ToolLandingPageProps) {
         ["Text sample", "Strong", 1304, 888], ["Text sample", "Balanced", 1304, 888], ["Text sample", "High quality", 1304, 888],
         ["Generated image sample", "Strong", 1205231, 44502], ["Generated image sample", "Balanced", 1205231, 70809], ["Generated image sample", "High quality", 1205231, 121061],
       ].map(([sample,mode,input,output])=><tr key={`${sample}-${mode}`}><td className="border-b border-line p-3">{t(String(sample))}</td><td className="border-b border-line p-3">{t(String(mode))}</td><td className="border-b border-line p-3 tabular-nums">{readableBytes(Number(input), locale)} → {readableBytes(Number(output), locale)}</td></tr>)}</tbody></table></div><a className="mt-5 inline-flex min-h-11 items-center rounded-md border border-line bg-white px-4 text-sm font-medium hover:bg-slate-50" href="/examples/compression-sample.pdf" download>{t("Download sample PDF")}</a></section>}
+
+      {guide && (
+        <section className="border-t border-line bg-white" aria-labelledby="tool-guide-heading">
+          <div className="mx-auto max-w-7xl px-5 py-14">
+            <h2 id="tool-guide-heading" className="max-w-4xl text-2xl font-semibold text-ink sm:text-3xl">
+              {guide.heading}
+            </h2>
+            <div className="mt-5 max-w-4xl space-y-4 text-base leading-7 text-slate-700">
+              {guide.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            </div>
+            <div className="mt-8 grid gap-5 lg:grid-cols-2">
+              <article className="rounded-lg border border-line bg-mist p-6">
+                <h3 className="text-lg font-semibold text-ink">{guide.exampleHeading}</h3>
+                <p className="mt-3 leading-7 text-slate-700">{guide.example}</p>
+              </article>
+              <article className="rounded-lg border border-line bg-mist p-6">
+                <h3 className="text-lg font-semibold text-ink">{guide.tipsHeading}</h3>
+                <ul className="mt-3 list-disc space-y-2 pl-5 text-slate-700">
+                  {guide.tips.map((tip) => <li key={tip}>{tip}</li>)}
+                </ul>
+              </article>
+            </div>
+            <nav aria-label={guide.relatedHeading} className="mt-8">
+              <h3 className="text-lg font-semibold text-ink">{guide.relatedHeading}</h3>
+              <div className="mt-4 grid gap-3 md:grid-cols-3">
+                {guide.links.map((link) => (
+                  <Link key={link.slug} href={`/${link.slug}`}
+                    className="group rounded-lg border border-line bg-mist p-4 transition hover:border-slate-300 hover:bg-white">
+                    <span className="inline-flex items-center gap-2 font-semibold text-brand-700">
+                      {link.label} <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden="true" />
+                    </span>
+                    <span className="mt-2 block text-sm leading-6 text-slate-600">{link.description}</span>
+                  </Link>
+                ))}
+              </div>
+            </nav>
+          </div>
+        </section>
+      )}
 
       {relatedTools.length > 0 && (
         <section className="bg-white">

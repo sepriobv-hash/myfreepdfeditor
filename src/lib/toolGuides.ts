@@ -1,0 +1,164 @@
+import type { SupportedLocale } from "./i18n";
+
+/**
+ * Human-written, task-specific guidance for pages that already appear in
+ * Search Console. Avoid generic keyword-filled paragraphs: each guide must
+ * describe the actual workflow, limits, and adjacent tools accurately.
+ */
+export type ToolGuide = {
+  heading: string;
+  paragraphs: string[];
+  exampleHeading: string;
+  example: string;
+  tipsHeading: string;
+  tips: string[];
+  relatedHeading: string;
+  links: { slug: string; label: string; description: string }[];
+};
+
+const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
+  "pt-BR": {
+    "extract-pdf-pages": {
+      heading: "Como extrair páginas específicas de um PDF",
+      paragraphs: [
+        "O extrator de PDF gratuito cria um novo arquivo apenas com as páginas que você escolher. Ele é útil para enviar uma parte de um contrato, separar um comprovante de um relatório ou compartilhar algumas páginas de uma apostila, sem alterar o arquivo original.",
+        "Selecione o PDF e digite os números das páginas no campo de seleção. Use vírgulas para páginas avulsas (1,3,7) e um hífen para um intervalo (2-5). Você também pode alterar a ordem, por exemplo 5,1-2. Confira o resultado antes de baixar o novo PDF.",
+        "Extrair páginas não é o mesmo que dividir PDF: a extração reúne a seleção em um único arquivo; a divisão gera arquivos separados. O limite desta ferramenta é de 100 páginas e 100 MB."
+      ],
+      exampleHeading: "Exemplo prático: extrair páginas de um contrato",
+      example: "Você tem um contrato de 12 páginas e só precisa enviar as páginas 2, 4 e 11. Selecione o documento, informe 2,4,11 e crie um novo PDF de três páginas. O contrato original continua intacto.",
+      tipsHeading: "Antes de baixar",
+      tips: [
+        "Confira os números das páginas e a sequência desejada.",
+        "Se precisar de vários PDFs separados, use Dividir PDF.",
+        "Se quiser organizar todas as páginas sem excluir nenhuma, use Reordenar páginas."
+      ],
+      relatedHeading: "Outras formas de organizar páginas",
+      links: [
+        { slug: "split-pdf", label: "Dividir PDF", description: "Salvar páginas como arquivos separados." },
+        { slug: "reorder-pdf-pages", label: "Reordenar páginas PDF", description: "Alterar a sequência das páginas." },
+        { slug: "merge-pdf", label: "Juntar PDF", description: "Combinar documentos em um só PDF." }
+      ]
+    },
+    "scanned-pdf-to-text": {
+      heading: "Como extrair texto de um PDF digitalizado",
+      paragraphs: [
+        "Um PDF digitalizado pode conter somente imagens das páginas. Por isso, copiar o texto normalmente não funciona. O reconhecimento óptico de caracteres (OCR) identifica letras e palavras nessas imagens e permite baixar o conteúdo como arquivo TXT.",
+        "Escolha o PDF digitalizado, selecione o idioma do texto e as páginas e execute o reconhecimento. Revise especialmente nomes, números e tabelas: a qualidade do resultado depende da nitidez e da orientação do documento. O arquivo TXT não mantém a formatação original.",
+        "Importante: o OCR desta ferramenta oferece inglês, neerlandês, alemão, francês, espanhol e italiano, mas ainda não reconhece português. O limite é de 20 páginas e 100 MB."
+      ],
+      exampleHeading: "Exemplo prático: copiar texto de uma digitalização",
+      example: "Se você recebeu uma carta digitalizada em espanhol e precisa aproveitar um parágrafo, selecione espanhol, reconheça as páginas e confira o TXT antes de copiar o trecho. Para pesquisar dentro de um PDF com a aparência original, use OCR PDF.",
+      tipsHeading: "Quando o reconhecimento falha",
+      tips: [
+        "Tente um documento mais nítido e corretamente orientado.",
+        "Confira o idioma selecionado antes de iniciar.",
+        "Use OCR PDF se precisar de um PDF pesquisável em vez de um arquivo TXT."
+      ],
+      relatedHeading: "Ferramentas para texto e digitalizações",
+      links: [
+        { slug: "ocr-pdf", label: "OCR PDF", description: "Criar um PDF pesquisável nos idiomas disponíveis." },
+        { slug: "pdf-to-word", label: "PDF para Word", description: "Converter documentos em DOCX para edição." },
+        { slug: "extract-pdf-pages", label: "Extrair páginas de PDF", description: "Selecionar somente as páginas necessárias." }
+      ]
+    }
+  },
+  "nl": {
+    "ocr-pdf": {
+      heading: "Een gescande PDF doorzoekbaar maken met OCR",
+      paragraphs: [
+        "Een scan bevat meestal afbeeldingen van tekst. Daardoor kun je woorden vaak niet selecteren of zoeken. OCR herkent de letters in de scan en maakt een doorzoekbare PDF of een tekstbestand dat je kunt controleren.",
+        "Open je PDF, kies de documenttaal en de pagina's en start de herkenning. Nederlands, Engels, Duits, Frans, Spaans en Italiaans worden ondersteund. Controleer achteraf vooral namen en bedragen; scheve of onscherpe scans geven sneller fouten.",
+        "De OCR-tool ondersteunt maximaal 20 pagina's en 100 MB. Wil je alleen de herkende tekst als TXT opslaan, kies dan de afzonderlijke scan-naar-tekstfunctie."
+      ],
+      exampleHeading: "Voorbeeld: tekst zoeken in een gescande brief",
+      example: "Je hebt een gescande brief van zes pagina's en wilt een bepaalde naam vinden. Kies Nederlands, laat de pagina's herkennen en download de doorzoekbare PDF. Controleer of die naam correct is herkend.",
+      tipsHeading: "Tips voor een beter resultaat",
+      tips: [
+        "Zorg dat pagina's recht staan en de scan voldoende scherp is.",
+        "Selecteer de taal die daadwerkelijk in het document voorkomt.",
+        "Controleer de herkende tekst voordat je deze gebruikt."
+      ],
+      relatedHeading: "Verder werken met je PDF",
+      links: [
+        { slug: "scanned-pdf-to-text", label: "Gescande PDF naar tekst", description: "Herkende tekst exporteren als TXT." },
+        { slug: "rotate-pdf", label: "PDF draaien", description: "Pagina's rechtzetten vóór OCR." },
+        { slug: "extract-pdf-pages", label: "PDF-pagina's extraheren", description: "Alleen relevante pagina's bewaren." }
+      ]
+    },
+    "redact-pdf": {
+      heading: "Gevoelige informatie veilig uit een PDF verwijderen",
+      paragraphs: [
+        "Een zwart vlak boven een naam betekent niet altijd dat de onderliggende tekst weg is. Gebruik daarom de speciale anonimiseertool in plaats van een gewone vorm of annotatie wanneer je persoonlijke gegevens wilt afschermen.",
+        "Markeer de gevoelige gebieden op iedere pagina en bekijk de selectie zorgvuldig. De tool maakt vervolgens een nieuwe afgevlakte PDF met pagina-afbeeldingen. Daarbij verdwijnen oorspronkelijke tekstlagen en bijlagen; links en interactieve velden blijven niet behouden.",
+        "Werk met een kopie en controleer het gedownloade resultaat voordat je het deelt. Deze tool ondersteunt maximaal 50 pagina's en 100 MB."
+      ],
+      exampleHeading: "Voorbeeld: een factuur anonimiseren",
+      example: "Je wilt een factuur delen zonder adres en rekeningnummer. Markeer beide gegevens op alle relevante pagina's, maak de geanonimiseerde kopie en controleer of je de tekst niet kunt selecteren of terugvinden.",
+      tipsHeading: "Belangrijk bij anonimiseren",
+      tips: [
+        "Controleer ook kop- en voetteksten en eventuele herhalingen van gegevens.",
+        "Gebruik geen gewone highlight of getekend zwart vlak als vervanging voor anonimiseren.",
+        "Bewaar het oorspronkelijke document apart en deel alleen de gecontroleerde kopie."
+      ],
+      relatedHeading: "Gerelateerde PDF-bewerkingen",
+      links: [
+        { slug: "delete-pdf-pages", label: "PDF-pagina's verwijderen", description: "Een volledige pagina weglaten." },
+        { slug: "extract-pdf-pages", label: "PDF-pagina's extraheren", description: "Alleen noodzakelijke pagina's delen." },
+        { slug: "annotate-pdf", label: "PDF annoteren", description: "Visuele notities toevoegen, zonder anonimiseren." }
+      ]
+    }
+  },
+  "fr": {
+    "reorder-pdf-pages": {
+      heading: "Comment réorganiser les pages d'un PDF sans modifier leur contenu",
+      paragraphs: [
+        "Si les pages d'un document numérisé sont dans le mauvais ordre, l'outil de réorganisation permet de déplacer une page avant ou après une autre. Vous créez ensuite un nouveau PDF dans l'ordre choisi sans écraser l'original.",
+        "Ouvrez le fichier, repérez chaque page dans les miniatures, déplacez-les dans le bon ordre et vérifiez le résultat avant le téléchargement. Pour ne conserver que certaines pages, utilisez plutôt l'outil d'extraction.",
+        "La réorganisation ne supprime pas les pages et ne corrige pas le texte qu'elles contiennent. Si une page est à l'envers, utilisez l'outil de rotation."
+      ],
+      exampleHeading: "Exemple : remettre une couverture en première page",
+      example: "Votre rapport commence par les annexes et la couverture est en page 4. Déplacez la couverture en première position, vérifiez la nouvelle séquence dans les miniatures et exportez le PDF.",
+      tipsHeading: "À vérifier avant l'export",
+      tips: [
+        "Contrôlez l'ordre des pages dans les miniatures.",
+        "Utilisez Extraire des pages pour conserver seulement une sélection.",
+        "Utilisez Supprimer des pages pour retirer les pages inutiles."
+      ],
+      relatedHeading: "Outils complémentaires",
+      links: [
+        { slug: "extract-pdf-pages", label: "Extraire des pages PDF", description: "Créer un PDF avec les pages sélectionnées." },
+        { slug: "delete-pdf-pages", label: "Supprimer des pages PDF", description: "Retirer les pages dont vous n'avez plus besoin." },
+        { slug: "rotate-pdf", label: "Faire pivoter un PDF", description: "Corriger l'orientation des pages." }
+      ]
+    }
+  },
+  "de": {
+    "reorder-pdf-pages": {
+      heading: "PDF-Seiten neu sortieren: Reihenfolge ändern",
+      paragraphs: [
+        "Sind die Seiten eines gescannten Dokuments vertauscht, kannst du sie über die Seitenübersicht in die richtige Reihenfolge bringen. Anschließend lädst du eine neue PDF-Datei herunter; die Originaldatei bleibt unverändert.",
+        "Öffne das Dokument, prüfe die Seitenminiaturen und verschiebe die Seiten nach oben oder unten. Kontrolliere die Reihenfolge vor dem Export. Wenn du nur einzelne Seiten benötigst, nutze stattdessen die Funktion zum Extrahieren.",
+        "Das Sortieren verändert keine Seiteninhalte. Gedrehte Seiten lassen sich mit dem Werkzeug PDF drehen separat korrigieren."
+      ],
+      exampleHeading: "Beispiel: Deckblatt nach vorne verschieben",
+      example: "In einem Bericht steht das Deckblatt erst auf Seite 4. Verschiebe es an die erste Stelle, prüfe die Vorschau und speichere die neue PDF-Datei.",
+      tipsHeading: "Vor dem Speichern prüfen",
+      tips: [
+        "Reihenfolge und Seitenzahl in der Vorschau kontrollieren.",
+        "Zum Entfernen einzelner Seiten PDF-Seiten löschen wählen.",
+        "Zum Behalten einer Auswahl PDF-Seiten extrahieren verwenden."
+      ],
+      relatedHeading: "Passende PDF-Werkzeuge",
+      links: [
+        { slug: "extract-pdf-pages", label: "PDF-Seiten extrahieren", description: "Ausgewählte Seiten als neue PDF speichern." },
+        { slug: "delete-pdf-pages", label: "PDF-Seiten löschen", description: "Nicht benötigte Seiten entfernen." },
+        { slug: "rotate-pdf", label: "PDF drehen", description: "Die Ausrichtung einzelner Seiten korrigieren." }
+      ]
+    }
+  }
+};
+
+export function getToolGuide(locale: SupportedLocale, slug: string): ToolGuide | undefined {
+  return guides[locale]?.[slug];
+}

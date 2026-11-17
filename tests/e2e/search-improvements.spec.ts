@@ -54,3 +54,22 @@ test('compression sample is a real PDF and uses understandable file sizes', asyn
  await expect(page.getByRole('table')).toContainText('1.2 MB → 44.5 KB');
  await expect(page.getByRole('link',{name:'Download sample PDF'})).toHaveAttribute('download','');
 });
+
+test('priority SEO guides provide unique localized help and crawlable related-tool links', async ({ request }) => {
+ const priorities = [
+  { locale: 'pt-BR', slug: 'extract-pdf-pages', heading: 'Como extrair páginas específicas de um PDF', next: 'split-pdf' },
+  { locale: 'pt-BR', slug: 'scanned-pdf-to-text', heading: 'Como extrair texto de um PDF digitalizado', next: 'ocr-pdf' },
+  { locale: 'nl', slug: 'ocr-pdf', heading: 'Een gescande PDF doorzoekbaar maken met OCR', next: 'rotate-pdf' },
+  { locale: 'nl', slug: 'redact-pdf', heading: 'Gevoelige informatie veilig uit een PDF verwijderen', next: 'annotate-pdf' },
+  { locale: 'fr', slug: 'reorder-pdf-pages', heading: "Comment réorganiser les pages d'un PDF sans modifier leur contenu", next: 'extract-pdf-pages' },
+  { locale: 'de', slug: 'reorder-pdf-pages', heading: 'PDF-Seiten neu sortieren: Reihenfolge ändern', next: 'rotate-pdf' },
+ ] as const;
+ for (const { locale, slug, heading, next } of priorities) {
+  const response = await request.get(getLocalizedPath(locale, `/${slug}`));
+  expect(response.status()).toBe(200);
+  const html = await response.text();
+  expect(html).toContain('id="tool-guide-heading"');
+  expect(html).toContain(heading.replaceAll("'", '&#x27;'));
+  expect(html).toContain(`href="${getLocalizedPath(locale, `/${next}`)}"`);
+ }
+});

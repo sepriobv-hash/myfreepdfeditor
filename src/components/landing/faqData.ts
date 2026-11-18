@@ -82,14 +82,14 @@ export const landingFaqs: LandingFaq[] = [
 const localizedFaqs: Partial<Record<SupportedLocale, LandingFaq[]>> = {
   nl: [
     {
-      question: "Is MyFreePDFEditor een gratis PDF-editor?",
+      question: "Kan ik een PDF gratis bewerken en downloaden?",
       answer:
-        "Ja. MyFreePDFEditor is een gratis online PDF-editor. Je kunt een PDF uploaden, in je browser bewerken en de bewerkte PDF downloaden zonder te betalen voor de basisworkflow.",
+        "Ja. Je kunt tekst aanpassen, afbeeldingen of een handtekening toevoegen en pagina's anders ordenen. Je downloadt de bewerkte PDF rechtstreeks uit je browser, zonder account, abonnement of watermerk.",
     },
     {
       question: "Hoe kan ik gratis een PDF online bewerken?",
       answer:
-        "Upload je PDF, kies een pagina, voeg tekst toe of vervang tekst, plaats afbeeldingen, onderteken, teken, markeer, beheer pagina's en exporteer daarna het document.",
+        "Open je PDF en kies de pagina die je wilt aanpassen. Klik op bestaande tekst om die visueel te vervangen of kies het gereedschap Tekst voor een nieuw tekstvak. Controleer je wijzigingen en download de bewerkte PDF.",
     },
     {
       question: "Kan ik bestaande tekst in een PDF aanpassen?",

@@ -30,6 +30,12 @@ const copy: Record<SupportedLocale, Record<string, readonly [string, string, str
     ]
   },
   "nl": {
+    "edit-pdf-text": [
+      "Tekst in een PDF bewerken – gratis online",
+      "Pas bestaande tekst in je PDF visueel aan. Corrigeer een typefout, wijzig lettergrootte of kleur en download je PDF zonder watermerk.",
+      "Hoe bewerk ik bestaande tekst in een PDF?",
+      "Open je PDF, klik op de tekst die de editor herkent en typ de vervanging. Pas de vormgeving aan en controleer het resultaat vóór je downloadt. Voor het veilig verwijderen van persoonsgegevens gebruik je de anonimiseertool."
+    ],
     "redact-pdf": [
       "PDF Anonimiseren Gratis — Gegevens Verwijderen",
       "Anonimiseer je PDF gratis. Markeer persoonsgegevens, controleer de afgeschermde gebieden en download een afgevlakte kopie zonder account.",
@@ -37,10 +43,10 @@ const copy: Record<SupportedLocale, Record<string, readonly [string, string, str
       "Open je PDF, markeer namen, adressen of rekeningnummers en controleer alle afgeschermde gebieden. Maak de geanonimiseerde PDF en controleer de download. Alle pagina’s worden afbeeldingen; oorspronkelijke tekstlagen en bijlagen worden niet meegenomen."
     ],
     "ocr-pdf": [
-      "OCR PDF Gratis — Scan Doorzoekbaar Maken",
-      "Maak een gescande PDF doorzoekbaar en download herkende tekst. Kies de documenttaal en verwerk de pagina’s gratis op je eigen apparaat.",
-      "Hoe maak ik een gescande PDF doorzoekbaar?",
-      "Kies je gescande PDF, selecteer de documenttaal en de pagina’s en start de tekstherkenning. Download de doorzoekbare PDF of de herkende tekst. Controleer namen en getallen aan de hand van de scan."
+      "OCR PDF gratis online – PDF-tekst herkennen",
+      "Herken tekst in een gescande PDF met gratis OCR. Kies de documenttaal en download een doorzoekbare PDF of de herkende tekst als TXT.",
+      "Hoe herken ik tekst in een gescande PDF?",
+      "Open je scan, kies de taal van de tekst en selecteer de pagina’s. Start de herkenning en download een PDF waarin je kunt zoeken en tekst kunt selecteren, of sla de herkende tekst op als TXT. Controleer namen en getallen aan de hand van de scan."
     ],
     "extract-pdf-pages": [
       "PDF Pagina’s Extraheren Gratis",
@@ -57,8 +63,8 @@ const copy: Record<SupportedLocale, Record<string, readonly [string, string, str
   },
   "de": {
     "reorder-pdf-pages": [
-      "PDF-Seiten Neu Sortieren — Kostenlos Online",
-      "Ändere die Reihenfolge deiner PDF-Seiten online. Verschiebe Seiten in der Übersicht und lade die sortierte Datei herunter, ohne das Original zu ändern.",
+      "PDF-Seiten sortieren – kostenlos online",
+      "Sortiere deine PDF-Seiten kostenlos im Browser. Verschiebe einzelne Seiten, prüfe die Reihenfolge und lade die neu sortierte PDF herunter.",
       "Wie kann ich PDF-Seiten in eine andere Reihenfolge bringen?",
       "Öffne die PDF, verschiebe Seiten über die Seitenleiste und prüfe die Reihenfolge vor dem Export. Für eine Auswahl nutze PDF-Seiten extrahieren."
     ],
@@ -191,9 +197,9 @@ const copy: Record<SupportedLocale, Record<string, readonly [string, string, str
       "Escolha o PDF, um dos idiomas disponíveis e as páginas. Execute o reconhecimento e baixe o PDF pesquisável ou o texto. Confira nomes e números na digitalização. O reconhecimento em português ainda não está disponível."
     ],
     "extract-pdf-pages": [
-      "Extrator de PDF Gratuito — Extrair Páginas Online",
-      "Use o extrator de PDF gratuito para extrair uma página ou várias páginas de um PDF. Selecione intervalos, organize a sequência e baixe um novo arquivo sem cadastro.",
-      "Como extrair páginas de um PDF gratuitamente?",
+      "Extrair páginas de PDF grátis online",
+      "Extraia uma página, várias páginas ou um intervalo de um PDF. Escolha a ordem e baixe um novo arquivo com apenas as páginas selecionadas, sem cadastro.",
+      "Como extrair uma ou mais páginas de um PDF online?",
       "Selecione o arquivo e digite 3 para uma página, 2-5 para um intervalo ou 5,1-3 para mudar a ordem. A extração gera um PDF com a seleção; a ferramenta Dividir PDF cria arquivos separados. O original não muda. Limite: 100 páginas e 100 MB."
     ],
     "scanned-pdf-to-text": [

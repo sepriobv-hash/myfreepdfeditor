@@ -220,9 +220,9 @@ const originalLandingCopy = {
     },
     hero: {
       badge: "PDF bewerken, rechtstreeks in je browser",
-      title: "Gratis PDF bewerken online",
+      title: "Gratis PDF bewerken en downloaden",
       description:
-        "Pas tekst visueel aan, voeg een handtekening of afbeelding toe en beheer je pagina's. Download je bewerkte PDF gratis, zonder account en zonder watermerk.",
+        "Bewerk je PDF gratis online. Pas tekst aan, voeg een afbeelding of handtekening toe en download je bestand zonder account of watermerk.",
       badges: ["Geen account nodig", "Geen watermerk", "Bestanden blijven op je apparaat"],
     },
     upload: {
@@ -249,7 +249,7 @@ const originalLandingCopy = {
       description:
         "Corrigeer een document, onderteken een formulier, voeg opmerkingen toe of zet pagina's in de juiste volgorde. Je werkt rechtstreeks in je browser.",
       cards: [
-        { title: "PDF-tekst bewerken", text: "Klik op herkende tekst, plaats een visuele vervanging en pas lettergrootte, kleur en tekenafstand aan." },
+        { title: "Tekst in een PDF bewerken", text: "Corrigeer een typefout of vervang een woord. Pas daarna het lettertype, de grootte en de kleur van de nieuwe tekst aan." },
         { title: "Afbeeldingen toevoegen", text: "Voeg PNG-, JPG- en WebP-afbeeldingen toe en verplaats, schaal en roteer ze op elke pagina." },
         { title: "Documenten ondertekenen", text: "Teken of upload een handtekening en plaats die precies waar je wilt." },
         { title: "Markeren en annoteren", text: "Gebruik markeringen, vormen, lijnen en vrije tekeningen voor opmerkingen en review." },

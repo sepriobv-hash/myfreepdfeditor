@@ -21,7 +21,7 @@ const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
     "extract-pdf-pages": {
       heading: "Como extrair páginas específicas de um PDF",
       paragraphs: [
-        "O extrator de PDF gratuito cria um novo arquivo apenas com as páginas que você escolher. Ele é útil para enviar uma parte de um contrato, separar um comprovante de um relatório ou compartilhar algumas páginas de uma apostila, sem alterar o arquivo original.",
+        "Use o extrator de PDF gratuito para salvar só as páginas que você precisa. Você pode extrair uma única página, escolher páginas fora de sequência ou salvar um intervalo inteiro. O navegador cria um novo PDF e mantém o arquivo original intacto.",
         "Selecione o PDF e digite os números das páginas no campo de seleção. Use vírgulas para páginas avulsas (1,3,7) e um hífen para um intervalo (2-5). Você também pode alterar a ordem, por exemplo 5,1-2. Confira o resultado antes de baixar o novo PDF.",
         "Extrair páginas não é o mesmo que dividir PDF: a extração reúne a seleção em um único arquivo; a divisão gera arquivos separados. O limite desta ferramenta é de 100 páginas e 100 MB."
       ],
@@ -67,7 +67,7 @@ const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
     "ocr-pdf": {
       heading: "Een gescande PDF doorzoekbaar maken met OCR",
       paragraphs: [
-        "Een scan bevat meestal afbeeldingen van tekst. Daardoor kun je woorden vaak niet selecteren of zoeken. OCR herkent de letters in de scan en maakt een doorzoekbare PDF of een tekstbestand dat je kunt controleren.",
+        "Kun je in je PDF geen tekst selecteren of een woord vinden met Ctrl+F of Cmd+F? Dan bestaat de pagina mogelijk uit een scan. OCR herkent de letters en maakt een doorzoekbare PDF met behoud van de pagina-afbeeldingen. Kies TXT als je alleen de herkende tekst nodig hebt.",
         "Open je PDF, kies de documenttaal en de pagina's en start de herkenning. Nederlands, Engels, Duits, Frans, Spaans en Italiaans worden ondersteund. Controleer achteraf vooral namen en bedragen; scheve of onscherpe scans geven sneller fouten.",
         "De OCR-tool ondersteunt maximaal 20 pagina's en 100 MB. Wil je alleen de herkende tekst als TXT opslaan, kies dan de afzonderlijke scan-naar-tekstfunctie."
       ],
@@ -75,6 +75,7 @@ const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
       example: "Je hebt een gescande brief van zes pagina's en wilt een bepaalde naam vinden. Kies Nederlands, laat de pagina's herkennen en download de doorzoekbare PDF. Controleer of die naam correct is herkend.",
       tipsHeading: "Tips voor een beter resultaat",
       tips: [
+        "Kun je de tekst al selecteren? Ga direct naar de tekstbewerker als je een woord wilt aanpassen.",
         "Zorg dat pagina's recht staan en de scan voldoende scherp is.",
         "Selecteer de taal die daadwerkelijk in het document voorkomt.",
         "Controleer de herkende tekst voordat je deze gebruikt."
@@ -83,7 +84,7 @@ const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
       links: [
         { slug: "scanned-pdf-to-text", label: "Gescande PDF naar tekst", description: "Herkende tekst exporteren als TXT." },
         { slug: "rotate-pdf", label: "PDF draaien", description: "Pagina's rechtzetten vóór OCR." },
-        { slug: "extract-pdf-pages", label: "PDF-pagina's extraheren", description: "Alleen relevante pagina's bewaren." }
+        { slug: "edit-pdf-text", label: "Tekst in een PDF bewerken", description: "Een woord aanpassen in een PDF met selecteerbare tekst." }
       ]
     },
     "redact-pdf": {

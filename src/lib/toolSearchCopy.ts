@@ -179,10 +179,10 @@ const copy: Record<SupportedLocale, Record<string, readonly [string, string, str
   },
   "pt-BR": {
     "reorder-pdf-pages": [
-      "Reordenar Páginas de PDF Online e Grátis",
-      "Mude a ordem das páginas de um PDF gratuitamente. Organize as páginas na visualização e baixe uma nova cópia, sem alterar o arquivo original.",
-      "Como mudar a ordem das páginas de um PDF?",
-      "Abra o PDF, mova as páginas na barra lateral e confira a ordem antes de exportar. Para salvar somente algumas páginas, use Extrair Páginas. Para remover páginas, use Excluir Páginas."
+      "Organizar páginas de PDF online grátis",
+      "Mude a ordem das páginas do PDF com as setas nas miniaturas. Confira a sequência e baixe uma nova cópia direto do navegador, sem cadastro.",
+      "Como organizar as páginas de um PDF online?",
+      "Abra o arquivo e use as setas abaixo das miniaturas para mover cada página para cima ou para baixo. Confira a sequência no painel Páginas e use Salvar / Exportar PDF para baixar o documento organizado."
     ],
     "redact-pdf": [
       "Tarjar PDF Grátis — Remover Dados Pessoais",

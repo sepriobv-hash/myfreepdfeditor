@@ -44,8 +44,8 @@ export const extraToolCopy: Record<AddedLocale,Record<string,{title:string;descr
       "description": "Insira fotos e logotipos em PDF e ajuste tamanho e posição."
     },
     "reorder-pdf-pages": {
-      "title": "Reorganizar páginas do PDF",
-      "description": "Altere a ordem das páginas de um arquivo PDF antes de salvar."
+      "title": "Organizar páginas de PDF",
+      "description": "Mova páginas no documento e baixe o PDF na ordem escolhida."
     },
     "delete-pdf-pages": {
       "title": "Excluir páginas de PDF",

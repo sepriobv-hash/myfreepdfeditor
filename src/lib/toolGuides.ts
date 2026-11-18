@@ -18,6 +18,27 @@ export type ToolGuide = {
 
 const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
   "pt-BR": {
+    "reorder-pdf-pages": {
+      heading: "Como mudar a ordem das páginas de um PDF",
+      paragraphs: [
+        "Abra o PDF e encontre a página que deseja mover pelas miniaturas do painel Páginas. Use Mover página para cima ou Mover página para baixo. Cada clique troca a página de posição com a vizinha.",
+        "As miniaturas são numeradas de acordo com a nova ordem. Clique em cada uma para conferir o conteúdo, especialmente quando as páginas da digitalização são parecidas.",
+        "Use Salvar / Exportar PDF para baixar uma nova cópia na sequência escolhida. Você pode fazer tudo no navegador, sem criar uma conta."
+      ],
+      exampleHeading: "Exemplo de uma digitalização fora de ordem",
+      example: "As quatro páginas foram digitalizadas na ordem 1, 3, 2, 4. Encontre a página 2 do documento na terceira miniatura e mova essa miniatura uma posição para cima. Confira a sequência 1, 2, 3, 4 antes de baixar.",
+      tipsHeading: "O que conferir antes de baixar",
+      tips: [
+        "Abra as miniaturas para conferir a capa, o início de cada seção e os anexos.",
+        "Confira o total de páginas e a sequência no arquivo baixado."
+      ],
+      relatedHeading: "Outras ferramentas para organizar o PDF",
+      links: [
+        { slug: "extract-pdf-pages", label: "Extrair páginas de PDF", description: "Salvar apenas as páginas selecionadas em outro PDF." },
+        { slug: "delete-pdf-pages", label: "Excluir páginas de PDF", description: "Retirar páginas repetidas ou em branco." },
+        { slug: "rotate-pdf", label: "Girar PDF", description: "Corrigir páginas de lado ou de cabeça para baixo." }
+      ]
+    },
     "extract-pdf-pages": {
       heading: "Como extrair páginas específicas de um PDF",
       paragraphs: [
@@ -31,12 +52,12 @@ const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
       tips: [
         "Confira os números das páginas e a sequência desejada.",
         "Se precisar de vários PDFs separados, use Dividir PDF.",
-        "Se quiser organizar todas as páginas sem excluir nenhuma, use Reordenar páginas."
+        "Para mudar a sequência do documento inteiro, use Organizar páginas de PDF."
       ],
       relatedHeading: "Outras formas de organizar páginas",
       links: [
         { slug: "split-pdf", label: "Dividir PDF", description: "Salvar páginas como arquivos separados." },
-        { slug: "reorder-pdf-pages", label: "Reordenar páginas PDF", description: "Alterar a sequência das páginas." },
+        { slug: "reorder-pdf-pages", label: "Organizar páginas de PDF", description: "Alterar a sequência das páginas." },
         { slug: "merge-pdf", label: "Juntar PDF", description: "Combinar documentos em um só PDF." }
       ]
     },

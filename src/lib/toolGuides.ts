@@ -90,12 +90,12 @@ const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
     "redact-pdf": {
       heading: "Gevoelige informatie veilig uit een PDF verwijderen",
       paragraphs: [
-        "Een zwart vlak boven een naam betekent niet altijd dat de onderliggende tekst weg is. Gebruik daarom de speciale anonimiseertool in plaats van een gewone vorm of annotatie wanneer je persoonlijke gegevens wilt afschermen.",
-        "Markeer de gevoelige gebieden op iedere pagina en bekijk de selectie zorgvuldig. De tool maakt vervolgens een nieuwe afgevlakte PDF met pagina-afbeeldingen. Daarbij verdwijnen oorspronkelijke tekstlagen en bijlagen; links en interactieve velden blijven niet behouden.",
-        "Werk met een kopie en controleer het gedownloade resultaat voordat je het deelt. Deze tool ondersteunt maximaal 50 pagina's en 100 MB."
+        "Je kunt zowel een PDF met selecteerbare tekst als een gescande PDF anonimiseren. Markeer persoonsgegevens zelf op elke pagina, bijvoorbeeld namen, adressen, handtekeningen of rekeningnummers. Controleer ook gegevens die zichtbaar zijn in afbeeldingen of stempels.",
+        "De tool maakt op je apparaat een nieuwe PDF en verwerkt de zwarte vlakken in de pagina-afbeeldingen. De oorspronkelijke tekstlaag, documentgegevens, bijlagen, links en interactieve velden gaan niet mee. Ook zichtbare tekst buiten de zwarte vlakken kun je in de nieuwe PDF niet meer selecteren.",
+        "De tool verwerkt bestanden tot 50 pagina’s en 100 MB. Controleer de gedownloade kopie op leesbare gegevens die je wilde afschermen voordat je het bestand deelt."
       ],
       exampleHeading: "Voorbeeld: een factuur anonimiseren",
-      example: "Je wilt een factuur delen zonder adres en rekeningnummer. Markeer beide gegevens op alle relevante pagina's, maak de geanonimiseerde kopie en controleer of je de tekst niet kunt selecteren of terugvinden.",
+      example: "Je wilt een factuur delen met behoud van de bedragen. Markeer het klantadres en rekeningnummer, ook als die in de voettekst of in een betaalstrook terugkomen. Open de nieuwe PDF en controleer visueel of de gemarkeerde gegevens volledig onleesbaar zijn en de bedragen leesbaar blijven.",
       tipsHeading: "Belangrijk bij anonimiseren",
       tips: [
         "Controleer ook kop- en voetteksten en eventuele herhalingen van gegevens.",

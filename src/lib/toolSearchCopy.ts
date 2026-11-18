@@ -37,10 +37,10 @@ const copy: Record<SupportedLocale, Record<string, readonly [string, string, str
       "Open je PDF, klik op de tekst die de editor herkent en typ de vervanging. Pas de vormgeving aan en controleer het resultaat vóór je downloadt. Voor het veilig verwijderen van persoonsgegevens gebruik je de anonimiseertool."
     ],
     "redact-pdf": [
-      "PDF Anonimiseren Gratis — Gegevens Verwijderen",
-      "Anonimiseer je PDF gratis. Markeer persoonsgegevens, controleer de afgeschermde gebieden en download een afgevlakte kopie zonder account.",
-      "Hoe verwijder ik persoonsgegevens uit een PDF?",
-      "Open je PDF, markeer namen, adressen of rekeningnummers en controleer alle afgeschermde gebieden. Maak de geanonimiseerde PDF en controleer de download. Alle pagina’s worden afbeeldingen; oorspronkelijke tekstlagen en bijlagen worden niet meegenomen."
+      "PDF anonimiseren – gratis online zwartlakken",
+      "Lak namen, adressen en rekeningnummers zwart in je PDF. Controleer de gemarkeerde gebieden en download gratis een nieuwe kopie zonder account.",
+      "Hoe kan ik een PDF online anonimiseren?",
+      "Open je PDF en trek een kader om elk gegeven dat je wilt zwartlakken. Controleer de gemarkeerde gebieden, kies Geanonimiseerde PDF maken en bekijk de download voordat je het bestand deelt. De tool maakt van alle pagina’s afbeeldingen waarin de zwarte vlakken zijn verwerkt."
     ],
     "ocr-pdf": [
       "OCR PDF gratis online – PDF-tekst herkennen",

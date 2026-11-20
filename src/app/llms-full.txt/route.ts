@@ -50,7 +50,7 @@ ${activeTools}
 ## Positioning
 - Category: free online PDF editor.
 - Main audience: people who need fast PDF edits in a browser.
-- Published search language: English. Additional European language versions remain available for review but are not currently advertised for indexing.
+- The localized homepages listed above and their tool pages are included in the page sitemap.
 - Important claim: the editor is free for the core editing workflow.
 
 ## Excluded From Public Product Discovery

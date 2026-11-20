@@ -43,6 +43,7 @@ ${toolPages}
 - Add new text, images, signatures, highlights, drawings, and shapes.
 - Adjust text styling, boldness, spacing, color, and placement.
 - Export edited PDFs from the web app.
+- Extract selectable PDF text to a plain-text file, or use OCR for scanned pages.
 
 ## Machine-Readable SEO
 - [Sitemap index](${siteUrl}/sitemap.xml)

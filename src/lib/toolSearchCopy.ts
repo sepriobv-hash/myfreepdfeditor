@@ -178,6 +178,12 @@ const copy: Record<SupportedLocale, Record<string, readonly [string, string, str
     ]
   },
   "pt-BR": {
+    "split-pdf": [
+      "Dividir PDF online grátis",
+      "Separe todas as páginas do PDF ou selecione quais deseja. Cada página vira um PDF individual. Baixe os arquivos pelo navegador, sem cadastro.",
+      "Como separar um PDF por página?",
+      "Escolha o PDF e deixe o campo de páginas em branco para separar todas. Para separar apenas algumas, digite uma lista ou um intervalo, como 1-3,5. Uma página é baixada como PDF. Duas ou mais são baixadas juntas em um ZIP."
+    ],
     "reorder-pdf-pages": [
       "Organizar páginas de PDF online grátis",
       "Mude a ordem das páginas do PDF com as setas nas miniaturas. Confira a sequência e baixe uma nova cópia direto do navegador, sem cadastro.",

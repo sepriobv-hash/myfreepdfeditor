@@ -57,6 +57,7 @@ test('compression sample is a real PDF and uses understandable file sizes', asyn
 
 test('priority SEO guides provide unique localized help and crawlable related-tool links', async ({ request }) => {
  const priorities = [
+  { locale: 'pt-BR', slug: 'split-pdf', heading: 'Como dividir um PDF em arquivos de uma página', next: 'extract-pdf-pages' },
   { locale: 'pt-BR', slug: 'extract-pdf-pages', heading: 'Como extrair páginas específicas de um PDF', next: 'split-pdf' },
   { locale: 'pt-BR', slug: 'scanned-pdf-to-text', heading: 'Como extrair texto de um PDF digitalizado', next: 'ocr-pdf' },
   { locale: 'nl', slug: 'ocr-pdf', heading: 'Een gescande PDF doorzoekbaar maken met OCR', next: 'rotate-pdf' },

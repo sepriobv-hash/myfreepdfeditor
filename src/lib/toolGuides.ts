@@ -18,6 +18,26 @@ export type ToolGuide = {
 
 const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
   "pt-BR": {
+    "split-pdf": {
+      heading: "Como dividir um PDF em arquivos de uma página",
+      paragraphs: [
+        "Abra o PDF no navegador. Em Páginas a processar, digite os números das páginas que você quer separar. Use vírgulas para páginas avulsas e hífen para um intervalo. Deixe o campo em branco para dividir o documento inteiro.",
+        "Clique em Criar arquivo e depois em Baixar arquivo. Se você selecionar várias páginas, extraia o ZIP para abrir os PDFs individuais. Para reunir páginas selecionadas em um único PDF, use a ferramenta de extração."
+      ],
+      exampleHeading: "Exemplo prático com recibos digitalizados",
+      example: "Você tem cinco recibos digitalizados em um único PDF, um por página. Digite 2-4 para baixar um ZIP com três PDFs, um para cada recibo selecionado.",
+      tipsHeading: "Limites e seleção de páginas",
+      tips: [
+        "O arquivo de origem pode ter até 100 páginas e 100 MB.",
+        "Para baixar somente a página 5 como PDF, digite 5 no campo de seleção."
+      ],
+      relatedHeading: "Outras formas de trabalhar com as páginas",
+      links: [
+        { slug: "extract-pdf-pages", label: "Extrair páginas de PDF", description: "Salvar as páginas escolhidas juntas em um novo PDF." },
+        { slug: "reorder-pdf-pages", label: "Organizar páginas de PDF", description: "Alterar a sequência das páginas do documento." },
+        { slug: "merge-pdf", label: "Juntar PDF", description: "Combinar vários arquivos PDF em um só." }
+      ]
+    },
     "reorder-pdf-pages": {
       heading: "Como mudar a ordem das páginas de um PDF",
       paragraphs: [
@@ -56,7 +76,7 @@ const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
       ],
       relatedHeading: "Outras formas de organizar páginas",
       links: [
-        { slug: "split-pdf", label: "Dividir PDF", description: "Salvar páginas como arquivos separados." },
+        { slug: "split-pdf", label: "Dividir PDF por página", description: "Baixar um PDF individual para cada página selecionada." },
         { slug: "reorder-pdf-pages", label: "Organizar páginas de PDF", description: "Alterar a sequência das páginas." },
         { slug: "merge-pdf", label: "Juntar PDF", description: "Combinar documentos em um só PDF." }
       ]

@@ -17,7 +17,7 @@ for (const name of await readdir(
       join(dest, "ocr", name),
     );
 }
-for (const lang of ["eng", "nld", "deu", "fra", "spa", "ita"])
+for (const lang of ["eng", "nld", "deu", "fra", "spa", "ita", "por"])
   await copyFile(
     join(
       root,
@@ -34,7 +34,7 @@ for (const weight of [400, 700])
     join(dest, `fonts/noto-${weight}.woff`),
   );
 console.log(
-  "Prepared same-origin OCR engines, six language packs and document fonts.",
+  "Prepared same-origin OCR engines, language packs and document fonts.",
 );
 
 await mkdir(join(dest, "licenses"), { recursive: true });

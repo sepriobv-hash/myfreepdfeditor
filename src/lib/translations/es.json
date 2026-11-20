@@ -396,7 +396,7 @@
   "Select the pages, draw the area to keep and review the exported PDF.": "Selecciona las páginas, dibuja el área que conservar y revisa el PDF exportado.",
   "OCR PDF": "Reconocer texto de PDF",
   "Turn scanned PDF pages into a searchable PDF and downloadable text, using recognition on your device.": "Convierte páginas escaneadas en un PDF buscable y texto descargable mediante reconocimiento en tu dispositivo.",
-  "Up to 20 pages and 100 MB. English, Dutch, German, French, Spanish and Italian are supported. Review recognition errors.": "Hasta 20 páginas y 100 MB. Se admiten inglés, neerlandés, alemán, francés, español e italiano. Revisa los errores de reconocimiento.",
+  "Up to 20 pages and 100 MB. Choose the document language and review the recognized text.": "Hasta 20 páginas y 100 MB. Elige el idioma del documento y revisa el texto reconocido.",
   "Choose the document language and pages, then recognize and review the text.": "Elige el idioma y las páginas, reconoce el texto y revísalo.",
   "Fill PDF forms": "Rellenar formularios PDF",
   "Complete interactive text fields, checkboxes and choices. Keep the fields editable or flatten the finished form.": "Completa campos de texto, casillas y opciones interactivas. Mantén los campos editables o aplana el formulario terminado.",

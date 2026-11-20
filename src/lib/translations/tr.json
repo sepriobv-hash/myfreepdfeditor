@@ -396,7 +396,7 @@
   "Select the pages, draw the area to keep and review the exported PDF.": "Seçenekleri ayarlayın ve önizlemeyi kontrol edin.",
   "OCR PDF": "OCR PDF: metin tanı",
   "Turn scanned PDF pages into a searchable PDF and downloadable text, using recognition on your device.": "Taranmış PDF sayfalarını aranabilir hale getirin.",
-  "Up to 20 pages and 100 MB. English, Dutch, German, French, Spanish and Italian are supported. Review recognition errors.": "Up to 20 pages and 100 MB. English, Dutch, German, French, Spanish and Italian are supported. Review recognition errors.",
+  "Up to 20 pages and 100 MB. Choose the document language and review the recognized text.": "En fazla 20 sayfa ve 100 MB. Belge dilini seçin ve tanınan metni kontrol edin.",
   "Choose the document language and pages, then recognize and review the text.": "Seçenekleri ayarlayın ve önizlemeyi kontrol edin.",
   "Fill PDF forms": "PDF form doldur",
   "Complete interactive text fields, checkboxes and choices. Keep the fields editable or flatten the finished form.": "PDF formlarındaki metin alanlarını ve kutucukları doldurun.",

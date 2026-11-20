@@ -62,17 +62,16 @@ const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
     "extract-pdf-pages": {
       heading: "Como extrair páginas específicas de um PDF",
       paragraphs: [
-        "Use o extrator de PDF gratuito para salvar só as páginas que você precisa. Você pode extrair uma única página, escolher páginas fora de sequência ou salvar um intervalo inteiro. O navegador cria um novo PDF e mantém o arquivo original intacto.",
-        "Selecione o PDF e digite os números das páginas no campo de seleção. Use vírgulas para páginas avulsas (1,3,7) e um hífen para um intervalo (2-5). Você também pode alterar a ordem, por exemplo 5,1-2. Confira o resultado antes de baixar o novo PDF.",
-        "Extrair páginas não é o mesmo que dividir PDF: a extração reúne a seleção em um único arquivo; a divisão gera arquivos separados. O limite desta ferramenta é de 100 páginas e 100 MB."
+        "Para enviar só parte de um contrato ou relatório, reúna as páginas que interessam em um PDF separado. Confira os números das páginas no leitor de PDF. Use a posição de cada página no arquivo, pois a numeração impressa pode começar depois da capa.",
+        "Digite 1,3,7 para selecionar páginas avulsas ou 2-5 para selecionar um intervalo. Se quiser baixar um PDF por página, use a ferramenta Dividir PDF."
       ],
       exampleHeading: "Exemplo prático: extrair páginas de um contrato",
       example: "Você tem um contrato de 12 páginas e só precisa enviar as páginas 2, 4 e 11. Selecione o documento, informe 2,4,11 e crie um novo PDF de três páginas. O contrato original continua intacto.",
       tipsHeading: "Antes de baixar",
       tips: [
-        "Confira os números das páginas e a sequência desejada.",
-        "Se precisar de vários PDFs separados, use Dividir PDF.",
-        "Para mudar a sequência do documento inteiro, use Organizar páginas de PDF."
+        "Use uma vírgula para combinar páginas e intervalos, como 2,5-7.",
+        "Deixe o campo em branco para incluir todas as páginas.",
+        "Abra o arquivo baixado para conferir a seleção e a sequência."
       ],
       relatedHeading: "Outras formas de organizar páginas",
       links: [
@@ -86,10 +85,10 @@ const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
       paragraphs: [
         "Um PDF digitalizado pode conter somente imagens das páginas. Por isso, copiar o texto normalmente não funciona. O reconhecimento óptico de caracteres (OCR) identifica letras e palavras nessas imagens e permite baixar o conteúdo como arquivo TXT.",
         "Escolha o PDF digitalizado, selecione o idioma do texto e as páginas e execute o reconhecimento. Revise especialmente nomes, números e tabelas: a qualidade do resultado depende da nitidez e da orientação do documento. O arquivo TXT não mantém a formatação original.",
-        "Importante: o OCR desta ferramenta oferece inglês, neerlandês, alemão, francês, espanhol e italiano, mas ainda não reconhece português. O limite é de 20 páginas e 100 MB."
+        "Para documentos em português, mantenha Português como idioma do documento. Você pode processar digitalizações de até 20 páginas e 100 MB."
       ],
       exampleHeading: "Exemplo prático: copiar texto de uma digitalização",
-      example: "Se você recebeu uma carta digitalizada em espanhol e precisa aproveitar um parágrafo, selecione espanhol, reconheça as páginas e confira o TXT antes de copiar o trecho. Para pesquisar dentro de um PDF com a aparência original, use OCR PDF.",
+      example: "Se você recebeu uma nota fiscal digitalizada em português, selecione a página com os itens, mantenha Português e clique em Criar arquivo. Compare os valores e a acentuação com a imagem antes de copiar o texto ou baixar o TXT.",
       tipsHeading: "Quando o reconhecimento falha",
       tips: [
         "Tente um documento mais nítido e corretamente orientado.",
@@ -98,7 +97,7 @@ const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
       ],
       relatedHeading: "Ferramentas para texto e digitalizações",
       links: [
-        { slug: "ocr-pdf", label: "OCR PDF", description: "Criar um PDF pesquisável nos idiomas disponíveis." },
+        { slug: "ocr-pdf", label: "OCR de PDF em português", description: "Criar um PDF pesquisável a partir da digitalização." },
         { slug: "pdf-to-word", label: "PDF para Word", description: "Converter documentos em DOCX para edição." },
         { slug: "extract-pdf-pages", label: "Extrair páginas de PDF", description: "Selecionar somente as páginas necessárias." }
       ]
@@ -109,7 +108,7 @@ const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
       heading: "Een gescande PDF doorzoekbaar maken met OCR",
       paragraphs: [
         "Kun je in je PDF geen tekst selecteren of een woord vinden met Ctrl+F of Cmd+F? Dan bestaat de pagina mogelijk uit een scan. OCR herkent de letters en maakt een doorzoekbare PDF met behoud van de pagina-afbeeldingen. Kies TXT als je alleen de herkende tekst nodig hebt.",
-        "Open je PDF, kies de documenttaal en de pagina's en start de herkenning. Nederlands, Engels, Duits, Frans, Spaans en Italiaans worden ondersteund. Controleer achteraf vooral namen en bedragen; scheve of onscherpe scans geven sneller fouten.",
+        "Open je PDF, kies de documenttaal en de pagina's en start de herkenning. Controleer achteraf vooral namen en bedragen. Scheve of onscherpe scans geven sneller fouten.",
         "De OCR-tool ondersteunt maximaal 20 pagina's en 100 MB. Wil je alleen de herkende tekst als TXT opslaan, kies dan de afzonderlijke scan-naar-tekstfunctie."
       ],
       exampleHeading: "Voorbeeld: tekst zoeken in een gescande brief",

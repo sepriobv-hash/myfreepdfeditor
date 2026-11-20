@@ -197,22 +197,22 @@ const copy: Record<SupportedLocale, Record<string, readonly [string, string, str
       "Abra o PDF, marque nomes, endereços ou números de conta e revise todas as máscaras. Crie o PDF tarjado e confira o arquivo baixado. As páginas viram imagens; camadas de texto e anexos originais são excluídos."
     ],
     "ocr-pdf": [
-      "OCR PDF Grátis — Tornar Digitalizações Pesquisáveis",
-      "Torne um PDF digitalizado pesquisável e baixe o texto reconhecido grátis. Selecione um idioma disponível e processe as páginas no seu dispositivo.",
-      "Como tornar um PDF digitalizado pesquisável?",
-      "Escolha o PDF, um dos idiomas disponíveis e as páginas. Execute o reconhecimento e baixe o PDF pesquisável ou o texto. Confira nomes e números na digitalização. O reconhecimento em português ainda não está disponível."
+      "OCR de PDF em português online grátis",
+      "Reconheça texto em português e torne seu PDF digitalizado pesquisável. Escolha as páginas e baixe o PDF ou o texto no navegador.",
+      "Como deixar um PDF digitalizado em português pesquisável?",
+      "Abra o PDF, selecione Português como idioma do documento e escolha as páginas. Clique em Criar arquivo e baixe o PDF pesquisável. Confira nomes e números com a digitalização."
     ],
     "extract-pdf-pages": [
       "Extrair páginas de PDF grátis online",
-      "Extraia uma página, várias páginas ou um intervalo de um PDF. Escolha a ordem e baixe um novo arquivo com apenas as páginas selecionadas, sem cadastro.",
-      "Como extrair uma ou mais páginas de um PDF online?",
-      "Selecione o arquivo e digite 3 para uma página, 2-5 para um intervalo ou 5,1-3 para mudar a ordem. A extração gera um PDF com a seleção; a ferramenta Dividir PDF cria arquivos separados. O original não muda. Limite: 100 páginas e 100 MB."
+      "Use o extrator de PDF grátis para salvar páginas avulsas ou um intervalo em um único arquivo. Escolha a ordem e baixe o novo PDF sem cadastro.",
+      "Como salvar só uma página de um PDF?",
+      "Abra o PDF e digite o número da página, por exemplo 3, no campo Páginas a processar. Clique em Criar arquivo e baixe o PDF com a página selecionada. Para salvar várias páginas juntas, use uma lista como 1,3,5 ou um intervalo como 2-5."
     ],
     "scanned-pdf-to-text": [
-      "Extrair Texto de PDF Digitalizado Grátis — OCR",
-      "Extraia texto de PDF digitalizado e salve em TXT com OCR no navegador. Funciona em seis idiomas disponíveis; o reconhecimento de texto em português ainda não é suportado.",
-      "Como extrair texto de um PDF digitalizado?",
-      "Envie a digitalização, escolha entre inglês, neerlandês, alemão, francês, espanhol e italiano e reconheça o texto. Revise nomes e números antes de baixar o TXT. Para manter as páginas em PDF pesquisável, use OCR PDF; o reconhecimento em português ainda não está disponível."
+      "Converter PDF digitalizado em texto grátis",
+      "Converta um PDF digitalizado em texto com OCR em português. Revise o resultado, copie o texto ou baixe um arquivo TXT direto do navegador.",
+      "Como converter um PDF digitalizado em texto em português?",
+      "Abra o PDF e escolha Português como idioma do documento. Selecione as páginas, clique em Criar arquivo e revise o texto reconhecido. Você pode copiar o texto ou baixá-lo como TXT. Para pesquisar dentro do próprio PDF, use a ferramenta OCR PDF."
     ]
   },
   "id": {

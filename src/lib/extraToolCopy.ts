@@ -1,7 +1,14 @@
 import type { AddedLocale } from "./extraLocalePacks";
 
+type ExtraToolCopy = {
+  title: string;
+  description: string;
+  steps?: string[];
+  limitation?: string;
+};
+
 /** Human-authored SEO titles and concise introductions for every live PDF tool. */
-export const extraToolCopy: Record<AddedLocale,Record<string,{title:string;description:string}>> = {
+export const extraToolCopy: Record<AddedLocale, Record<string, ExtraToolCopy>> = {
   "pt-BR": {
     "edit-pdf": {
       "title": "Editar PDF online grátis",
@@ -57,7 +64,13 @@ export const extraToolCopy: Record<AddedLocale,Record<string,{title:string;descr
     },
     "extract-pdf-pages": {
       "title": "Extrair páginas de PDF",
-      "description": "Selecione páginas específicas para criar um novo documento PDF."
+      "description": "Salve só as páginas escolhidas, na ordem desejada, em um único PDF.",
+      "steps": [
+        "Escolha o PDF com as páginas que você quer extrair.",
+        "Em Páginas a processar, digite uma página, uma lista ou um intervalo. Use 5,1-2 para salvar as páginas 5, 1 e 2 nessa ordem.",
+        "Clique em Criar arquivo e baixe o novo PDF com as páginas selecionadas."
+      ],
+      "limitation": "Até 100 páginas e 100 MB. Numere a partir de 1 e inclua cada página apenas uma vez por seleção."
     },
     "jpg-to-pdf": {
       "title": "Converter JPG em PDF",
@@ -77,7 +90,8 @@ export const extraToolCopy: Record<AddedLocale,Record<string,{title:string;descr
     },
     "ocr-pdf": {
       "title": "OCR PDF: reconhecer texto",
-      "description": "Reconheça texto em páginas digitalizadas e gere um PDF pesquisável."
+      "description": "Reconheça texto em português e gere um PDF pesquisável a partir de páginas digitalizadas.",
+      "limitation": "Até 20 páginas e 100 MB. Escolha o idioma do documento e revise o texto reconhecido."
     },
     "fill-pdf": {
       "title": "Preencher formulários PDF",
@@ -117,7 +131,8 @@ export const extraToolCopy: Record<AddedLocale,Record<string,{title:string;descr
     },
     "scanned-pdf-to-text": {
       "title": "Extrair texto de PDF digitalizado",
-      "description": "Reconheça o texto de uma digitalização e baixe um arquivo TXT."
+      "description": "Reconheça texto em português em um PDF digitalizado e baixe um arquivo TXT.",
+      "limitation": "Até 20 páginas e 100 MB. O TXT contém apenas texto simples."
     }
   },
   "id": {

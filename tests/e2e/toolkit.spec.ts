@@ -48,10 +48,13 @@ async function create(page: Page) {
     page.getByRole("heading", { name: "Ready to download", exact: true }),
   ).toBeVisible({ timeout: 90000 });
 }
-async function scannedInvoice() {
+async function scannedInvoice(
+  heading = "HELLO INVOICE 104",
+  detail = "Payment total 250",
+) {
   const png = await sharp(
     Buffer.from(
-      '<svg width="1200" height="1600" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="white"/><text x="100" y="200" font-family="sans-serif" font-size="64" fill="black">HELLO INVOICE 104</text><text x="100" y="320" font-family="sans-serif" font-size="48" fill="black">Payment total 250</text></svg>',
+      `<svg width="1200" height="1600" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="white"/><text x="100" y="200" font-family="sans-serif" font-size="64" fill="black">${heading}</text><text x="100" y="320" font-family="sans-serif" font-size="48" fill="black">${detail}</text></svg>`,
     ),
   )
     .png()
@@ -531,10 +534,10 @@ test("new Dutch tools preserve locale across results and work on narrow mobile s
   await expect(page.locator("html")).toHaveAttribute("lang", "nl");
 });
 
-test("all six OCR language packs and document fonts are served locally", async ({
+test("all OCR language packs and document fonts are served locally", async ({
   request,
 }) => {
-  for (const lang of ["eng", "nld", "deu", "fra", "spa", "ita"]) {
+  for (const lang of ["eng", "nld", "deu", "fra", "spa", "ita", "por"]) {
     const path = `/tool-assets/ocr/${lang}.traineddata.gz`;
     const response = await request.head(path);
     expect(response.status()).toBe(200);
@@ -655,6 +658,30 @@ test("scan-to-text produces a readable TXT download", async ({page}) => {
   const file = await pending;
   expect(file.suggestedFilename()).toBe("sample.txt");
   expect(await readFile((await file.path())!,"utf8")).toContain("INVOICE 104");
+});
+
+test("Brazilian OCR defaults to Portuguese and preserves accents in TXT and searchable PDF", async ({ page }) => {
+  test.setTimeout(120_000);
+  const scan = await scannedInvoice("NOTA FISCAL 104", "Informação de pagamento");
+  expect(textOf(scan).trim()).toBe("");
+
+  for (const slug of ["scanned-pdf-to-text", "ocr-pdf"]) {
+    await page.goto(`/pt-BR/${slug}`);
+    await page.locator("input[type=file]").setInputFiles({
+      name: "nota.pdf",
+      mimeType: "application/pdf",
+      buffer: scan,
+    });
+    const language = page.getByLabel("Idioma do documento");
+    await expect(language).toHaveValue("pt-BR");
+    await expect(language.locator("option:checked")).toHaveText("Português");
+    await page.getByRole("button", { name: "Criar arquivo", exact: true }).click();
+    await expect(page.getByRole("heading", { name: "Pronto para baixar", exact: true })).toBeVisible({ timeout: 55_000 });
+    const output = await download(page, "Baixar arquivo");
+    const text = slug === "ocr-pdf" ? textOf(output) : output.toString("utf8");
+    expect(text).toContain("NOTA FISCAL 104");
+    expect(text).toContain("Informação de pagamento");
+  }
 });
 
 test("shape and duplicate-page routes open the editor for the selected task", async ({page}) => {

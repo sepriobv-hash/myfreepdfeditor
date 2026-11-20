@@ -15,7 +15,10 @@ export const ocrLanguages = {
   fr: "fra",
   es: "spa",
   it: "ita",
+  "pt-BR": "por",
 } as const;
+
+export type OcrLanguage = keyof typeof ocrLanguages;
 
 function abortable<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -35,7 +38,7 @@ function abortable<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> {
 export async function recognizePdf(
   bytes: ArrayBuffer,
   name: string,
-  language: keyof typeof ocrLanguages,
+  language: OcrLanguage,
   selection: string,
   job: Job,
   textOnly = false,

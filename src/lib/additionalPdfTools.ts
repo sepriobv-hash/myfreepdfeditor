@@ -92,7 +92,7 @@ export const additionalToolContent = [
     intro:
       "Turn scanned PDF pages into a searchable PDF and downloadable text, using recognition on your device.",
     limit:
-      "Up to 20 pages and 100 MB. English, Dutch, German, French, Spanish and Italian are supported. Review recognition errors.",
+      "Up to 20 pages and 100 MB. Choose the document language and review the recognized text.",
     action:
       "Choose the document language and pages, then recognize and review the text.",
   },
@@ -209,7 +209,7 @@ export const additionalToolContent = [
     name: "Convert scanned PDF to text",
     intro: "Recognize the text on scanned pages and download a plain TXT file for copying, searching or editing.",
     example: "Copy a paragraph from a scanned letter into a message.",
-    limit: "Up to 20 pages and 100 MB. English, Dutch, German, French, Spanish and Italian are supported. Review recognition errors.",
+    limit: "Up to 20 pages and 100 MB. Choose the document language and review the recognized text.",
     action: "Choose the document language and pages, then recognize and review the text.",
   },
 ] as const;

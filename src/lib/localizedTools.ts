@@ -26,18 +26,19 @@ function localizeToolBase(tool: PdfTool, locale: SupportedLocale): PdfTool {
     const entry = extraToolCopy[locale as AddedLocale][tool.slug];
     const pack = extraLocalePacks[locale as AddedLocale];
     if (!entry) throw new Error(`Missing localized tool: ${locale}/${tool.slug}`);
+    const limitation = entry.limitation ?? pack.tool[3];
     return {
       ...tool,
       title: entry.title, h1: entry.title, shortTitle: entry.title,
       description: entry.description, intro: entry.description,
       uploadTitle: entry.title, uploadDescription: entry.description,
       useCase: `${entry.description} ${pack.tool[2]}`,
-      limitation: pack.tool[3],
-      steps: [pack.tool[4], pack.tool[5], pack.tool[6]],
+      limitation,
+      steps: entry.steps ?? [pack.tool[4], pack.tool[5], pack.tool[6]],
       faqs: [
         { question: pack.tool[7], answer: pack.tool[8] },
         { question: pack.tool[9], answer: pack.tool[10] },
-        { question: pack.tool[11], answer: pack.tool[3] },
+        { question: pack.tool[11], answer: limitation },
       ],
     };
   }

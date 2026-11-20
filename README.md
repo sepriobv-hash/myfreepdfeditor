@@ -36,7 +36,7 @@ npm run build
 
 ## Notes
 
-The editor uses visual overlay editing. Existing PDF text is preserved in the original page content; new edits are added as exported PDF objects. Use the dedicated redaction tool to remove marked sensitive areas in a flattened copy. OCR recognizes printed text in English, Dutch, German, French, Spanish and Italian. Review exported files before sharing.
+The editor uses visual overlay editing. Existing PDF text is preserved in the original page content; new edits are added as exported PDF objects. Use the dedicated redaction tool to remove marked sensitive areas in a flattened copy. OCR recognizes printed text in English, Dutch, German, French, Spanish, Italian and Portuguese. Review exported files before sharing.
 
 Files are processed in browser memory by default. No upload API route is required for the core editor workflow.
 

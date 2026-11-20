@@ -504,6 +504,20 @@ test("target compression reports success while lossless mode retains selectable 
   ).toBeVisible();
 });
 
+test("the compression drop area accepts a dropped PDF", async ({ page }) => {
+  await page.goto("/compress-pdf");
+  const dataTransfer = await page.evaluateHandle(bytes => {
+    const transfer = new DataTransfer();
+    transfer.items.add(new File([new Uint8Array(bytes)], "dropped.pdf", { type: "application/pdf" }));
+    return transfer;
+  }, Array.from(await createDigitalPdf()));
+  const dropArea = page.getByRole("heading", { name: "Choose a PDF to compress", exact: true }).locator("..");
+  await dropArea.dispatchEvent("drop", { dataTransfer });
+  await expect(page.getByText("dropped.pdf", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Compress PDF", exact: true })).toBeEnabled();
+  await dataTransfer.dispose();
+});
+
 test("new Dutch tools preserve locale across results and work on narrow mobile screens", async ({
   page,
 }) => {
@@ -682,6 +696,38 @@ test("Brazilian OCR defaults to Portuguese and preserves accents in TXT and sear
     expect(text).toContain("NOTA FISCAL 104");
     expect(text).toContain("Informação de pagamento");
   }
+});
+
+test("PDF to text keeps page order and exports Unicode without using OCR", async ({ page }) => {
+  const pdf = await PDFDocument.create();
+  pdf.addPage().drawText("Café no relatório");
+  pdf.addPage().drawText("Segunda página");
+  pdf.addPage().drawText("Terceira página");
+
+  const ocrRequests: string[] = [];
+  page.on("request", request => {
+    if (request.url().includes("/tool-assets/ocr/")) ocrRequests.push(request.url());
+  });
+  await upload(page, "/pdf-to-text", Buffer.from(await pdf.save()));
+  await page.getByLabel("Pages to process").fill("3,1");
+  await create(page);
+  await expect(page.getByRole("textbox", { name: "Extracted text" })).toHaveValue("Terceira página\n\nCafé no relatório\n");
+  expect((await download(page)).toString("utf8")).toBe("Terceira página\n\nCafé no relatório\n");
+  expect(ocrRequests).toEqual([]);
+});
+
+test("image-only PDFs can continue to Dutch OCR from text extraction", async ({ page }) => {
+  await page.goto("/nl/pdf-to-text");
+  await page.locator("input[type=file]").setInputFiles({
+    name: "scan.pdf",
+    mimeType: "application/pdf",
+    buffer: await createScannedLikePdf(),
+  });
+  await page.getByRole("button", { name: "Bestand maken", exact: true }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "geen selecteerbare tekst" })).toBeVisible();
+  await page.getByRole("button", { name: "Gescande PDF naar tekst", exact: true }).click();
+  await expect(page).toHaveURL(/\/nl\/scanned-pdf-to-text$/);
+  await expect(page.getByText("scan.pdf", { exact: true })).toBeVisible();
 });
 
 test("shape and duplicate-page routes open the editor for the selected task", async ({page}) => {

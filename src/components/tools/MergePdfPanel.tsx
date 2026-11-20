@@ -1,4 +1,5 @@
 "use client";
+import { useFileDrop } from "@/hooks/useFileDrop";
 import { usePendingToolUpload } from "@/hooks/usePendingToolUpload";
 import { getLocalizedPath } from "@/lib/i18n";
 import { storePendingUpload } from "@/lib/editor/uploadHandoff";
@@ -27,11 +28,12 @@ export function MergePdfPanel() {
   const [continuing, setContinuing] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [files, setFiles] = useState<File[]>([]);
-  const [isDragging, setIsDragging] = useState(false);
   const [isMerging, setIsMerging] = useState(false);
   const [result, setResult] = useState<{ blob: Blob; name: string } | null>(null);
   const { notify } = useToast();
   usePendingToolUpload(file => addFiles([file]), () => notify(t("The temporary file is no longer available. Choose it again."), "error"));
+
+  const { dragging, dropProps } = useFileDrop(addFiles, isMerging);
 
   function addFiles(selectedFiles: File[]) {
     const pdfFiles = selectedFiles.filter(isPdfFile);
@@ -40,11 +42,12 @@ export function MergePdfPanel() {
     }
     if (pdfFiles.length === 0) return;
 
-    const existingKeys = new Set(files.map(fileKey));
-    const nextFiles = [
-      ...files,
-      ...pdfFiles.filter((file) => !existingKeys.has(fileKey(file))),
-    ].slice(0, MAX_FILES);
+    const filesByKey = new Map(files.map(file => [fileKey(file), file]));
+    for (const file of pdfFiles) {
+      const key = fileKey(file);
+      if (!filesByKey.has(key)) filesByKey.set(key, file);
+    }
+    const nextFiles = Array.from(filesByKey.values()).slice(0, MAX_FILES);
     const totalBytes = nextFiles.reduce((total, file) => total + file.size, 0);
 
     if (totalBytes > MAX_TOTAL_BYTES) {
@@ -52,7 +55,7 @@ export function MergePdfPanel() {
       return;
     }
 
-    if (nextFiles.length === MAX_FILES && files.length + pdfFiles.length > MAX_FILES) {
+    if (filesByKey.size > MAX_FILES) {
       notify(t("You can merge up to 30 PDFs at once."), "error");
     }
 
@@ -134,31 +137,22 @@ export function MergePdfPanel() {
   }
 
   return (
-    <div className="p-3 sm:p-5">
+    <div className="p-1.5 sm:p-3">
       <div
-        className={`flex min-h-52 flex-col items-center justify-center border-2 border-dashed px-6 py-8 text-center transition ${
-          isDragging ? "border-rose-500 bg-rose-50" : "border-rose-200 bg-rose-50/40"
+        className={`flex min-h-52 flex-col items-center justify-center rounded-lg border border-dashed px-4 py-6 text-center transition-colors sm:px-6 sm:py-8 ${
+          dragging ? "border-brand-500 bg-brand-50" : "border-[#b8ab9d] bg-paper"
         }`}
-        onDragEnter={(event) => {
-          event.preventDefault();
-          setIsDragging(true);
-        }}
-        onDragOver={(event) => event.preventDefault()}
-        onDragLeave={() => setIsDragging(false)}
-        onDrop={(event) => {
-          event.preventDefault();
-          setIsDragging(false);
-          addFiles(Array.from(event.dataTransfer.files));
-        }}
+        {...dropProps}
       >
-        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-white text-rose-600 shadow-sm">
+        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-brand-50 text-brand-700">
           <Files className="h-6 w-6" />
         </div>
         <h2 className="mt-4 text-xl font-semibold text-ink">{t("Choose PDF files to merge")}</h2>
-        <p className="mt-2 max-w-md text-sm leading-6 text-slate-600"> {t("Add two or more PDFs. Your files stay on this device while they are combined.")} </p>
+        <p className="mt-2 max-w-md text-sm leading-6 text-slate-600"> PDF · 2–{MAX_FILES} {t("files")} </p>
         <button
           type="button"
           className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700"
+          disabled={isMerging}
           onClick={() => {
             trackUsageEvent("upload_clicked", { source: "merge-pdf" });
             inputRef.current?.click();
@@ -171,6 +165,7 @@ export function MergePdfPanel() {
           type="file"
           accept="application/pdf,.pdf"
           multiple
+          disabled={isMerging}
           onChange={(event) => {
             addFiles(Array.from(event.target.files ?? []));
             event.currentTarget.value = "";
@@ -196,13 +191,13 @@ export function MergePdfPanel() {
                   <div className="truncate text-sm font-medium text-ink">{file.name}</div>
                   <div className="text-xs text-slate-500">{formatBytes(file.size)}</div>
                 </div>
-                <button type="button" title={t("Move up")} aria-label={t(t("Move up")) + ": " + file.name} className="p-2 text-slate-500 hover:text-ink disabled:opacity-30" disabled={index === 0} onClick={() => moveFile(index, -1)}>
+                <button type="button" title={t("Move up")} aria-label={t("Move up") + ": " + file.name} className="p-2 text-slate-500 hover:text-ink disabled:opacity-30" disabled={isMerging || index === 0} onClick={() => moveFile(index, -1)}>
                   <ArrowUp className="h-4 w-4" />
                 </button>
-                <button type="button" title={t("Move down")} aria-label={t(t("Move down")) + ": " + file.name} className="p-2 text-slate-500 hover:text-ink disabled:opacity-30" disabled={index === files.length - 1} onClick={() => moveFile(index, 1)}>
+                <button type="button" title={t("Move down")} aria-label={t("Move down") + ": " + file.name} className="p-2 text-slate-500 hover:text-ink disabled:opacity-30" disabled={isMerging || index === files.length - 1} onClick={() => moveFile(index, 1)}>
                   <ArrowDown className="h-4 w-4" />
                 </button>
-                <button type="button" title={t("Remove")} aria-label={t(t("Remove")) + ": " + file.name} className="p-2 text-slate-500 hover:text-rose-600" onClick={() => removeFile(index)}>
+                <button type="button" title={t("Remove")} aria-label={t("Remove") + ": " + file.name} className="p-2 text-slate-500 hover:text-rose-600" disabled={isMerging} onClick={() => removeFile(index)}>
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>

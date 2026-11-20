@@ -24,6 +24,7 @@ export function errorKey(error: unknown) {
       "INVALID_PAGES",
       "LIMIT",
       "NO_TEXT",
+      "NO_SELECTABLE_TEXT",
       "UNSUPPORTED_FONT",
       "INVALID_DOCX",
       "UNSUPPORTED_FORM",
@@ -36,6 +37,7 @@ export function errorKey(error: unknown) {
         LIMIT: "This file exceeds the browser processing limits.",
         NO_TEXT:
           "No selectable text was found. Run OCR first, or choose the page-image Word format.",
+        NO_SELECTABLE_TEXT: "These pages have no selectable text. Use scan-to-text for page images.",
         UNSUPPORTED_FONT:
           "This document contains characters the export font cannot render. Use the page-image Word format where available.",
         INVALID_DOCX:

@@ -4,18 +4,20 @@ import {
   ArrowDown,
   ArrowUp,
   CheckCircle2,
+  Copy,
   Download,
   FileUp,
   Loader2,
   X,
 } from "lucide-react";
 import { useLocale, useTranslation } from "@/components/i18n/LocaleProvider";
+import { useFileDrop } from "@/hooks/useFileDrop";
+import { usePendingToolUpload } from "@/hooks/usePendingToolUpload";
+import { useToast } from "@/components/ui/Toaster";
 import { getLocalizedPath } from "@/lib/i18n";
-import {
-  consumePendingUpload,
-  storePendingUpload,
-} from "@/lib/editor/uploadHandoff";
+import { storePendingUpload } from "@/lib/editor/uploadHandoff";
 import { cn, downloadBlob } from "@/lib/utils";
+import type { PdfTool } from "@/lib/pdfTools";
 import { fileSizeBucket, trackUsageEvent } from "@/lib/usage/client";
 import {
   checkCancelled,
@@ -31,18 +33,7 @@ import type { FormField } from "@/lib/pdf/toolkit/forms";
 import type { OcrLanguage } from "@/lib/pdf/toolkit/ocr";
 import { PdfPreview } from "./PdfPreview";
 
-export type ToolkitWorkflow =
-  | "split"
-  | "extract"
-  | "images-to-pdf"
-  | "pdf-to-images"
-  | "rotate"
-  | "crop"
-  | "ocr"
-  | "forms"
-  | "redact"
-  | "pdf-to-word"
-  | "word-to-pdf";
+type ToolkitWorkflow = Exclude<PdfTool["workflow"], "editor" | "merge" | "compress" | undefined>;
 const button =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-line bg-white px-4 py-2 text-sm font-semibold text-ink hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50";
 const ocrLanguageLabels: Record<OcrLanguage, string> = {
@@ -65,9 +56,12 @@ export function ToolkitPanel({
 }) {
   const t = useTranslation(),
     locale = useLocale();
+  const { notify } = useToast();
   const pngInput = slug === "png-to-pdf";
   const flattenForm = slug === "flatten-pdf-form";
-  const textOutput = slug === "scanned-pdf-to-text";
+  const plainText = workflow === "pdf-to-text";
+  const textOutput = plainText || slug === "scanned-pdf-to-text";
+  const textLabel = t(plainText ? "Extracted text" : "Recognized text");
   const [files, setFiles] = useState<File[]>([]),
     [bytes, setBytes] = useState<ArrayBuffer | null>(null),
     [count, setCount] = useState(0),
@@ -90,6 +84,7 @@ export function ToolkitPanel({
     [reading, setReading] = useState(false),
     [progress, setProgress] = useState(0),
     [error, setError] = useState(""),
+    [offerScan, setOfferScan] = useState(false),
     [result, setResult] = useState<Output | null>(null),
     [previewResult, setPreviewResult] = useState<ArrayBuffer | null>(null),
     [nextTool, setNextTool] = useState("/editor");
@@ -99,9 +94,9 @@ export function ToolkitPanel({
   const [manual, setManual] = useState({ x: 10, y: 10, width: 40, height: 15 });
   const abort = useRef<AbortController | null>(null),
     generation = useRef(0),
-    mounted = useRef(true),
-    handoff = useRef(false);
+    mounted = useRef(true);
   const fileInput = useRef<HTMLInputElement>(null);
+  const textPreview = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
     mounted.current = true;
     return () => {
@@ -121,6 +116,7 @@ export function ToolkitPanel({
     setResult(null);
     setPreviewResult(null);
     setError("");
+    setOfferScan(false);
   }
   async function choose(incoming: File[]) {
     const id = ++generation.current;
@@ -199,31 +195,13 @@ export function ToolkitPanel({
       if (id === generation.current && mounted.current) setReading(false);
     }
   }
-  useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get("uploadId");
-    if (!id || handoff.current || images || wordInput) return;
-    handoff.current = true;
-    void consumePendingUpload(id)
-      .then((file) => {
-        window.history.replaceState(
-          window.history.state,
-          "",
-          window.location.pathname,
-        );
-        if (file) void choose([file]);
-        else
-          setError(
-            t("The temporary file is no longer available. Choose it again."),
-          );
-      })
-      .catch(() =>
-        setError(
-          t("The temporary file is no longer available. Choose it again."),
-        ),
-      );
-    // The handoff is consumed exactly once, and always uses this route's initial workflow.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  usePendingToolUpload(
+    file => { void choose([file]); },
+    () => setError(t("The temporary file is no longer available. Choose it again.")),
+    !images && !wordInput,
+  );
+  const { dragging, dropProps } = useFileDrop(incoming => void choose(incoming), busy || reading);
+
   function addRect(r: Rect) {
     invalidate();
     setConfirmed(false);
@@ -235,7 +213,7 @@ export function ToolkitPanel({
       }));
   }
   async function run() {
-    if (!files.length || busy) return;
+    if (!files.length || abort.current) return;
     invalidate();
     setBusy(true);
     setProgress(0);
@@ -286,6 +264,9 @@ export function ToolkitPanel({
         } else if (workflow === "redact") {
           const { redactPdf } = await import("@/lib/pdf/toolkit/pages");
           output = await redactPdf(bytes, files[0].name, masks, job);
+        } else if (workflow === "pdf-to-text") {
+          const { pdfToText } = await import("@/lib/pdf/toolkit/text");
+          output = await pdfToText(bytes, files[0].name, selection, job);
         } else if (workflow === "ocr") {
           const { recognizePdf } = await import("@/lib/pdf/toolkit/ocr");
           output = await recognizePdf(
@@ -313,17 +294,43 @@ export function ToolkitPanel({
         outputSizeBucket: fileSizeBucket(output.blob.size),
       });
     } catch (e) {
-      if (mounted.current)
+      if (mounted.current) {
         setError(
           controller.signal.aborted
             ? t("Processing cancelled. Your original file is unchanged.")
             : t(errorKey(e)),
         );
+        setOfferScan(
+          plainText && !controller.signal.aborted && e instanceof Error && e.message === "NO_SELECTABLE_TEXT",
+        );
+      }
       if (!controller.signal.aborted)
         trackUsageEvent("export_failed", { source: slug });
     } finally {
       if (mounted.current) setBusy(false);
       abort.current = null;
+    }
+  }
+
+  async function continueTo(path: string, file: File) {
+    setContinuing(true);
+    try {
+      const id = await storePendingUpload(file);
+      window.location.assign(getLocalizedPath(locale, `${path}?uploadId=${encodeURIComponent(id)}`));
+    } catch (e) {
+      setError(t(errorKey(e)));
+      setContinuing(false);
+    }
+  }
+
+  async function copyText(text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      notify(t("Text copied."), "success");
+    } catch {
+      textPreview.current?.focus();
+      textPreview.current?.select();
+      notify(t("Select and copy the text manually."), "info");
     }
   }
   const hasArea =
@@ -338,38 +345,34 @@ export function ToolkitPanel({
     hasArea &&
     (workflow !== "forms" || (flattenForm ? fields.length > 0 : fields.some((f) => !f.readOnly)));
   return (
-    <div className="p-3 sm:p-5">
+    <div className="p-1.5 sm:p-3">
       {!files.length && (
         <div
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-            if (!busy && !reading)
-              void choose(Array.from(e.dataTransfer.files));
-          }}
-          className="flex min-h-72 flex-col items-center justify-center rounded-md border-2 border-dashed border-rose-200 bg-rose-50/30 px-5 py-7 text-center"
+          {...dropProps}
+          className={cn(
+            "flex min-h-52 flex-col items-center justify-center rounded-lg border border-dashed border-[#b8ab9d] bg-paper px-4 py-6 text-center transition-colors sm:px-6 sm:py-8",
+            dragging && "border-brand-500 bg-brand-50",
+          )}
         >
-          <FileUp aria-hidden="true" className="h-9 w-9 text-rose-700" />
+          <FileUp aria-hidden="true" className="size-8 text-brand-700" />
           <h2 className="mt-4 text-xl font-semibold">
             {t(
               pngInput ? "Choose PNG images" : images
                 ? "Choose JPG or PNG images"
                 : wordInput
                   ? "Choose a Word document"
-                  : "Choose PDF",
+                  : "Drop your PDF here",
             )}
           </h2>
-          <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">
-            {t(
-              images
+          {(images || wordInput) && (
+            <p className="mt-2 max-w-md text-sm leading-6 text-muted">
+              {t(images
                 ? "Up to 50 images, 100 MB in total. Reorder before creating your PDF."
-                : wordInput
-                  ? "DOCX files up to 30 MB. Conversion runs on this device."
-                  : "Your file stays on this device. Choose a PDF to see the available options.",
-            )}
-          </p>
+                : "DOCX files up to 30 MB. Conversion runs on this device.")}
+            </p>
+          )}
           <button
-            className={`${button} mt-5`}
+            className={`mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-50`}
             disabled={reading}
             onClick={() => fileInput.current?.click()}
           >
@@ -378,7 +381,7 @@ export function ToolkitPanel({
             ) : (
               <FileUp className="h-4 w-4" />
             )}
-            {t(reading ? "Reading document…" : "Choose files")}
+            {t(reading ? "Reading document…" : images || wordInput ? "Choose files" : "Choose PDF")}
           </button>
         </div>
       )}
@@ -862,7 +865,7 @@ export function ToolkitPanel({
             </div>
           )}
           <button
-            className={cn(button, "w-full border-rose-600 bg-rose-600 text-white hover:bg-rose-700")}
+            className={cn(button, "w-full border-brand-600 bg-brand-600 text-white hover:bg-brand-700")}
             disabled={!ready}
             onClick={() => void run()}
           >
@@ -894,12 +897,19 @@ export function ToolkitPanel({
         </div>
       )}
       {error && (
-        <p
-          role="alert"
-          className="mt-4 rounded-md border border-rose-200 bg-rose-50 p-3 text-sm leading-6 text-rose-900"
-        >
-          {error}
-        </p>
+        <div className="mt-4 rounded-md border border-brand-100 bg-brand-50 p-3 text-sm leading-6 text-brand-700">
+          <p role="alert">{error}</p>
+          {offerScan && files[0] && (
+            <button
+              type="button"
+              className="mt-2 min-h-10 text-left font-semibold underline"
+              disabled={continuing}
+              onClick={() => void continueTo(count > 20 ? "/extract-pdf-pages" : "/scanned-pdf-to-text", files[0])}
+            >
+              {t(count > 20 ? "Extract PDF pages" : "Convert scanned PDF to text")}
+            </button>
+          )}
+        </div>
       )}
       {result && !busy && (
         <div className="mt-5 space-y-4 rounded-md border border-emerald-200 bg-emerald-50 p-4">
@@ -929,16 +939,19 @@ export function ToolkitPanel({
           {result.text !== undefined && (
             <>
               <details open={textOutput || undefined}>
-                <summary className="cursor-pointer text-sm font-semibold">
-                  {t("Recognized text")}
-                </summary>
+                <summary className="cursor-pointer text-sm font-semibold">{textLabel}</summary>
                 <textarea
+                  ref={textPreview}
                   className={`${input} mt-3`}
                   readOnly
                   rows={8}
                   value={result.text}
-                  aria-label={t("Recognized text")}
+                  aria-label={textLabel}
                 />
+                <button type="button" className={`${button} mt-2`} onClick={() => void copyText(result.text ?? "")}>
+                  <Copy aria-hidden="true" size={16} />
+                  {t("Copy text")}
+                </button>
               </details>
               {!textOutput && <button
                 className={button}
@@ -1007,6 +1020,7 @@ export function ToolkitPanel({
                   {[
                     ["/editor", "PDF Editor"],
                     ["/ocr-pdf", "OCR PDF"],
+                    ["/pdf-to-text", "PDF to text"],
                     ["/pdf-to-word", "PDF to Word"],
                     ["/fill-pdf", "Fill PDF forms"],
                     ["/extract-pdf-pages", "Extract PDF pages"],
@@ -1023,22 +1037,7 @@ export function ToolkitPanel({
                 <button
                   className={button}
                   disabled={continuing}
-                  onClick={async () => {
-                    setContinuing(true);
-                    try {
-                      const id = await storePendingUpload(
-                        new File([result.blob], result.name, {
-                          type: "application/pdf",
-                        }),
-                      );
-                      window.location.assign(
-                        getLocalizedPath(locale, `${nextTool}?uploadId=${id}`),
-                      );
-                    } catch (e) {
-                      setError(t(errorKey(e)));
-                      setContinuing(false);
-                    }
-                  }}
+                  onClick={() => void continueTo(nextTool, new File([result.blob], result.name, { type: "application/pdf" }))}
                 >
                   {t("Continue")}
                 </button>

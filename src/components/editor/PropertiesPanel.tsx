@@ -1,7 +1,7 @@
 "use client";
 import { useTranslation } from "@/components/i18n/LocaleProvider";
 
-import { Copy, Layers, SendToBack, Trash2 } from "lucide-react";
+import { Copy, Layers, SendToBack, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useEditorStore } from "@/store/editorStore";
 import type { EditorObject } from "@/types/editor";
@@ -10,6 +10,7 @@ export function PropertiesPanel() {
   const t = useTranslation();
   const pages = useEditorStore((state) => state.pages);
   const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
+  const selectObject = useEditorStore((state) => state.selectObject);
   const updateObject = useEditorStore((state) => state.updateObject);
   const deleteObject = useEditorStore((state) => state.deleteObject);
   const duplicateObject = useEditorStore((state) => state.duplicateObject);
@@ -19,9 +20,9 @@ export function PropertiesPanel() {
 
   if (!selected) {
     return (
-      <aside className="hidden w-80 shrink-0 border-l border-line bg-white p-4 lg:block">
+      <aside className="hidden w-72 shrink-0 border-l border-line bg-white p-4 lg:block xl:w-80">
         <h2 className="text-sm font-semibold text-ink">{t("Properties")}</h2>
-        <div className="mt-8 rounded-md border border-dashed border-line bg-slate-50 p-5 text-center text-sm leading-6 text-slate-500"> {t("Select an object to edit its text, colors, opacity, size, and layer order.")} </div>
+        <p className="mt-3 text-sm leading-6 text-muted">{t("Select an object to edit its text, colors, opacity, size, and layer order.")}</p>
       </aside>
     );
   }
@@ -32,15 +33,20 @@ export function PropertiesPanel() {
   }
 
   return (
-    <aside className="max-h-56 w-full shrink-0 overflow-y-auto border-t border-line bg-white p-4 lg:max-h-none lg:w-80 lg:border-l lg:border-t-0 editor-scrollbar">
+    <aside className="max-h-[36dvh] w-full shrink-0 overflow-y-auto border-t border-line bg-white p-4 editor-scrollbar lg:max-h-none lg:w-72 lg:border-l lg:border-t-0 xl:w-80">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-sm font-semibold text-ink">{t("Properties")}</h2>
           <p className="text-xs capitalize text-slate-500">{t(({ text: "Text", rectangle: "Rectangle", circle: "Circle", line: "Line", drawing: "Draw", highlight: "Highlight", image: "Add image", signature: "Signature" })[selected.type])}</p>
         </div>
-        <Button title={t("Delete object")} variant="danger" onClick={() => deleteObject(selected.id)}>
-          <Trash2 className="h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button title={t("Delete object")} variant="danger" onClick={() => deleteObject(selected.id)}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+          <Button title={t("Close")} aria-label={t("Close")} variant="ghost" className="lg:hidden" onClick={() => selectObject(null)}>
+            <X aria-hidden="true" size={16} />
+          </Button>
+        </div>
       </div>
 
       <div className="space-y-4">

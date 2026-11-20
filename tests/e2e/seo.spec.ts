@@ -78,6 +78,10 @@ test("Dutch mobile directory fits the viewport, filters and keeps the selected l
  await page.getByRole("button", { name: "Filters wissen" }).click();
  await page.getByRole("combobox").selectOption("Convert");
  await page.getByRole("searchbox").fill("PNG");
+ await page.reload();
+ await expect(page.getByRole("searchbox")).toHaveValue("PNG");
+ await expect(page.getByRole("combobox")).toHaveValue("Convert");
+ await expect(page.locator('a[data-tool-slug="sign-pdf"]')).toHaveCount(0);
  await page.locator('a[data-tool-slug="pdf-to-png"]').click();
  await expect(page).toHaveURL(/\/nl\/pdf-to-png$/);
  await page.locator("header summary").click();

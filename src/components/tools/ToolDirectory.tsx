@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowUpDown, CheckSquare, ChevronRight, CircleCheck, Copy, Crop, FileImage, FileMinus2, FileOutput, Files, FileText, FileType2, FilePenLine, Highlighter, Image, Images, ListFilter, Minimize2, PenLine, Pencil, Replace, RotateCw, ScanText, Search, Shapes, Shield, Signature, Split, Type } from "lucide-react";
 import type { ToolCategory } from "@/lib/pdfTools";
 
@@ -17,15 +17,18 @@ const icons = {
   "split-pdf": Split, "extract-pdf-pages": FileOutput, "jpg-to-pdf": FileImage, "png-to-pdf": Images,
   "pdf-to-jpg": Image, "pdf-to-png": FileImage, "rotate-pdf": RotateCw, "crop-pdf": Crop, "ocr-pdf": ScanText,
   "fill-pdf": CheckSquare, "redact-pdf": Shield, "pdf-to-word": FileType2, "word-to-pdf": FileText,
-  "flatten-pdf-form": CircleCheck, "scanned-pdf-to-text": ScanText, "duplicate-pdf-pages": Copy, "add-shapes-to-pdf": Shapes,
+  "flatten-pdf-form": CircleCheck, "scanned-pdf-to-text": ScanText, "pdf-to-text": FileText, "duplicate-pdf-pages": Copy, "add-shapes-to-pdf": Shapes,
 } as const;
-const accents: Record<ToolCategory, string> = {
-  Edit: "bg-rose-50 text-rose-700", Sign: "bg-indigo-50 text-indigo-700", Organize: "bg-sky-50 text-sky-700",
-  Convert: "bg-teal-50 text-teal-700", Optimize: "bg-amber-50 text-amber-800", Protect: "bg-slate-100 text-slate-700", Annotate: "bg-violet-50 text-violet-700",
-};
-
 function normalize(text: string) {
-  return text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+  return text.toLowerCase()
+    .normalize("NFD")
+    .replace(/(\p{Script=Latin})\p{M}+/gu, "$1")
+    .replaceAll("ß", "ss")
+    .replaceAll("ı", "i")
+    .replaceAll("ł", "l")
+    .replaceAll("œ", "oe")
+    .replace(/[^\p{L}\p{N}\p{M}]+/gu, " ")
+    .trim();
 }
 
 export function ToolDirectory({ groups, heading, searchLabel, categoryLabel, allLabel, emptyLabel, clearLabel }: {
@@ -34,57 +37,110 @@ export function ToolDirectory({ groups, heading, searchLabel, categoryLabel, all
 }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
-  const terms = normalize(query).trim().split(/\s+/).filter(Boolean);
-  const visible = groups.filter(g => !category || g.category === category).map(g => ({
-    ...g, tools: g.tools.filter(tool => {
-      const content = normalize([tool.name, tool.description, g.label, tool.slug.replaceAll("-", " ")].join(" "));
-      return terms.every(term => content.includes(term));
-    }),
-  })).filter(g => g.tools.length);
+
+  useEffect(() => {
+    function readFilters() {
+      const params = new URLSearchParams(window.location.search);
+      const selected = params.get("category") ?? "";
+      setQuery((params.get("q") ?? "").slice(0, 120));
+      setCategory(groups.some(group => group.category === selected) ? selected : "");
+    }
+
+    readFilters();
+    window.addEventListener("popstate", readFilters);
+    return () => window.removeEventListener("popstate", readFilters);
+  }, [groups]);
+
+  function updateFilters(nextQuery: string, nextCategory: string) {
+    setQuery(nextQuery);
+    setCategory(nextCategory);
+    const url = new URL(window.location.href);
+    if (nextQuery.trim()) url.searchParams.set("q", nextQuery.trim());
+    else url.searchParams.delete("q");
+    if (nextCategory) url.searchParams.set("category", nextCategory);
+    else url.searchParams.delete("category");
+    window.history.replaceState(window.history.state, "", url);
+  }
+
+  const terms = normalize(query).split(/\s+/).filter(Boolean);
+  const visible = groups
+    .filter(group => !category || group.category === category)
+    .map(group => ({
+      ...group,
+      tools: group.tools.filter(tool => {
+        const text = normalize([tool.name, tool.description, group.label, tool.slug].join(" "));
+        return terms.every(term => text.includes(term));
+      }),
+    }))
+    .filter(group => group.tools.length > 0);
+
   return (
     <>
-      <section className="border-b border-line bg-white">
-        <div className="mx-auto max-w-7xl px-4 pb-5 pt-6 sm:px-6 sm:py-8 lg:flex lg:items-center lg:justify-between lg:gap-8 lg:px-8">
-          <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl">{heading}</h1>
-          <div className="mt-4 flex flex-wrap gap-2 sm:mt-5 lg:mt-0 lg:w-1/2">
-            <label className="flex min-h-11 min-w-0 flex-[2_1_11rem] items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 focus-within:border-brand-700 focus-within:ring-1 focus-within:ring-brand-700 sm:max-w-lg">
-              <Search aria-hidden="true" className="h-5 w-5 shrink-0 text-slate-500" />
-              <input type="search" aria-label={searchLabel} placeholder={searchLabel} value={query} onChange={e => setQuery(e.target.value)}
-                className="min-w-0 flex-1 bg-transparent py-2 text-base outline-none placeholder:text-slate-500" />
+      <section className="border-b border-line bg-paper">
+        <div className="site-wrap grid gap-4 py-6 sm:gap-6 sm:py-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:py-10">
+          <h1 className="site-title text-4xl sm:text-5xl">{heading}</h1>
+          <div className="flex flex-wrap gap-2">
+            <label className="flex min-h-11 min-w-0 flex-[2_1_10rem] items-center gap-2 rounded-md border border-[#c5b9ac] bg-white px-3 focus-within:border-brand-700 focus-within:ring-1 focus-within:ring-brand-700">
+              <Search aria-hidden="true" className="size-4 shrink-0 text-muted" />
+              <input
+                type="search"
+                aria-label={searchLabel}
+                placeholder={searchLabel}
+                value={query}
+                maxLength={120}
+                onChange={event => updateFilters(event.target.value, category)}
+                className="min-w-0 flex-1 bg-transparent py-2 text-base outline-none placeholder:text-muted focus-visible:outline-none"
+              />
             </label>
-            <label className="relative flex min-h-11 min-w-0 max-w-full items-center rounded-lg border border-slate-300 bg-white">
-              <ListFilter aria-hidden="true" className="pointer-events-none absolute left-3 h-4 w-4 text-slate-600" />
-              <select aria-label={categoryLabel} value={category} onChange={e => setCategory(e.target.value)}
-                className="h-full max-w-full cursor-pointer rounded-lg bg-transparent py-2 pl-9 pr-2 text-sm font-semibold">
+            <label className="relative flex min-h-11 min-w-0 max-w-full items-center rounded-md border border-[#c5b9ac] bg-white">
+              <ListFilter aria-hidden="true" className="pointer-events-none absolute left-3 size-4 text-muted" />
+              <select
+                aria-label={categoryLabel}
+                value={category}
+                onChange={event => updateFilters(query, event.target.value)}
+                className="h-full max-w-full cursor-pointer rounded-md bg-transparent py-2 pl-9 pr-2 text-base text-ink sm:text-sm"
+              >
                 <option value="">{allLabel}</option>
-                {groups.map(g => <option key={g.category} value={g.category}>{g.label}</option>)}
+                {groups.map(group => <option key={group.category} value={group.category}>{group.label}</option>)}
               </select>
             </label>
           </div>
         </div>
       </section>
-      <div className="mx-auto max-w-7xl space-y-7 px-4 py-6 sm:space-y-10 sm:px-6 sm:py-8 lg:px-8">
-        {!visible.length && <div className="rounded-xl border border-line bg-white p-6">
-          <p role="status" className="font-semibold">{emptyLabel}</p>
-          <button className="mt-2 min-h-11 text-sm font-semibold text-brand-700 underline" onClick={() => { setQuery(""); setCategory(""); }}>{clearLabel}</button>
-        </div>}
-        {visible.map(g => <section key={g.category}>
-          <h2 className="mb-3 text-lg font-bold tracking-tight sm:text-xl">{g.label}</h2>
-          <div className="grid gap-2 sm:grid-cols-2 sm:gap-3 xl:grid-cols-3">
-            {g.tools.map(tool => {
-              const Icon = icons[tool.slug as keyof typeof icons] ?? FileText;
-              return <a key={tool.slug} href={tool.href} data-tool-slug={tool.slug}
-                className="group flex items-start gap-3 rounded-xl border border-line bg-white p-3.5 transition hover:border-slate-400 focus-visible:outline-brand-700 sm:p-4">
-                <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-lg ${accents[g.category]}`}><Icon size={20} aria-hidden="true" /></span>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-base font-semibold leading-snug text-ink group-hover:text-brand-700">{tool.name}</h3>
-                  <p className="mt-1 text-sm leading-5 text-slate-600">{tool.description}</p>
-                </div>
-                <ChevronRight size={16} aria-hidden="true" className="mt-1 shrink-0 text-slate-400 group-hover:text-brand-700" />
-              </a>;
-            })}
+      <div className="site-wrap space-y-7 py-6 sm:space-y-9 sm:py-8">
+        {visible.length === 0 && (
+          <div className="rounded-lg border border-line bg-white px-5 py-6">
+            <p role="status" className="font-semibold">{emptyLabel}</p>
+            <button className="mt-1 min-h-11 text-sm font-semibold text-brand-700 underline" onClick={() => updateFilters("", "")}>
+              {clearLabel}
+            </button>
           </div>
-        </section>)}
+        )}
+        {visible.map(group => (
+          <section key={group.category} aria-labelledby={`directory-${group.category}`}>
+            <h2 id={`directory-${group.category}`} className="site-title mb-2.5 text-2xl sm:text-[1.75rem]">{group.label}</h2>
+            <div className="tool-link-grid grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+              {group.tools.map(tool => {
+                const Icon = icons[tool.slug as keyof typeof icons] ?? FileText;
+                return (
+                  <a
+                    key={tool.slug}
+                    href={tool.href}
+                    data-tool-slug={tool.slug}
+                    className="group flex min-h-20 items-start gap-3 bg-white p-3.5 hover:bg-paper focus-visible:outline-offset-[-3px] sm:p-4"
+                  >
+                    <Icon size={19} aria-hidden="true" className="mt-0.5 shrink-0 text-brand-700" />
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-base font-semibold leading-snug text-ink group-hover:text-brand-700">{tool.name}</h3>
+                      <p className="mt-1 text-sm leading-5 text-muted">{tool.description}</p>
+                    </div>
+                    <ChevronRight size={16} aria-hidden="true" className="mt-0.5 shrink-0 text-muted group-hover:text-brand-700" />
+                  </a>
+                );
+              })}
+            </div>
+          </section>
+        ))}
       </div>
     </>
   );

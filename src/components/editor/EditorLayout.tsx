@@ -1,11 +1,10 @@
 "use client";
-import { useTranslation } from "@/components/i18n/LocaleProvider";
+import { useLocale, useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Link from "@/components/i18n/LocaleLink";
 import { useSearchParams } from "next/navigation";
-import { FileText, Loader2 } from "lucide-react";
-import { BrandLogo } from "@/components/brand/BrandLogo";
+import { ChevronLeft, ChevronRight, FileText } from "lucide-react";
+import { SiteHeader } from "@/components/brand/SiteHeader";
 import { PageSidebar } from "@/components/editor/PageSidebar";
 import { PDFCanvas } from "@/components/editor/PDFCanvas";
 import { PropertiesPanel } from "@/components/editor/PropertiesPanel";
@@ -16,8 +15,9 @@ import { useToast } from "@/components/ui/Toaster";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { imageFileToEditorData } from "@/lib/editor/fileUtils";
 import { createImageObject } from "@/lib/editor/objectUtils";
-import { consumePendingUpload } from "@/lib/editor/uploadHandoff";
+import { clearUploadParameters, consumePendingUpload } from "@/lib/editor/uploadHandoff";
 import { exportEditedPdf } from "@/lib/pdf/exportPdf";
+import { fetchSamplePdf, getSampleLabels } from "@/lib/samplePdf";
 import {
   consumeUploadDurationBucket,
   durationBucket,
@@ -40,8 +40,17 @@ const landingTools: Partial<Record<string, EditorTool>> = {
 
 export function EditorLayout() {
   const t = useTranslation();
+  const locale = useLocale();
   const searchParams = useSearchParams();
+  const uploadId = searchParams.get("uploadId");
+  const requestedToolSlug = searchParams.get("tool") ?? "";
   const [signatureOpen, setSignatureOpen] = useState(false);
+  const [pagesOpen, setPagesOpen] = useState(false);
+  const [fitToWidth, setFitToWidth] = useState(true);
+  const [isSampleLoading, setIsSampleLoading] = useState(false);
+  const [sampleLabel, sampleError] = getSampleLabels(locale);
+  const pendingUpload = useRef<{ id: string; file: Promise<File | null> } | null>(null);
+  const canvasViewport = useRef<HTMLElement>(null);
   const trackedDocumentIdRef = useRef<string | null>(null);
   const initialEditSignatureRef = useRef<string | null>(null);
   const firstEditTrackedRef = useRef(false);
@@ -50,7 +59,9 @@ export function EditorLayout() {
   const pdfDoc = useEditorStore((state) => state.pdfDoc);
   const pages = useEditorStore((state) => state.pages);
   const activePageId = useEditorStore((state) => state.activePageId);
+  const setActivePage = useEditorStore((state) => state.setActivePage);
   const zoom = useEditorStore((state) => state.zoom);
+  const setZoom = useEditorStore((state) => state.setZoom);
   const isLoading = useEditorStore((state) => state.isLoading);
   const loadPdf = useEditorStore((state) => state.loadPdf);
   const addObject = useEditorStore((state) => state.addObject);
@@ -58,36 +69,36 @@ export function EditorLayout() {
   const { notify } = useToast();
 
   useEffect(() => {
-    const uploadId = searchParams.get("uploadId");
-    if (!uploadId || document || isLoading) return;
+    if (!uploadId) return;
+    if (pendingUpload.current?.id !== uploadId) {
+      pendingUpload.current = { id: uploadId, file: consumePendingUpload(uploadId) };
+    }
 
-    let cancelled = false;
-    void consumePendingUpload(uploadId)
+    let active = true;
+    void pendingUpload.current.file
       .then(async (file) => {
-        if (cancelled) return;
+        if (!active) return;
         if (!file) {
           notify(t("The uploaded PDF could not be found. Please upload it again."), "error");
           return;
         }
-        await loadPdf(file);
-        const requestedTool = landingTools[searchParams.get("tool") ?? ""];
+        if (!(await loadPdf(file)) || !active) return;
+        const requestedTool = landingTools[requestedToolSlug];
         if (requestedTool) useEditorStore.getState().setTool(requestedTool);
         trackUsageEvent("upload_success", {
-          source: searchParams.get("tool") ?? "homepage",
+          source: requestedToolSlug || "homepage",
           fileSizeBucket: fileSizeBucket(file.size),
         });
-        if (!cancelled) notify(t("PDF uploaded."), "success");
       })
       .catch(() => {
-        if (!cancelled) {
-          notify(t("Could not load this PDF."), "error");
-        }
+        if (active) notify(t("Could not load this PDF."), "error");
+      })
+      .finally(() => {
+        if (active) clearUploadParameters(uploadId, true);
       });
 
-    return () => {
-      cancelled = true;
-    };
-  }, [document, isLoading, loadPdf, notify, searchParams, t]);
+    return () => { active = false; };
+  }, [loadPdf, notify, requestedToolSlug, t, uploadId]);
 
   useEffect(() => {
     if (!document) return;
@@ -121,6 +132,38 @@ export function EditorLayout() {
     () => pages.find((page) => page.id === activePageId) ?? pages[0],
     [activePageId, pages],
   );
+  const pageWidth = activePage?.width;
+  const pageIndex = pages.findIndex(page => page.id === activePage?.id);
+
+  const fitPageWidth = useCallback(() => {
+    const viewport = canvasViewport.current;
+    if (!viewport || !pageWidth) return;
+    const { paddingLeft, paddingRight } = window.getComputedStyle(viewport);
+    const available = viewport.clientWidth - parseFloat(paddingLeft) - parseFloat(paddingRight);
+    setZoom(Math.min(1, Math.floor(available / pageWidth * 100) / 100));
+  }, [pageWidth, setZoom]);
+
+  useEffect(() => {
+    setFitToWidth(true);
+  }, [document]);
+
+  useEffect(() => {
+    const viewport = canvasViewport.current;
+    if (!viewport || !fitToWidth) return;
+    fitPageWidth();
+    const observer = new ResizeObserver(fitPageWidth);
+    observer.observe(viewport);
+    return () => observer.disconnect();
+  }, [fitPageWidth, fitToWidth]);
+
+  useEffect(() => {
+    canvasViewport.current?.scrollTo(0, 0);
+  }, [activePageId]);
+
+  function zoomManually(nextZoom: number) {
+    setFitToWidth(false);
+    setZoom(nextZoom);
+  }
 
   const handleExport = useCallback(async () => {
     if (!document || !pages.length) {
@@ -164,14 +207,25 @@ export function EditorLayout() {
         source: "editor",
         fileSizeBucket: fileSizeBucket(file.size),
       });
-      await loadPdf(file);
+      if (!(await loadPdf(file))) return;
       trackUsageEvent("upload_success", {
         source: "editor",
         fileSizeBucket: fileSizeBucket(file.size),
       });
-      notify(t("PDF uploaded."), "success");
     } catch {
       notify(t("Could not load this PDF."), "error");
+    }
+  }
+
+  async function openSample() {
+    if (isSampleLoading || isLoading || uploadId) return;
+    setIsSampleLoading(true);
+    try {
+      await handleUpload(await fetchSamplePdf());
+    } catch {
+      notify(sampleError, "error");
+    } finally {
+      setIsSampleLoading(false);
     }
   }
 
@@ -213,55 +267,88 @@ export function EditorLayout() {
 
   if (!document || !pdfDoc || !activePage) {
     return (
-      <main className="min-h-screen bg-mist">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
-          <Link className="flex items-center gap-3" href="/">
-            <BrandLogo compact />
-          </Link>
-          <Link
-            className="inline-flex h-10 items-center justify-center rounded-md border border-line bg-white px-3 text-sm font-medium text-ink transition hover:bg-slate-50"
-            href="/"
-          > {t("Home")} </Link>
-        </nav>
-        <section className="mx-auto max-w-2xl px-5 py-12">
-          <div className="mb-6 flex items-center justify-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-md bg-white text-brand-600 shadow-soft">
-              {isLoading ? <Loader2 className="h-7 w-7 animate-spin" /> : <FileText className="h-7 w-7" />}
-            </div>
+      <main className="min-h-screen bg-paper text-ink">
+        <SiteHeader locale={locale} path="/editor" t={t} />
+        <section className="site-wrap max-w-xl py-10 text-center sm:py-14">
+          <h1 className="site-title mb-5 text-4xl sm:mb-7 sm:text-6xl">{t("PDF Editor")}</h1>
+          <div className="rounded-xl border border-[#d6cbbd] bg-[#efe9df] p-2.5 shadow-panel sm:p-3">
+            <UploadDropzone
+              onFile={handleUpload}
+              isLoading={isLoading || isSampleLoading || Boolean(uploadId)}
+              onChoose={() => trackUsageEvent("upload_clicked", { source: "editor" })}
+              wide
+              illustrated
+              copy={{ title: "Drop your PDF here", button: "Choose PDF", privacy: "Files stay on your device" }}
+            />
+            <button
+              type="button"
+              className="mt-1 inline-flex min-h-11 items-center gap-2 rounded-sm px-2 text-sm font-medium hover:text-brand-700 hover:underline disabled:opacity-50"
+              disabled={isLoading || isSampleLoading || Boolean(uploadId)}
+              onClick={() => void openSample()}
+            >
+              <FileText aria-hidden="true" size={16} />
+              {sampleLabel}
+            </button>
           </div>
-          <UploadDropzone
-            onFile={handleUpload}
-            isLoading={isLoading}
-            onChoose={() => trackUsageEvent("upload_clicked", { source: "editor" })}
-          />
         </section>
       </main>
     );
   }
 
   return (
-    <main className="flex h-screen min-h-0 flex-col bg-mist">
+    <main className="flex h-[100dvh] min-h-0 flex-col bg-mist" aria-busy={isLoading}>
       <TopToolbar
+        fileName={document.fileName}
+        isLoading={isLoading}
+        pagesOpen={pagesOpen}
+        fitToWidth={fitToWidth}
+        onTogglePages={() => setPagesOpen(open => !open)}
+        onFitWidth={() => {
+          setFitToWidth(true);
+          fitPageWidth();
+          canvasViewport.current?.scrollTo(0, 0);
+        }}
+        onZoom={zoomManually}
         onUploadPdf={(file) => void handleUpload(file)}
         onAddImage={(file) => void handleAddImage(file)}
         onOpenSignature={() => setSignatureOpen(true)}
         onExport={() => void handleExport()}
       />
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-        <div className="flex min-h-0 flex-1">
-        <PageSidebar pdfDoc={pdfDoc} />
-        <section className="relative min-w-0 flex-1 overflow-auto bg-[#e9edf3] p-4 editor-scrollbar">
-          <div className="mx-auto flex min-h-full w-max items-start justify-center p-2">
-            <PDFCanvas pdfDoc={pdfDoc} page={activePage} zoom={zoom} />
-          </div>
-        </section>
+        <div className="flex min-h-0 min-w-0 flex-1">
+          <PageSidebar pdfDoc={pdfDoc} openOnNarrow={pagesOpen} />
+          <section ref={canvasViewport} aria-label={t("Preview page")} tabIndex={0} className="relative min-w-0 flex-1 overflow-auto bg-[#ece8e0] p-3 editor-scrollbar sm:p-5">
+            <div className="mx-auto flex min-h-full w-max min-w-full items-start justify-center">
+              <PDFCanvas pdfDoc={pdfDoc} page={activePage} zoom={zoom} />
+            </div>
+          </section>
         </div>
         <PropertiesPanel />
       </div>
-      <footer className="flex min-h-10 shrink-0 items-center justify-between gap-3 border-t border-line bg-white px-4 text-xs text-slate-600">
-        <span> {t("Page")} {pages.findIndex((page) => page.id === activePage.id) + 1} {t("of")} {pages.length}
-        </span>
-        <span className="min-w-0 truncate">{document.fileName}</span>
+      <footer className="flex min-h-10 shrink-0 items-center justify-between gap-3 border-t border-line bg-paper px-2.5 text-xs text-muted">
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            aria-label={t("Previous page")}
+            title={t("Previous page")}
+            disabled={pageIndex <= 0}
+            onClick={() => setActivePage(pages[pageIndex - 1].id)}
+            className="grid size-9 place-items-center rounded-sm hover:bg-mist disabled:opacity-30"
+          >
+            <ChevronLeft aria-hidden="true" size={16} />
+          </button>
+          <span aria-live="polite">{t("Page")} {pageIndex + 1} {t("of")} {pages.length}</span>
+          <button
+            type="button"
+            aria-label={t("Next page")}
+            title={t("Next page")}
+            disabled={pageIndex >= pages.length - 1}
+            onClick={() => setActivePage(pages[pageIndex + 1].id)}
+            className="grid size-9 place-items-center rounded-sm hover:bg-mist disabled:opacity-30"
+          >
+            <ChevronRight aria-hidden="true" size={16} />
+          </button>
+        </div>
         <span>{t("Zoom")} {Math.round(zoom * 100)}%</span>
       </footer>
       <SignatureModal

@@ -129,6 +129,16 @@ export const extraToolCopy: Record<AddedLocale, Record<string, ExtraToolCopy>> =
       "title": "Achatar formulário PDF",
       "description": "Salve os campos preenchidos como conteúdo fixo da página."
     },
+    "pdf-to-text": {
+      "title": "Converter PDF em texto",
+      "description": "Extraia texto selecionável de um PDF. Copie o conteúdo ou baixe um arquivo TXT direto do navegador.",
+      "steps": [
+        "Escolher arquivos",
+        "Selecione uma página ou um intervalo. Deixe o campo em branco para incluir todas as páginas.",
+        "Confira o resultado e baixe seu arquivo."
+      ],
+      "limitation": "Até 100 páginas e 100 MB. O arquivo TXT contém apenas texto. A ordem de leitura pode variar em PDFs com várias colunas."
+    },
     "scanned-pdf-to-text": {
       "title": "Extrair texto de PDF digitalizado",
       "description": "Reconheça texto em português em um PDF digitalizado e baixe um arquivo TXT.",
@@ -248,6 +258,16 @@ export const extraToolCopy: Record<AddedLocale, Record<string, ExtraToolCopy>> =
       "title": "Ratakan formulir PDF",
       "description": "Simpan isian formulir sebagai bagian tetap halaman PDF."
     },
+    "pdf-to-text": {
+      "title": "Ubah PDF menjadi teks",
+      "description": "Ekstrak teks yang dapat dipilih dari PDF. Salin teks atau unduh file TXT langsung dari browser.",
+      "steps": [
+        "Pilih file",
+        "Pilih halaman atau rentang. Kosongkan kolom untuk menyertakan semua halaman.",
+        "Periksa hasilnya dan unduh file Anda."
+      ],
+      "limitation": "Hingga 100 halaman dan 100 MB. File TXT hanya berisi teks. Urutan baca pada PDF berkolom dapat berbeda."
+    },
     "scanned-pdf-to-text": {
       "title": "Ubah PDF hasil pindai ke teks",
       "description": "Kenali tulisan dari PDF hasil pindai dan unduh sebagai TXT."
@@ -365,6 +385,16 @@ export const extraToolCopy: Record<AddedLocale, Record<string, ExtraToolCopy>> =
     "flatten-pdf-form": {
       "title": "PDF formunu düzleştir",
       "description": "Doldurulmuş form değerlerini sayfaya sabitleyin."
+    },
+    "pdf-to-text": {
+      "title": "PDF’yi metne dönüştür",
+      "description": "PDF’den seçilebilir metni çıkarın. Metni kopyalayın veya tarayıcıdan bir TXT dosyası indirin.",
+      "steps": [
+        "Dosya seç",
+        "Tek sayfa veya aralık seçin. Tüm sayfalar için alanı boş bırakın.",
+        "Sonucu kontrol edip dosyanızı indirin."
+      ],
+      "limitation": "En fazla 100 sayfa ve 100 MB. TXT dosyası yalnızca metin içerir. Çok sütunlu PDF’lerde okuma sırası farklı olabilir."
     },
     "scanned-pdf-to-text": {
       "title": "Taranmış PDF'yi metne dönüştür",
@@ -484,6 +514,16 @@ export const extraToolCopy: Record<AddedLocale, Record<string, ExtraToolCopy>> =
       "title": "Spłaszcz formularz PDF",
       "description": "Zapisz uzupełnione pola na stałe w treści strony."
     },
+    "pdf-to-text": {
+      "title": "Konwertuj PDF na tekst",
+      "description": "Wyodrębnij tekst, który można zaznaczyć w PDF. Skopiuj wynik lub pobierz plik TXT bezpośrednio z przeglądarki.",
+      "steps": [
+        "Wybierz pliki",
+        "Wybierz stronę lub zakres. Pozostaw pole puste, aby uwzględnić wszystkie strony.",
+        "Sprawdź wynik i pobierz plik."
+      ],
+      "limitation": "Do 100 stron i 100 MB. Plik TXT zawiera sam tekst. W dokumentach wielokolumnowych kolejność odczytu może się różnić."
+    },
     "scanned-pdf-to-text": {
       "title": "Zamień skan PDF na tekst",
       "description": "Rozpoznaj tekst ze skanów PDF i pobierz plik TXT."
@@ -601,6 +641,16 @@ export const extraToolCopy: Record<AddedLocale, Record<string, ExtraToolCopy>> =
     "flatten-pdf-form": {
       "title": "PDF फ़ॉर्म फ़्लैटन करें",
       "description": "भरे हुए फ़ॉर्म की जानकारी को PDF पेज पर स्थायी करें।"
+    },
+    "pdf-to-text": {
+      "title": "PDF से टेक्स्ट निकालें",
+      "description": "PDF का चुना जा सकने वाला टेक्स्ट निकालें। टेक्स्ट कॉपी करें या ब्राउज़र से TXT फ़ाइल डाउनलोड करें।",
+      "steps": [
+        "फ़ाइलें चुनें",
+        "एक पेज या पेज रेंज चुनें। सभी पेजों के लिए फ़ील्ड खाली रखें।",
+        "नतीजा जांचें और फ़ाइल डाउनलोड करें।"
+      ],
+      "limitation": "अधिकतम 100 पेज और 100 MB। TXT फ़ाइल में केवल टेक्स्ट होता है। कई कॉलम वाली PDF में पढ़ने का क्रम बदल सकता है।"
     },
     "scanned-pdf-to-text": {
       "title": "स्कैन PDF को टेक्स्ट में बदलें",

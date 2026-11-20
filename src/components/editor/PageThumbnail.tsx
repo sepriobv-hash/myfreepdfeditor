@@ -1,49 +1,65 @@
 "use client";
-import { useTranslation } from "@/components/i18n/LocaleProvider";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "@/components/i18n/LocaleProvider";
 import type { PageState } from "@/types/editor";
 import type { PdfJsDocument } from "@/types/pdf";
 
 export function PageThumbnail({ pdfDoc, page }: { pdfDoc: PdfJsDocument; page: PageState }) {
   const t = useTranslation();
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const container = useRef<HTMLDivElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
+  const [visible, setVisible] = useState(false);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const targetCanvas = canvas;
+    if (visible || !container.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) setVisible(true);
+    }, { rootMargin: "120px" });
+    observer.observe(container.current);
+    return () => observer.disconnect();
+  }, [visible]);
 
-    async function render() {
+  useEffect(() => {
+    const target = canvas.current;
+    if (!visible || !target) return;
+    let cancelled = false;
+    let task: { promise: Promise<void>; cancel?: () => void } | undefined;
+
+    async function render(targetCanvas: HTMLCanvasElement) {
       try {
         const pdfPage = await pdfDoc.getPage(page.sourcePageIndex + 1);
-        const width = 104;
-        const scale = width / page.width;
-        const dpr = window.devicePixelRatio || 1;
-        const viewport = pdfPage.getViewport({ scale: scale * dpr });
-        targetCanvas.width = viewport.width;
-        targetCanvas.height = viewport.height;
-        targetCanvas.style.width = `${width}px`;
-        targetCanvas.style.height = `${page.height * scale}px`;
+        if (cancelled) return;
+        const scale = 124 / page.width;
+        const viewport = pdfPage.getViewport({ scale: scale * Math.min(window.devicePixelRatio || 1, 2) });
+        targetCanvas.width = Math.ceil(viewport.width);
+        targetCanvas.height = Math.ceil(viewport.height);
         const context = targetCanvas.getContext("2d");
-        if (!context || cancelled) return;
-        await pdfPage.render({ canvasContext: context, viewport }).promise;
+        if (!context) return;
+        task = pdfPage.render({ canvasContext: context, viewport });
+        await task.promise;
       } catch {
         if (!cancelled) setFailed(true);
       }
     }
 
-    void render();
+    void render(target);
     return () => {
       cancelled = true;
+      task?.cancel?.();
     };
-  }, [page.height, page.sourcePageIndex, page.width, pdfDoc]);
+  }, [page.sourcePageIndex, page.width, pdfDoc, visible]);
 
-  if (failed) {
-    return <div className="flex h-32 w-24 items-center justify-center bg-slate-100 text-xs text-slate-500">{t("Preview")}</div>;
-  }
-
-  return <canvas ref={canvasRef} className="rounded-sm bg-white shadow-sm" />;
+  return (
+    <div
+      ref={container}
+      className="relative mx-auto w-full max-w-[7.75rem] overflow-hidden rounded-sm border border-line bg-white shadow-sm"
+      style={{ aspectRatio: `${page.width} / ${page.height}` }}
+    >
+      {failed
+        ? <span className="absolute inset-0 grid place-items-center text-xs text-muted">{t("Preview")}</span>
+        : <canvas ref={canvas} className="absolute inset-0 size-full" aria-hidden="true" />}
+    </div>
+  );
 }

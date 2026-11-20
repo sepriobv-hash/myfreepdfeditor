@@ -19,6 +19,11 @@ export async function getPdfJs() {
 
 export async function loadPdfFromBytes(bytes: ArrayBuffer): Promise<PdfJsDocument> {
   const pdfjs = await getPdfJs();
-  const task = pdfjs.getDocument({ data: bytes.slice(0) });
-  return task.promise as unknown as Promise<PdfJsDocument>;
+  const task = pdfjs.getDocument({ data: bytes.slice(0), isEvalSupported: false });
+  try {
+    return await task.promise as unknown as PdfJsDocument;
+  } catch (error) {
+    await task.destroy().catch(() => undefined);
+    throw error;
+  }
 }

@@ -2,7 +2,7 @@ import { pageMetadata } from "@/lib/pageMetadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LandingPage } from "@/components/landing/LandingPage";
-import { landingCopyByLocale } from "@/components/landing/landingCopy";
+import { getLandingCopy } from "@/components/landing/landingCopy";
 import { getLandingFaqs } from "@/components/landing/faqData";
 import {
   getAbsoluteLocalizedUrl,
@@ -10,6 +10,7 @@ import {
   supportedLocales,
 } from "@/lib/i18n";
 import { siteName } from "@/lib/site";
+import { translators } from "@/lib/translations";
 
 type LocalePageProps = {
   params: Promise<{ locale: string }>;
@@ -51,13 +52,13 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
     url: getAbsoluteLocalizedUrl(locale),
-    description: landingCopyByLocale[locale].hero.description,
+    description: getLandingCopy(locale).description,
     offers: {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
     },
-    featureList: landingCopyByLocale[locale].workflow.features.slice(0, 6),
+    featureList: ["Edit PDF", "Sign PDF", "Merge PDF", "Compress PDF"].map(translators[locale]),
   };
 
   return (

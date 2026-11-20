@@ -26,7 +26,7 @@ type EditorStore = {
   error: string | null;
   history: HistorySnapshot[];
   future: HistorySnapshot[];
-  loadPdf: (file: File) => Promise<void>;
+  loadPdf: (file: File) => Promise<boolean>;
   resetEditor: () => void;
   setTool: (tool: EditorTool) => void;
   setZoom: (zoom: number) => void;
@@ -62,22 +62,19 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   future: [],
 
   async loadPdf(file) {
+    if (get().isLoading || get().isExporting) return false;
     if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
       set({ error: "Please choose a valid PDF file." });
       throw new Error("Invalid PDF file");
     }
 
-    if (file.size > 60 * 1024 * 1024) {
-      set({ error: "This PDF is large. It may take a moment to render in the browser." });
-    }
-
-    set({ isLoading: true, error: null, selectedObjectId: null });
+    set({ isLoading: true, error: null });
     const currentDoc = get().pdfDoc;
-    await currentDoc?.destroy?.().catch(() => undefined);
+    let pdfDoc: PdfJsDocument | undefined;
 
     try {
       const originalBytes = await file.arrayBuffer();
-      const pdfDoc = await loadPdfFromBytes(originalBytes);
+      pdfDoc = await loadPdfFromBytes(originalBytes);
       const pages: PageState[] = [];
 
       for (let index = 0; index < pdfDoc.numPages; index += 1) {
@@ -111,7 +108,10 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         future: [],
         error: null,
       });
+      void currentDoc?.destroy?.().catch(() => undefined);
+      return true;
     } catch (error) {
+      await pdfDoc?.destroy?.().catch(() => undefined);
       set({
         isLoading: false,
         error: error instanceof Error ? error.message : "Could not load this PDF.",
@@ -142,7 +142,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   },
 
   setZoom(zoom) {
-    set({ zoom: Math.min(2.5, Math.max(0.4, Number(zoom.toFixed(2)))) });
+    set({ zoom: Math.min(2.5, Math.max(0.2, Number(zoom.toFixed(2)))) });
   },
 
   setActivePage(pageId) {

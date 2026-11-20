@@ -1,35 +1,18 @@
 import Image from "next/image";
-import { siteName } from "@/lib/site";
-
-type BrandLogoProps = {
-  compact?: boolean;
-};
-
-export function BrandLogo({ compact = false }: BrandLogoProps) {
-  if (compact) {
-    return (
-      <span className="flex items-center gap-3">
-        <Image
-          src="/brand/icon-192.png"
-          alt=""
-          width={40}
-          height={40}
-          className="h-10 w-10 rounded-md object-contain"
-          priority
-        />
-        <span className="text-lg font-semibold">{siteName}</span>
-      </span>
-    );
-  }
-
+export function BrandLogo() {
   return (
-    <Image
-      src="/brand/myfreepdfeditor-logo.png"
-      alt={siteName}
-      width={360}
-      height={90}
-      className="h-auto w-full max-w-48 object-contain sm:max-w-60"
-      priority
-    />
+    <span className="inline-flex items-center gap-1.5 whitespace-nowrap sm:gap-2">
+      <Image
+        src="/brand/icon-192.png"
+        alt=""
+        width={34}
+        height={34}
+        className="size-8 shrink-0 object-contain mix-blend-multiply sm:size-[34px]"
+        unoptimized
+      />
+      <span className="text-[0.9375rem] font-bold tracking-[-0.045em] text-ink sm:text-lg">
+        MyFree<span className="text-brand-600">PDF</span>Editor
+      </span>
+    </span>
   );
 }

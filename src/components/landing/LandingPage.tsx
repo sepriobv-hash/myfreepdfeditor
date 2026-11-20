@@ -1,569 +1,87 @@
-"use client";
-import { additionalToolContent } from "@/lib/additionalPdfTools";
-import { extraLocalePacks, type AddedLocale } from "@/lib/extraLocalePacks";
-import { extraToolCopy } from "@/lib/extraToolCopy";
-import { useTranslation } from "@/components/i18n/LocaleProvider";
-
-import { useEffect, useState } from "react";
-import Link from "@/components/i18n/LocaleLink";
-import {
-  ArrowRight,
-  BadgeCheck,
-  Check,
-  FileImage,
-  FileText,
-  Highlighter,
-  Layers3,
-  LockKeyhole,
-  MonitorCheck,
-  MousePointer2,
-  RotateCw,
-  ScanText,
-  Signature,
-  Stamp,
-  TextCursorInput,
-  UploadCloud,
-} from "lucide-react";
-import { BrandLogo } from "@/components/brand/BrandLogo";
-import { UploadDropzone } from "@/components/editor/UploadDropzone";
+import { ArrowRight, FileOutput, Files, Minimize2, FileText, ShieldCheck, Signature, TextCursorInput } from "lucide-react";
+import { SiteFooter } from "@/components/brand/SiteFooter";
+import { FaqList } from "@/components/ui/FaqList";
+import { SiteHeader } from "@/components/brand/SiteHeader";
+import { LandingUpload } from "@/components/landing/LandingUpload";
 import { getLandingFaqs } from "@/components/landing/faqData";
-import { LanguageSelector } from "@/components/landing/LanguageSelector";
-import { landingCopyByLocale } from "@/components/landing/landingCopy";
-import { Button } from "@/components/ui/Button";
-import { useToast } from "@/components/ui/Toaster";
-import { storePendingUpload } from "@/lib/editor/uploadHandoff";
+import { getLandingCopy } from "@/components/landing/landingCopy";
 import { defaultLocale, getLocalizedPath, type SupportedLocale } from "@/lib/i18n";
-import { fileSizeBucket, trackUsageEvent } from "@/lib/usage/client";
+import { localizeTool } from "@/lib/localizedTools";
+import { getToolBySlug } from "@/lib/pdfTools";
+import { translators } from "@/lib/translations";
 
-const toolCards = [
-  {
-    title: "Edit PDF text",
-    text: "Click detected text, replace it visually, tune font size, color, spacing, and export cleanly for free.",
-    icon: TextCursorInput,
-    tone: "bg-rose-50 text-rose-700 border-rose-100",
-    href: "/edit-pdf-text",
-  },
-  {
-    title: "Add images",
-    text: "Insert PNG, JPG, and WebP images, then move, resize, rotate, and layer them on any page.",
-    icon: FileImage,
-    tone: "bg-amber-50 text-amber-700 border-amber-100",
-    href: "/add-image-to-pdf",
-  },
-  {
-    title: "Sign documents",
-    text: "Draw a signature or upload one, place it precisely, and keep it editable until export.",
-    icon: Signature,
-    tone: "bg-emerald-50 text-emerald-700 border-emerald-100",
-    href: "/sign-pdf",
-  },
-  {
-    title: "Highlight and annotate",
-    text: "Add highlights, shapes, lines, and freehand notes for review workflows.",
-    icon: Highlighter,
-    tone: "bg-teal-50 text-teal-700 border-teal-100",
-    href: "/annotate-pdf",
-  },
-  {
-    title: "Manage pages",
-    text: "Preview pages, reorder, duplicate, and delete pages before downloading the final file.",
-    icon: Layers3,
-    tone: "bg-violet-50 text-violet-700 border-violet-100",
-    href: "/reorder-pdf-pages",
-  },
-  {
-    title: "Export securely",
-    text: "Download a real edited PDF while preserving the original page content.",
-    icon: LockKeyhole,
-    tone: "bg-slate-100 text-slate-800 border-slate-200",
-    href: "/edit-pdf",
-  },
+const shortcuts = [
+  { slug: "edit-pdf-text", icon: TextCursorInput, description: "Replace existing text on the page." },
+  { slug: "merge-pdf", icon: Files, description: "Combine several PDFs into one file." },
+  { slug: "sign-pdf", icon: Signature, description: "Draw or place your signature on a page." },
+  { slug: "compress-pdf", icon: Minimize2, description: "Reduce the file size for sharing or uploads." },
+  { slug: "extract-pdf-pages", icon: FileOutput, description: "Save a selection of pages together in one PDF." },
+  { slug: "pdf-to-text", icon: FileText, description: "Extract selectable text as a TXT file." },
 ];
 
-const primaryToolLinksByLocale: Partial<Record<SupportedLocale, Array<{ href: string; label: string }>>> = {
-  en: [
-    { href: "/edit-pdf", label: "Edit PDF" },
-    { href: "/sign-pdf", label: "Sign PDF" },
-    { href: "/merge-pdf", label: "Merge PDF" },
-    { href: "/compress-pdf", label: "Compress PDF" },
-    { href: "/all-tools", label: "All Tools" },
-  ],
-  nl: [
-    { href: "/edit-pdf", label: "PDF bewerken" },
-    { href: "/sign-pdf", label: "PDF ondertekenen" },
-    { href: "/merge-pdf", label: "PDF samenvoegen" },
-    { href: "/compress-pdf", label: "PDF comprimeren" },
-    { href: "/all-tools", label: "Alle tools" },
-  ],
-  de: [
-    { href: "/edit-pdf", label: "PDF bearbeiten" },
-    { href: "/sign-pdf", label: "PDF unterschreiben" },
-    { href: "/merge-pdf", label: "PDF zusammenfuegen" },
-    { href: "/compress-pdf", label: "PDF komprimieren" },
-    { href: "/all-tools", label: "Alle Werkzeuge" },
-  ],
-  fr: [
-    { href: "/edit-pdf", label: "Modifier PDF" },
-    { href: "/sign-pdf", label: "Signer PDF" },
-    { href: "/merge-pdf", label: "Fusionner PDF" },
-    { href: "/compress-pdf", label: "Compresser PDF" },
-    { href: "/all-tools", label: "Tous les outils" },
-  ],
-  es: [
-    { href: "/edit-pdf", label: "Editar PDF" },
-    { href: "/sign-pdf", label: "Firmar PDF" },
-    { href: "/merge-pdf", label: "Unir PDF" },
-    { href: "/compress-pdf", label: "Comprimir PDF" },
-    { href: "/all-tools", label: "Todas las herramientas" },
-  ],
-  it: [
-    { href: "/edit-pdf", label: "Modifica PDF" },
-    { href: "/sign-pdf", label: "Firma PDF" },
-    { href: "/merge-pdf", label: "Unisci PDF" },
-    { href: "/compress-pdf", label: "Comprimi PDF" },
-    { href: "/all-tools", label: "Tutti gli strumenti" },
-  ],
-};
-
-const howItWorksLabel: Partial<Record<SupportedLocale, string>> = {
-  en: "How it works",
-  nl: "Hoe het werkt",
-  de: "So funktioniert es",
-  fr: "Comment ca marche",
-  es: "Como funciona",
-  it: "Come funziona",
-};
-
-const stepIcons = [UploadCloud, MousePointer2, FileText];
-
-const trustItems = [
-  { icon: MonitorCheck, tone: "bg-rose-50 text-rose-600" },
-  { icon: TextCursorInput, tone: "bg-teal-50 text-teal-600" },
-  { icon: ScanText, tone: "bg-amber-50 text-amber-600" },
-  { icon: LockKeyhole, tone: "bg-emerald-50 text-emerald-600" },
-];
-
-const uploadNotesByLocale: Partial<Record<SupportedLocale, [string, string]>> = {
-  en: ["Best for PDFs under 100 MB", "Password-protected files may not open"],
-  nl: ["Werkt het best met PDF's onder 100 MB", "Beveiligde PDF's openen mogelijk niet"],
-  de: ["Am besten fuer PDFs unter 100 MB", "Passwortgeschuetzte PDFs lassen sich eventuell nicht oeffnen"],
-  fr: ["Ideal pour les PDF de moins de 100 Mo", "Les PDF proteges par mot de passe peuvent ne pas s'ouvrir"],
-  es: ["Ideal para PDF de menos de 100 MB", "Los PDF protegidos con contrasena pueden no abrirse"],
-  it: ["Ideale per PDF sotto i 100 MB", "I PDF protetti da password potrebbero non aprirsi"],
-};
-
-const termsLabel: Partial<Record<SupportedLocale, string>> = {
-  en: "Terms",
-  nl: "Voorwaarden",
-  de: "Nutzungsbedingungen",
-  fr: "Conditions",
-  es: "Terminos",
-  it: "Termini",
-};
-
-type LandingPageProps = {
-  locale?: SupportedLocale;
-};
-
-export function LandingPage({ locale = defaultLocale }: LandingPageProps) {
-  const [isUploading, setIsUploading] = useState(false);
-  const { notify } = useToast();
-  const copy = landingCopyByLocale[locale];
+export function LandingPage({ locale = defaultLocale }: { locale?: SupportedLocale }) {
+  const t = translators[locale];
+  const copy = getLandingCopy(locale);
   const faqs = getLandingFaqs(locale);
-  const localizedToolCards = toolCards.map((tool, index) => ({
-    ...tool,
-    ...copy.tools.cards[index],
-  }));
-  const extra = locale in extraLocalePacks ? extraLocalePacks[locale as AddedLocale] : null;
-  const primaryToolLinks = primaryToolLinksByLocale[locale] ?? [
-    ...["edit-pdf", "sign-pdf", "merge-pdf", "compress-pdf"].map(slug => ({
-      href: `/${slug}`, label: extraToolCopy[locale as AddedLocale][slug].title,
-    })),
-    { href: "/all-tools", label: extra?.nav[1] ?? "All Tools" },
-  ];
-  const uploadNotes = uploadNotesByLocale[locale] ?? [extra?.trust[1] ?? "", extra?.trust[3] ?? ""];
-  const howLabel = howItWorksLabel[locale] ?? extra?.workflow[0] ?? "How it works";
-  const termsText = termsLabel[locale] ?? ({
-    "pt-BR": "Termos", id: "Ketentuan", tr: "Koşullar", pl: "Warunki", hi: "शर्तें",
-  } as Record<AddedLocale, string>)[locale as AddedLocale];
-  const t = useTranslation();
-  const uploadFeedback = { invalid: t("Please choose a valid PDF file."), ready: t("PDF uploaded. Opening editor..."), failed: t("Could not prepare this PDF.") };
-
-  useEffect(() => {
-    trackUsageEvent("landing_view", { page: "home", locale });
-  }, [locale]);
-
-  async function handleUpload(file: File) {
-    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
-      notify(uploadFeedback.invalid, "error");
-      return;
-    }
-
-    try {
-      setIsUploading(true);
-      trackUsageEvent("upload_started", {
-        source: "homepage",
-        fileSizeBucket: fileSizeBucket(file.size),
-      });
-      const uploadId = await storePendingUpload(file);
-      trackUsageEvent("upload_success", {
-        source: "homepage",
-        fileSizeBucket: fileSizeBucket(file.size),
-      });
-      notify(uploadFeedback.ready, "success");
-      window.location.assign(getLocalizedPath(locale, `/editor?uploadId=${encodeURIComponent(uploadId)}`));
-    } catch {
-      setIsUploading(false);
-      trackUsageEvent("upload_failed", { source: "homepage" });
-      notify(uploadFeedback.failed, "error");
-    }
-  }
 
   return (
-    <main className="min-h-screen bg-mist text-ink">
-      <nav className="sticky top-0 z-30 border-b border-line bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-4">
-          <Link className="flex min-w-0 items-center gap-3" href={getLocalizedPath(locale)} aria-label={locale === "nl" ? "MyFreePDFEditor startpagina" : "MyFreePDFEditor home"}>
-            <BrandLogo />
-          </Link>
-          <div className="hidden min-w-0 flex-1 flex-wrap items-center justify-center gap-1 lg:flex">
-            {primaryToolLinks.map((link) => (
-              <Link key={link.href} className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-ink" href={link.href}>
-                {link.label}
-              </Link>
-            ))}
-          </div>
-          <Button className="h-auto min-h-11 max-w-[48%] shrink-0 px-3 py-2 text-center lg:max-w-none" variant="primary" onClick={() => window.location.assign(getLocalizedPath(locale, "/editor"))}>
-            {copy.nav.cta}
-            <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
-        <div className="mx-auto flex max-w-7xl gap-4 overflow-x-auto border-t border-line px-5 py-2 lg:hidden">
-          {primaryToolLinks.map((link) => (
-            <Link key={link.href} className="inline-flex min-h-11 shrink-0 items-center whitespace-nowrap text-sm font-medium text-slate-600 hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600" href={link.href}>
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      </nav>
+    <main className="min-h-screen bg-paper text-ink">
+      <SiteHeader locale={locale} path="/" t={t} />
 
-      <section className="mx-auto max-w-7xl px-5 pb-14 pt-8 md:pb-20 md:pt-16">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-md border border-rose-100 bg-white px-3 py-2 text-sm font-medium text-rose-700 shadow-sm">
-            <BadgeCheck className="h-4 w-4 text-rose-600" />
-            {copy.hero.badge}
-          </div>
-          <h1 className="text-3xl font-semibold leading-tight tracking-normal text-ink sm:text-4xl md:text-6xl">
-            {copy.hero.title}
-          </h1>
-          <p className="mx-auto mt-5 max-w-3xl text-base leading-7 text-slate-600 md:text-lg md:leading-8">
-            {copy.hero.description}
+      <section className="site-wrap grid gap-6 py-8 sm:gap-9 sm:py-12 md:grid-cols-[1fr_0.95fr] md:items-center lg:gap-16 lg:py-[4.5rem]">
+        <div className="min-w-0">
+          <h1 className="site-title md:max-w-[14ch] text-[clamp(2.6rem,6.15vw,5.25rem)]">{copy.title}</h1>
+          <p className="mt-4 max-w-[34rem] text-base leading-relaxed text-muted sm:mt-5 sm:text-lg">
+            {copy.description}
           </p>
-          <div className="mt-7 flex flex-wrap justify-center gap-2 text-sm font-medium">
-            {copy.hero.badges.map((label, index) => (
-                <span
-                  key={label}
-                  className={
-                    index === 0
-                      ? "rounded-md bg-rose-50 px-3 py-2 text-rose-700"
-                      : index === 1
-                        ? "rounded-md bg-amber-50 px-3 py-2 text-amber-700"
-                        : index === 2
-                          ? "rounded-md bg-teal-50 px-3 py-2 text-teal-700"
-                          : "rounded-md bg-emerald-50 px-3 py-2 text-emerald-700"
-                  }
+          <a
+            href={getLocalizedPath(locale, "/security")}
+            className="mt-4 inline-flex min-h-8 items-center gap-2 rounded-sm text-sm font-medium text-muted hover:text-ink hover:underline sm:mt-5"
+          >
+            <ShieldCheck aria-hidden="true" className="size-4 shrink-0 text-brand-700" />
+            {t("Files stay on your device")}
+          </a>
+        </div>
+        <LandingUpload locale={locale} />
+      </section>
+
+      <section id="tools" className="border-y border-line bg-white">
+        <div className="site-wrap py-8 sm:py-11">
+          <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2">
+            <h2 className="site-title text-3xl sm:text-4xl">{t("Tools")}</h2>
+            <a href={getLocalizedPath(locale, "/all-tools")} className="inline-flex min-h-9 items-center gap-2 rounded-sm text-sm font-semibold text-brand-700 hover:underline">
+              {t("All PDF tools")} <ArrowRight aria-hidden="true" size={16} />
+            </a>
+          </div>
+          <div className="tool-link-grid grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {shortcuts.map(({ slug, icon: Icon, description }) => {
+              const tool = localizeTool(getToolBySlug(slug)!, locale);
+              return (
+                <a
+                  key={slug}
+                  href={getLocalizedPath(locale, `/${slug}`)}
+                  aria-labelledby={`home-${slug}`}
+                  aria-describedby={`home-${slug}-summary`}
+                  className="group flex min-h-24 items-start gap-3 bg-white px-4 py-4 hover:bg-paper focus-visible:outline-offset-[-3px] sm:px-5"
                 >
-                  {label}
-                </span>
-              ))}
-          </div>
-        </div>
-
-        <div className="mx-auto mt-10 max-w-5xl rounded-xl border border-rose-100 bg-white p-2 shadow-panel">
-          <UploadDropzone
-            onFile={handleUpload}
-            isLoading={isUploading}
-            onChoose={() => trackUsageEvent("upload_clicked", { source: "homepage", locale })}
-            wide
-            copy={copy.upload}
-          />
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-slate-500">
-            <span>{uploadNotes[0]}</span>
-            <span>{uploadNotes[1]}</span>
-            <Link className="font-semibold text-brand-700 hover:text-brand-700" href="/how-it-works">
-              {howLabel}
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-line bg-white">
-        <div className="mx-auto grid max-w-7xl gap-4 px-5 py-7 md:grid-cols-4">
-          {trustItems.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <div key={copy.trustItems[index]} className="flex items-center gap-3 text-sm font-medium text-slate-700">
-                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${item.tone}`}>
-                  <Icon className="h-4 w-4" />
-                </div>
-                {copy.trustItems[index]}
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      <section id="tools" className="mx-auto max-w-7xl px-5 py-16">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-normal text-brand-700">{copy.tools.eyebrow}</p>
-            <h2 className="mt-3 text-3xl font-semibold text-ink md:text-4xl">
-              {copy.tools.title}
-            </h2>
-          </div>
-          <p className="max-w-xl text-base leading-7 text-slate-600">
-            {copy.tools.description}
-          </p>
-        </div>
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {localizedToolCards.map((tool) => {
-            const Icon = tool.icon;
-            return (
-              <Link
-                key={tool.title}
-                href={tool.href}
-                className="rounded-lg border border-line bg-white p-6 shadow-soft transition hover:-translate-y-0.5 hover:shadow-panel"
-              >
-                <div className={`mb-5 flex h-11 w-11 items-center justify-center rounded-md border ${tool.tone}`}>
-                  <Icon className="h-5 w-5" />
-                </div>
-                <h3 className="text-lg font-semibold text-ink">{tool.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{tool.text}</p>
-              </Link>
-            );
-          })}
-        </div>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          {primaryToolLinks.slice(2).map((link) => (
-            <Link key={link.href} href={link.href} className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-line bg-white px-3 text-sm font-semibold text-ink shadow-sm hover:bg-slate-50">
-              {link.label}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-5 pb-12"><h2 className="text-2xl font-semibold">{t("More ways to finish your PDF task")}</h2><div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">{additionalToolContent.map(({slug, name: label}) => <Link key={slug} href={`/${slug}`} className="flex min-h-14 items-center justify-between gap-2 rounded-md border border-line bg-white p-4 text-sm font-semibold shadow-soft hover:bg-slate-50">{t(label)}<ArrowRight className="h-4 w-4 shrink-0" /></Link>)}</div></section>
-
-      <section className="bg-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-normal text-brand-700">{copy.workflow.eyebrow}</p>
-            <h2 className="mt-3 text-3xl font-semibold text-ink md:text-4xl">
-              {copy.workflow.title}
-            </h2>
-            <p className="mt-4 text-base leading-7 text-slate-600">
-              {copy.workflow.description}
-            </p>
-            <div className="mt-7 grid gap-3 sm:grid-cols-2">
-              {copy.workflow.features.map((item) => (
-                <div key={item} className="flex items-center gap-2 text-sm text-slate-700">
-                  <Check className="h-4 w-4 shrink-0 text-accent-600" />
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="min-w-0 rounded-lg border border-line bg-mist p-4 shadow-soft">
-              <div className="rounded-md border border-line bg-white shadow-soft">
-              <div className="flex items-center justify-between border-b border-line px-4 py-3">
-                <div className="flex items-center gap-2">
-                  <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-accent-500" />
-                </div>
-                <span className="text-xs font-medium text-slate-500">{copy.workflow.previewLabel}</span>
-              </div>
-              <div className="grid min-h-96 grid-cols-[56px_minmax(0,1fr)] sm:grid-cols-[84px_minmax(0,1fr)]">
-                <div className="border-r border-line bg-rose-50/40 p-2 sm:p-3">
-                  {[1, 2, 3].map((page) => (
-                    <div
-                      key={page}
-                      className="mb-3 h-20 rounded-sm border border-line bg-white p-2 shadow-sm"
-                    >
-                      <div className="mb-2 h-2 w-full rounded bg-slate-200" />
-                      <div className="h-2 w-4/5 rounded bg-slate-100" />
-                    </div>
-                  ))}
-                </div>
-                <div className="min-w-0 p-3 sm:p-5">
-                  <div className="mb-4 flex flex-wrap gap-2">
-                    {[TextCursorInput, FileImage, Signature, Highlighter, Stamp].map((Icon, index) => (
-                      <div
-                        key={index}
-                        className={
-                          index === 0
-                            ? "flex h-9 w-9 items-center justify-center rounded-md border border-rose-100 bg-rose-50 text-rose-700"
-                            : index === 1
-                              ? "flex h-9 w-9 items-center justify-center rounded-md border border-amber-100 bg-amber-50 text-amber-700"
-                              : index === 2
-                                ? "flex h-9 w-9 items-center justify-center rounded-md border border-emerald-100 bg-emerald-50 text-emerald-700"
-                                : index === 3
-                                  ? "flex h-9 w-9 items-center justify-center rounded-md border border-teal-100 bg-teal-50 text-teal-700"
-                                  : "flex h-9 w-9 items-center justify-center rounded-md border border-violet-100 bg-violet-50 text-violet-700"
-                        }
-                      >
-                        <Icon className="h-4 w-4" />
-                      </div>
-                    ))}
+                  <Icon aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-brand-700" />
+                  <div className="min-w-0 flex-1">
+                    <h3 id={`home-${slug}`} className="font-semibold leading-snug group-hover:text-brand-700">{tool.shortTitle}</h3>
+                    <p id={`home-${slug}-summary`} className="mt-1 text-sm leading-5 text-muted">{t(description)}</p>
                   </div>
-                  <div className="mx-auto h-72 max-w-sm rounded-sm border border-line bg-white p-4 shadow-soft sm:p-8">
-                    <div className="h-5 w-44 max-w-full rounded bg-slate-800" />
-                    <div className="mt-5 space-y-2">
-                      <div className="h-2.5 rounded bg-slate-200" />
-                      <div className="h-2.5 rounded bg-slate-200" />
-                      <div className="h-2.5 w-4/5 rounded bg-slate-200" />
-                    </div>
-                    <div className="mt-8 rounded-md border border-rose-300 bg-rose-50 p-3">
-                      <div className="h-3 w-36 max-w-full rounded bg-brand-600" />
-                      <div className="mt-2 h-2 w-48 max-w-full rounded bg-rose-200" />
-                    </div>
-                    <div className="mt-8 flex items-center justify-between">
-                      <div className="h-12 w-28 max-w-[65%] rounded-sm border-2 border-dashed border-teal-500 bg-teal-50" />
-                      <Signature className="h-10 w-10 shrink-0 text-amber-500" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  <ArrowRight aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-muted group-hover:text-brand-700" />
+                </a>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-16">
-        <div className="grid gap-5 md:grid-cols-3">
-          {copy.steps.map((step, index) => {
-            const Icon = stepIcons[index];
-            return (
-              <article key={step.title} className="rounded-lg border border-line bg-white p-6 shadow-soft">
-                <div className="mb-5 flex items-center justify-between">
-                  <div
-                    className={
-                      index === 0
-                        ? "flex h-11 w-11 items-center justify-center rounded-md bg-rose-600 text-white"
-                        : index === 1
-                          ? "flex h-11 w-11 items-center justify-center rounded-md bg-teal-600 text-white"
-                          : "flex h-11 w-11 items-center justify-center rounded-md bg-amber-500 text-white"
-                    }
-                  >
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <span className="text-sm font-semibold text-slate-500">0{index + 1}</span>
-                </div>
-                <h3 className="text-lg font-semibold text-ink">{step.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{step.text}</p>
-              </article>
-            );
-          })}
-        </div>
+      <section id="faq" className="site-wrap grid gap-4 py-9 sm:py-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
+        <h2 className="site-title text-3xl sm:text-4xl">{t("FAQ")}</h2>
+        <FaqList faqs={faqs} />
       </section>
-
-      <section id="security" className="border-y border-line bg-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-normal text-brand-700">{copy.security.eyebrow}</p>
-            <h2 className="mt-3 text-3xl font-semibold text-ink">
-              {copy.security.title}
-            </h2>
-            {copy.security.paragraphs.map((paragraph) => (
-              <p key={paragraph} className="mt-4 text-base leading-7 text-slate-600">
-                {paragraph}
-              </p>
-            ))}
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {copy.security.cards.map(({ title, text }, index) => (
-              <div
-                key={title}
-                className={
-                  index === 0
-                    ? "rounded-lg border border-rose-100 bg-rose-50 p-5"
-                    : index === 1
-                      ? "rounded-lg border border-teal-100 bg-teal-50 p-5"
-                      : index === 2
-                        ? "rounded-lg border border-amber-100 bg-amber-50 p-5"
-                        : "rounded-lg border border-emerald-100 bg-emerald-50 p-5"
-                }
-              >
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-md bg-white text-ink shadow-sm">
-                  <LockKeyhole className="h-4 w-4" />
-                </div>
-                <h3 className="text-base font-semibold text-ink">{title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-700">{text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="faq" className="mx-auto max-w-4xl px-5 pb-16">
-        <div className="text-center">
-          <p className="text-sm font-semibold uppercase tracking-normal text-brand-700">{copy.faq.eyebrow}</p>
-          <h2 className="mt-3 text-3xl font-semibold text-ink md:text-4xl">
-            {copy.faq.title}
-          </h2>
-        </div>
-        <div className="mt-8 divide-y divide-line rounded-lg border border-line bg-white shadow-soft">
-          {faqs.map((faq) => (
-            <details key={faq.question} className="group p-5">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-ink">
-                {faq.question}
-                <RotateCw className="h-4 w-4 shrink-0 text-slate-500 transition group-open:rotate-45" />
-              </summary>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{faq.answer}</p>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-ink text-white">
-        <div className="mx-auto grid max-w-7xl gap-8 px-5 py-12 md:grid-cols-[1fr_auto] md:items-center">
-          <div>
-            <h2 className="text-3xl font-semibold">{copy.cta.title}</h2>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
-              {copy.cta.description}
-            </p>
-          </div>
-          <Button variant="primary" className="h-12 px-5" onClick={() => window.location.assign(getLocalizedPath(locale, "/editor"))}>
-            {copy.cta.button}
-            <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
-      </section>
-
-      <footer className="bg-white">
-        <div className="mx-auto max-w-7xl px-5 py-8">
-          <LanguageSelector currentLocale={locale} label={copy.footer.language} />
-          <div className="mt-6 flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-3">
-              <BrandLogo compact />
-              <div>
-                <div className="text-xs text-slate-500">{copy.footer.tagline}</div>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-4 text-sm text-slate-600">
-              <Link href="/editor" className="hover:text-ink">{copy.footer.editor}</Link>
-              <Link href="/all-tools" className="hover:text-ink">{copy.footer.allTools}</Link>
-              <Link href="/about" className="hover:text-ink">{copy.footer.about}</Link>
-              <Link href="/security" className="hover:text-ink">{copy.footer.security}</Link>
-              <Link href="/how-it-works" className="hover:text-ink">{howLabel}</Link>
-              <Link href="/privacy" className="hover:text-ink">{copy.footer.privacy}</Link>
-              <Link href="/terms" className="hover:text-ink">{termsText}</Link>
-              <a href="#faq" className="hover:text-ink">{copy.footer.faq}</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter locale={locale} t={t} />
     </main>
   );
 }

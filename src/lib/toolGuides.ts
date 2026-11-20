@@ -99,7 +99,7 @@ const guides: Partial<Record<SupportedLocale, Record<string, ToolGuide>>> = {
       links: [
         { slug: "ocr-pdf", label: "OCR de PDF em português", description: "Criar um PDF pesquisável a partir da digitalização." },
         { slug: "pdf-to-word", label: "PDF para Word", description: "Converter documentos em DOCX para edição." },
-        { slug: "extract-pdf-pages", label: "Extrair páginas de PDF", description: "Selecionar somente as páginas necessárias." }
+        { slug: "pdf-to-text", label: "Converter PDF em texto", description: "Extrair texto selecionável de um PDF digital." }
       ]
     }
   },

@@ -1,4 +1,5 @@
 "use client";
+import { useFileDrop } from "@/hooks/useFileDrop";
 import { usePendingToolUpload } from "@/hooks/usePendingToolUpload";
 import { useTranslation } from "@/components/i18n/LocaleProvider";
 
@@ -6,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { AlertCircle, Download, FileDown, FileText, Loader2, Trash2 } from "lucide-react";
 import { useToast } from "@/components/ui/Toaster";
 import { getPdfJs } from "@/lib/pdf/renderPdf";
-import { downloadBlob, sanitizeFileName } from "@/lib/utils";
+import { cn, downloadBlob, sanitizeFileName } from "@/lib/utils";
 import { fileSizeBucket, trackUsageEvent } from "@/lib/usage/client";
 
 const MAX_FILE_BYTES = 100 * 1024 * 1024;
@@ -39,6 +40,7 @@ export function CompressPdfPanel() {
   const [result, setResult] = useState<CompressionResult | null>(null);
   const { notify } = useToast();
   usePendingToolUpload(file => chooseFile(file), () => notify(t("The temporary file is no longer available. Choose it again."), "error"));
+  const { dragging, dropProps } = useFileDrop(files => chooseFile(files[0]), isCompressing);
   const [target, setTarget] = useState(0);
   const [preserve, setPreserve] = useState(false);
   const cancelled = useRef(false);
@@ -141,14 +143,20 @@ export function CompressPdfPanel() {
     : 0;
 
   return (
-    <div className="p-3 sm:p-5">
+    <div className="p-1.5 sm:p-3">
       {!file ? (
-        <div className="flex min-h-64 flex-col items-center justify-center border-2 border-dashed border-rose-200 bg-rose-50/40 px-6 py-8 text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-md bg-white text-rose-600 shadow-sm">
+        <div
+          {...dropProps}
+          className={cn(
+            "flex min-h-52 flex-col items-center justify-center rounded-lg border border-dashed border-[#b8ab9d] bg-paper px-4 py-6 text-center transition-colors sm:px-6 sm:py-8",
+            dragging && "border-brand-500 bg-brand-50",
+          )}
+        >
+          <div className="flex h-12 w-12 items-center justify-center rounded-md bg-brand-50 text-brand-700">
             <FileDown className="h-6 w-6" />
           </div>
           <h2 className="mt-4 text-xl font-semibold text-ink">{t("Choose a PDF to compress")}</h2>
-          <p className="mt-2 max-w-md text-sm leading-6 text-slate-600"> {t("Reduce file size locally in your browser. Files up to 100 MB and 100 pages are supported.")} </p>
+          <p className="mt-2 max-w-md text-sm leading-6 text-slate-600"> PDF · 100 MB </p>
           <button type="button" className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700" onClick={() => {
             trackUsageEvent("upload_clicked", { source: "compress-pdf" });
             inputRef.current?.click();

@@ -81,7 +81,7 @@ export function ToolRoutePage({ slug, locale = "en" }: { slug: string; locale?: 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <ToolLandingPage tool={tool} relatedTools={getRelatedTools(tool).map(item => localizeTool(item, locale))} />
+      <ToolLandingPage tool={tool} locale={locale} relatedTools={getRelatedTools(tool).map(item => localizeTool(item, locale))} />
     </>
   );
 }

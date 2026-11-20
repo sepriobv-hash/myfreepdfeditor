@@ -13,7 +13,7 @@ export type PdfTool = {
   uploadTitle: string;
   uploadDescription: string;
   category: ToolCategory;
-  workflow?: "editor" | "merge" | "compress" | "split" | "extract" | "images-to-pdf" | "pdf-to-images" | "rotate" | "crop" | "ocr" | "forms" | "redact" | "pdf-to-word" | "word-to-pdf";
+  workflow?: "editor" | "merge" | "compress" | "split" | "extract" | "images-to-pdf" | "pdf-to-images" | "rotate" | "crop" | "ocr" | "forms" | "redact" | "pdf-to-word" | "word-to-pdf" | "pdf-to-text";
   priority: string;
   related: string[];
   steps: string[];

@@ -15,6 +15,7 @@ export function useKeyboardShortcuts(onExport: () => void) {
       const isTyping =
         target?.tagName === "INPUT" ||
         target?.tagName === "TEXTAREA" ||
+        target?.tagName === "SELECT" ||
         target?.isContentEditable;
       const mod = event.metaKey || event.ctrlKey;
 
@@ -34,6 +35,8 @@ export function useKeyboardShortcuts(onExport: () => void) {
         onExport();
         return;
       }
+
+      if (isTyping) return;
 
       if (mod && event.key.toLowerCase() === "z" && !event.shiftKey) {
         event.preventDefault();

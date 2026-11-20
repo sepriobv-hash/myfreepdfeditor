@@ -26,6 +26,7 @@ export function PDFCanvas({
 
   useEffect(() => {
     let cancelled = false;
+    let task: { promise: Promise<void>; cancel?: () => void } | undefined;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const targetCanvas = canvas;
@@ -33,16 +34,22 @@ export function PDFCanvas({
     async function render() {
       setIsRendering(true);
       const pdfPage = await pdfDoc.getPage(page.sourcePageIndex + 1);
-      const dpr = window.devicePixelRatio || 1;
-      const viewport = pdfPage.getViewport({ scale: zoom * dpr });
-      targetCanvas.width = viewport.width;
-      targetCanvas.height = viewport.height;
+      if (cancelled) return;
+      const scale = Math.min(
+        zoom * Math.min(window.devicePixelRatio || 1, 2),
+        Math.sqrt(8_000_000 / (page.width * page.height)),
+        4096 / Math.max(page.width, page.height),
+      );
+      const viewport = pdfPage.getViewport({ scale });
+      targetCanvas.width = Math.ceil(viewport.width);
+      targetCanvas.height = Math.ceil(viewport.height);
       targetCanvas.style.width = `${page.width * zoom}px`;
       targetCanvas.style.height = `${page.height * zoom}px`;
       const context = targetCanvas.getContext("2d");
       if (!context || cancelled) return;
       context.setTransform(1, 0, 0, 1, 0, 0);
-      await pdfPage.render({ canvasContext: context, viewport }).promise;
+      task = pdfPage.render({ canvasContext: context, viewport });
+      await task.promise;
       if (!cancelled) setIsRendering(false);
     }
 
@@ -52,6 +59,7 @@ export function PDFCanvas({
 
     return () => {
       cancelled = true;
+      task?.cancel?.();
     };
   }, [page.height, page.sourcePageIndex, page.width, pdfDoc, zoom]);
 

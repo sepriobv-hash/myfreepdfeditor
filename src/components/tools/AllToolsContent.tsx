@@ -4,7 +4,8 @@ import type { AddedLocale } from "@/lib/extraLocalePacks";
 import { localizeTool } from "@/lib/localizedTools";
 import { translators } from "@/lib/translations";
 import { getLocalizedPath, type SupportedLocale } from "@/lib/i18n";
-import { ToolHeader } from "./ToolHeader";
+import { SiteFooter } from "@/components/brand/SiteFooter";
+import { SiteHeader } from "@/components/brand/SiteHeader";
 import { ToolDirectory } from "./ToolDirectory";
 
 const categoryOrder = ["Edit", "Organize", "Convert", "Sign", "Annotate", "Optimize", "Protect"] as const;
@@ -31,6 +32,7 @@ const directoryDescriptions: Record<string, string> = {
   "pdf-to-png": "Export crisp PNG images of selected pages.",
   "ocr-pdf": "Make scanned pages searchable.",
   "scanned-pdf-to-text": "Download recognized text as a TXT file.",
+  "pdf-to-text": "Extract selectable text as a TXT file.",
   "pdf-to-word": "Convert a PDF into a Word document.",
   "word-to-pdf": "Save a DOCX document as a PDF.",
   "sign-pdf": "Draw or place your signature on a page.",
@@ -55,10 +57,11 @@ export default function AllToolsContent({ locale = "en" }: { locale?: SupportedL
         : directoryDescriptions[tool.slug] ? t(directoryDescriptions[tool.slug]) : tool.intro })),
   }));
   return (
-    <main className="min-h-screen bg-mist text-ink">
-      <ToolHeader locale={locale} path="/all-tools" languageLabel={t("Language")} />
+    <main className="min-h-screen bg-paper text-ink">
+      <SiteHeader locale={locale} path="/all-tools" t={t} />
       <ToolDirectory groups={groups} heading={t("All PDF tools")} searchLabel={t("Search tools")} categoryLabel={t("Category")}
         allLabel={t("All tools")} emptyLabel={t("No matching tools")} clearLabel={t("Clear filters")} />
+      <SiteFooter locale={locale} t={t} />
     </main>
   );
 }

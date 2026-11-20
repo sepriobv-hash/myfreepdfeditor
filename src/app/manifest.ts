@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Free PDF editor for editing PDFs online in your browser.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f8fafc",
-    theme_color: "#e11d48",
+    background_color: "#faf8f3",
+    theme_color: "#a72e22",
     icons: [
       {
         src: "/brand/icon-192.png",

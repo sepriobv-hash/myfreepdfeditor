@@ -43,6 +43,7 @@ test('Dutch mobile signature and page changes export a valid document',async({pa
  await page.mouse.move(box.x+30,box.y+30);await page.mouse.down();await page.mouse.move(box.x+100,box.y+60,{steps:8});await page.mouse.up();
  await page.screenshot({path:'test-results/mobile-signature.png'});
  await page.getByRole('dialog').getByRole('button',{name:'Handtekening toevoegen',exact:true}).click();
+ await page.getByRole('button',{name:'Pagina’s',exact:true}).click();
  await page.getByTitle('Pagina omlaag',{exact:true}).first().click();
  page.once('dialog',dialog=>dialog.accept());
  await page.getByTitle('Pagina verwijderen',{exact:true}).last().click();

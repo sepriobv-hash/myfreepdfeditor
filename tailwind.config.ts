@@ -9,15 +9,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#111827",
-        line: "#e3e7ee",
-        mist: "#f8fafc",
+        ink: "#282521",
+        line: "#e1dbd2",
+        mist: "#f5f2ec",
+        paper: "#faf8f3",
+        muted: "#625b54",
         brand: {
-          50: "#fff1f2",
-          100: "#ffe4e6",
-          500: "#f43f5e",
-          600: "#e11d48",
-          700: "#be123c"
+          50: "#fcf0ec",
+          100: "#f4ddd5",
+          500: "#c03e2f",
+          600: "#a72e22",
+          700: "#84231a"
         },
         accent: {
           500: "#14b8a6",
@@ -37,9 +39,9 @@ const config: Config = {
         }
       },
       boxShadow: {
-        panel: "0 18px 45px rgba(17, 24, 39, 0.08)",
-        soft: "0 8px 24px rgba(17, 24, 39, 0.07)"
-      }
+        panel: "0 16px 42px rgba(46, 36, 26, 0.09)",
+        soft: "0 3px 10px rgba(46, 36, 26, 0.06)"
+      },
     },
   },
   plugins: [],

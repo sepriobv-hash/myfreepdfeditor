@@ -1,11 +1,13 @@
+@import "@fontsource-variable/source-serif-4";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   color-scheme: light;
-  --background: #f6f8fb;
-  --foreground: #111827;
+  --background: #faf8f3;
+  --foreground: #282521;
 }
 
 * {
@@ -35,6 +37,62 @@ select {
 
 button {
   cursor: pointer;
+}
+
+:where(a, button, summary, input, select, textarea):focus-visible {
+  outline: 2px solid #a72e22;
+  outline-offset: 3px;
+}
+
+.site-wrap {
+  width: min(72rem, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.site-title {
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  font-weight: 520;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+:lang(hi) .site-title {
+  font-family: inherit;
+  font-weight: 700;
+  line-height: 1.22;
+  letter-spacing: normal;
+}
+
+@media (min-width: 640px) {
+  .site-wrap {
+    width: min(72rem, calc(100% - 4rem));
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .tool-link-grid > :last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .tool-link-grid > :last-child:nth-child(3n + 1) {
+    grid-column: span 3;
+  }
+
+  .tool-link-grid > :last-child:nth-child(3n + 2) {
+    grid-column: span 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
 
 canvas {

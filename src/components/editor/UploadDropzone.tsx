@@ -1,21 +1,18 @@
 "use client";
 import { useTranslation } from "@/components/i18n/LocaleProvider";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { FileUp, Loader2, ShieldCheck } from "lucide-react";
+import { useFileDrop } from "@/hooks/useFileDrop";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
 type UploadDropzoneCopy = {
   title: string;
-  description: string;
+  description?: string;
   button: string;
-  privacy: string;
+  privacy?: string;
   loading?: string;
-  socialProof?: {
-    rating: string;
-    text: string;
-  };
 };
 
 export function UploadDropzone({
@@ -24,6 +21,7 @@ export function UploadDropzone({
   onChoose,
   compact = false,
   wide = false,
+  illustrated = false,
   copy = {
     title: "Drop your PDF here",
     description:
@@ -37,11 +35,11 @@ export function UploadDropzone({
   onChoose?: () => void;
   compact?: boolean;
   wide?: boolean;
+  illustrated?: boolean;
   copy?: UploadDropzoneCopy;
 }) {
   const t = useTranslation();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
 
   const handleFiles = useCallback(
     async (files: FileList | null) => {
@@ -52,24 +50,17 @@ export function UploadDropzone({
     [onFile, isLoading],
   );
 
+  const { dragging, dropProps } = useFileDrop(files => void onFile(files[0]), isLoading);
+
   return (
     <div
       aria-busy={Boolean(isLoading)}
       className={cn(
-        "group rounded-lg border border-dashed border-slate-300 bg-white text-center shadow-soft transition",
-        isDragging && "border-brand-500 bg-brand-50",
-        compact ? "p-5" : wide ? "px-6 py-8 md:px-12 md:py-12" : "p-8 md:p-10",
+        "rounded-lg border border-dashed border-[#b8ab9d] bg-white text-center transition-colors",
+        dragging && "border-brand-500 bg-brand-50 ring-2 ring-brand-100",
+        compact ? "p-4" : wide ? "px-4 py-6 sm:px-8 sm:py-8" : "px-5 py-7 sm:px-8",
       )}
-      onDragOver={(event) => {
-        event.preventDefault();
-        if (!isLoading) setIsDragging(true);
-      }}
-      onDragLeave={() => setIsDragging(false)}
-      onDrop={(event) => {
-        event.preventDefault();
-        setIsDragging(false);
-        void handleFiles(event.dataTransfer.files);
-      }}
+      {...dropProps}
     >
       <input
         ref={inputRef}
@@ -83,26 +74,21 @@ export function UploadDropzone({
           event.currentTarget.value = "";
         }}
       />
-      <div
-        className={cn(
-          "mx-auto mb-4 flex items-center justify-center rounded-md bg-brand-50 text-brand-600",
-          wide ? "h-16 w-16" : "h-12 w-12",
-        )}
-      >
-        {isLoading ? (
-          <Loader2 className={cn("animate-spin", wide ? "h-7 w-7" : "h-5 w-5")} />
-        ) : (
-          <FileUp className={cn(wide ? "h-7 w-7" : "h-5 w-5")} />
-        )}
+      <div aria-hidden="true" className={cn("relative mx-auto mb-4 grid place-items-center", illustrated ? "h-[4.15rem] w-[4.5rem]" : "size-10")}>
+        {illustrated && <span className="absolute left-[1.375rem] top-1 h-14 w-10 rotate-[12deg] rounded border border-[#c9baaa] bg-[#eae0d2]" />}
+        <span className={cn(
+          "relative grid place-items-center text-brand-600",
+          illustrated ? "h-14 w-10 -rotate-6 rounded border border-[#bcab98] bg-paper shadow-sm" : "size-10 rounded-md bg-brand-50",
+        )}>
+          {isLoading ? <Loader2 size={20} className="animate-spin" /> : <FileUp size={20} />}
+        </span>
       </div>
-      <h2 className={cn("font-semibold text-ink", compact ? "text-base" : wide ? "text-3xl" : "text-xl")}>
+      <h2 className={cn("font-semibold leading-snug text-ink", compact ? "text-base" : "text-xl")}>
         {t(copy.title)}
       </h2>
-      <p className={cn("mx-auto mt-2 text-sm leading-6 text-slate-600", wide ? "max-w-2xl" : "max-w-md")}>
-        {t(copy.description)}
-      </p>
+      {copy.description && <p className="mx-auto mt-1.5 max-w-sm text-sm leading-6 text-muted">{t(copy.description)}</p>}
       <Button
-        className={cn("mt-5", wide && "h-12 px-6 text-base")}
+        className={cn("mt-4 h-auto min-h-11 px-5 py-2.5 font-semibold", wide && "min-h-12 text-base")}
         variant="primary"
         disabled={isLoading}
         onClick={() => {
@@ -110,15 +96,17 @@ export function UploadDropzone({
           inputRef.current?.click();
         }}
       >
-        {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileUp className="h-4 w-4" />}
+        {isLoading ? <Loader2 aria-hidden="true" className="size-4 shrink-0 animate-spin" /> : <FileUp aria-hidden="true" className="size-4 shrink-0" />}
         <span role={isLoading ? "status" : undefined}>
           {isLoading ? t(copy.loading ?? "Opening PDF…") : t(copy.button)}
         </span>
       </Button>
-      <div className="mt-4 flex items-center justify-center gap-2 text-xs text-slate-500">
-        <ShieldCheck className="h-3.5 w-3.5 text-accent-600" />
-        {t(copy.privacy)}
-      </div>
+      {copy.privacy && (
+        <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted">
+          <ShieldCheck aria-hidden="true" className="size-3.5 shrink-0" />
+          {t(copy.privacy)}
+        </p>
+      )}
     </div>
   );
 }

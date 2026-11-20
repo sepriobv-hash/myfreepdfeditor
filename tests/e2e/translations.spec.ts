@@ -76,7 +76,7 @@ for (const locale of locales) {
   await page.locator('input[type="file"]').setInputFiles({ name: "invalid.txt", mimeType: "text/plain", buffer: Buffer.from("invalid") });
   await expect(page.getByRole("alert").filter({ hasText: t("Please choose a valid PDF file.") })).toHaveText(t("Please choose a valid PDF file."));
   await page.locator('input[type="file"]').setInputFiles({ name: "source.pdf", mimeType: "application/pdf", buffer: await createDigitalPdf() });
-  await expect(page).toHaveURL(new RegExp(`/${locale}/editor\\?uploadId=.+&tool=sign-pdf`));
+  await expect(page).toHaveURL(new RegExp(`/${locale}/editor$`));
   await expect(page.getByRole("button", { name: t("Download"), exact: true })).toBeVisible();
   await expect(page.getByTitle(t("Undo"), { exact: true })).toBeVisible();
   // Original document text is never translated or mutated by the UI catalog.

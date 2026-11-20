@@ -10,7 +10,8 @@ import {
   supportedLocales,
 } from "@/lib/i18n";
 import { siteName } from "@/lib/site";
-import { translators } from "@/lib/translations";
+import { localizeTool } from "@/lib/localizedTools";
+import { getToolBySlug } from "@/lib/pdfTools";
 
 type LocalePageProps = {
   params: Promise<{ locale: string }>;
@@ -58,7 +59,8 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
       price: "0",
       priceCurrency: "USD",
     },
-    featureList: ["Edit PDF", "Sign PDF", "Merge PDF", "Compress PDF"].map(translators[locale]),
+    featureList: ["edit-pdf", "sign-pdf", "merge-pdf", "compress-pdf"]
+      .map(slug => localizeTool(getToolBySlug(slug)!, locale).shortTitle),
   };
 
   return (

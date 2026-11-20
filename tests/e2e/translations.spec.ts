@@ -51,6 +51,7 @@ for (const locale of locales) {
  test(`${locale}: homepage, related tools, language switching and editor preserve language`, async ({ page }) => {
   test.setTimeout(120_000);
   await page.goto(`/${locale}`);
+  await expect(page.locator(`header a[href="/${locale}/merge-pdf"]`)).toHaveText(t("Merge PDFs"));
   const links = await page.locator('main a[href^="/"]').evaluateAll(elements => elements.map(el => el.getAttribute("href")!));
   const languageLinks = localeOptions.map(option => option.code === "en" ? "/" : `/${option.code}`);
   expect(links.filter(href => !languageLinks.includes(href)).every(href => href.startsWith(`/${locale}/`))).toBe(true);

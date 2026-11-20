@@ -6,7 +6,7 @@ import { SiteLanguageMenu } from "./SiteLanguageMenu";
 
 const links = [
   { path: "/all-tools", label: "All PDF tools" },
-  { path: "/merge-pdf", label: "Merge PDF" },
+  { path: "/merge-pdf", label: "Merge PDFs" },
   { path: "/compress-pdf", label: "Compress PDF" },
 ] as const;
 
